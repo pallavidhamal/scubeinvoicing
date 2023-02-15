@@ -65,31 +65,29 @@ public class DateUtils {
     public static boolean isValidDate(String date) {
     	
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        
         dateFormat.setLenient(false);
-        
         try {
-        	
           dateFormat.parse(date.trim());
-          
         } 
         catch (Exception pe) {
-        	
           return false;
-          
         }
-        
         return true;
-      }
+    }
     
     
     public static String modifyDateLayout(String inputDate) throws ParseException {
     	
         Date date = new SimpleDateFormat("dd-MM-yyyy").parse(inputDate);
-        
         String formattedDateToString = new SimpleDateFormat("dd-MM-yyyy").format(date);
-        
         return formattedDateToString;
+        
+    }
+    
+    public static Date stringToDateConvert(String inputDate) throws ParseException {
+    	
+        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate);
+        return date;
         
     }
 

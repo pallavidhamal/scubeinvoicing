@@ -3,6 +3,9 @@ package com.scube.invoicing.exception;
  * Created by Keshav Patel.
  */
 public enum EntityType {
+	SERVICE,
+	INVOICE,
+	CUSTOMER,
     USER,
     MATERIALCODE,
     OTP,
@@ -46,5 +49,7 @@ public enum EntityType {
     CHARGINGPOINTCONNECTOR,
     BOOKING,
     PAYMENTMODE,
-    PAYMENTFREQUENCY
+    PAYMENTFREQUENCY,
+    PANNO,
+    GSTNO
 }

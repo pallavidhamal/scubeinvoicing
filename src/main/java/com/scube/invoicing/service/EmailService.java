@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.scube.invoicing.dto.incoming.CreateInvoiceIncomingDto;
+
 
 @Service
 public class EmailService {
@@ -42,7 +44,7 @@ public class EmailService {
 	
 	public void sendMailWithAttachment(File rejectedFileName, File acceptedFileName) throws Exception {
 		
-		logger.info("*****EmailService sendMailWithAttachment*****");
+		logger.info("---- EmailService sendMailWithAttachment ---- ");
 		
 		logger.info("Acccepted File Path " + acceptedFileName);
 		
@@ -653,4 +655,90 @@ public void sendMailForExcelNotPresent() throws Exception {
 		}
 	}
 
+	public void sendInvoiceMailToCustomer(CreateInvoiceIncomingDto createInvoiceIncomingDto, File attachedFile) throws Exception {
+	
+		logger.info(" ---- EmailService sendInvoiceMailToCustomer ---- ");
+		
+		StringBuffer failureReason = null;
+		String host = fromMailIdHost;
+		
+		Properties properties = System.getProperties();
+		logger.info("Properties are ------" + properties);
+		properties.put("mail.smtp.host", host);
+		properties.put("mail.smtp.port", "465");
+		properties.put("mail.smtp.ssl.enable", "true");
+		properties.put("mail.smtp.auth", "true");
+		
+		String mailTextContent = createInvoiceIncomingDto.getMailBody();
+		String subjectLine = createInvoiceIncomingDto.getSubject();
+		
+		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {			
+				return new PasswordAuthentication(createInvoiceIncomingDto.getFromEmailID(), fromMailPwd);
+			}
+		});
+		session.setDebug(true);
+	
+		try {
+			MimeMessage mimeMessage = new MimeMessage(session);
+			
+			MimeBodyPart textBodyPart = new MimeBodyPart();			
+			textBodyPart.setText(mailTextContent);
+			
+			MimeMultipart mimeMultipart = new MimeMultipart();			
+			mimeMultipart.addBodyPart(textBodyPart);
+			
+			mimeMessage.setFrom(new InternetAddress(createInvoiceIncomingDto.getFromEmailID()));
+			
+			Multipart multipart = new MimeMultipart();
+			multipart.addBodyPart(textBodyPart);
+			
+			mimeMessage.setContent(multipart);
+			
+			InternetAddress internetFromMailAddress = new InternetAddress(createInvoiceIncomingDto.getFromEmailID());
+			
+			mimeMessage.setSender(internetFromMailAddress);
+			mimeMessage.setSubject(subjectLine);
+			
+			mimeMessage.addRecipients(Message.RecipientType.TO, 
+	                InternetAddress.parse(createInvoiceIncomingDto.getToEmailID()));
+			mimeMessage.addRecipients(Message.RecipientType.CC, 
+	                InternetAddress.parse(createInvoiceIncomingDto.getBccEmailID()));
+			
+			MimeBodyPart fileMimeBodyPart = new MimeBodyPart();
+			fileMimeBodyPart.attachFile(attachedFile);
+			multipart.addBodyPart(fileMimeBodyPart);
+			mimeMessage.setContent(multipart);
+			
+			logger.info("------------" + "Sending" + "---------------");
+			Transport.send(mimeMessage);
+			logger.info("Mail Sent Successfully...................");	
+		} 
+		catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			StringBuffer exception = new StringBuffer(e.getMessage().toString());
+			  
+	        if (exception.indexOf("ConnectException") >= 0)      // connection problem.
+	        {
+	        	failureReason = new StringBuffer(" Unable to Connect Mail server");
+	        }
+	        else if (exception.indexOf("SendFailedException") >= 0)      // Wrong To Address 
+	        {
+	            failureReason = new StringBuffer("Wrong To Mail address");
+	        }
+	        else if (exception.indexOf("FileNotFoundException") >= 0)    //File Not Found at Specified Location
+	        {
+	        	failureReason = new StringBuffer("File Not Found at Specific location");                   
+	        }
+	        else        // Email has not been sent.
+	        {
+	        	failureReason = new StringBuffer("Email has not been sent.");
+	        }
+			
+			logger.info("---- EmailService exception ----" + failureReason);
+			
+		}
+	}
 }

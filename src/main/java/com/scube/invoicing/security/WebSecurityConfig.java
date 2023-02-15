@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			 * .antMatchers("/api/v1/empinfo/saveDocument/**").permitAll()
 			 */	 
 			//	.antMatchers("/swagger-ui/**","/api-docs/**").permitAll()
-			//	.antMatchers("/api/**").permitAll()
+				.antMatchers("/api/**").permitAll()
 			//	.antMatchers("/chargerImages/**").permitAll()
 			.anyRequest().authenticated();
 
