@@ -59,7 +59,7 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 			throw BRSException.throwException("Error : Customer ID cannot be blank or null");
 		}
 		
-		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("b547e09f95");
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("a0976ca4c2");
 		
 		if(companyMasterEntity == null) {
 			throw BRSException.throwException("Error : NO Company Details Found");

@@ -51,5 +51,6 @@ public enum EntityType {
     PAYMENTMODE,
     PAYMENTFREQUENCY,
     PANNO,
-    GSTNO
+    GSTNO,
+    CURRENCY
 }

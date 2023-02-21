@@ -52,7 +52,7 @@ public class ReceiptPdfExporter {
 
 	public File generateInvoice(List<CustomerInvoiceServiceEntity> customerInvoiceServiceList,
 			CompanyMasterEntity companyMasterEntity, CustomerInvoiceEntity customerInvoiceEntity, 
-			CreateInvoiceIncomingDto createInvoiceIncomingDto) throws Exception {
+			CreateInvoiceIncomingDto createInvoiceIncomingDto, CustomerMasterEntity customerMasterEntity) throws Exception {
 
 		String filename = "INVOICE_" + new Date().getTime() + "".concat(fileExtension);
 		logger.info("Check File Name :--- " + filename);
@@ -165,7 +165,7 @@ public class ReceiptPdfExporter {
 		dateBox2Cell.setBackgroundColor(new DeviceRgb(46, 35, 85));
 		
 		dateBox2Cell.add(new Paragraph("PLEASE PAY"));
-		dateBox2Cell.add(new Paragraph("INR " + "0.00"));
+		dateBox2Cell.add(new Paragraph(customerMasterEntity.getCurrencyMasterEntity().getCurrencyName() + "0.00"));
 
 		billingAndShippingAndPaymentDateTable.addCell(dateBox2Cell);
 
@@ -403,7 +403,8 @@ public class ReceiptPdfExporter {
 				.setTextAlignment(TextAlignment.LEFT)
 				.setHorizontalAlignment(HorizontalAlignment.LEFT)
 				.setFontColor(DeviceRgb.makeLighter(new DeviceRgb(32,46,90))));
-		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph("INR " + String.valueOf(createInvoiceIncomingDto.getTotalDueAmount())))
+		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerMasterEntity
+				.getCurrencyMasterEntity().getCurrencyName() + String.valueOf(createInvoiceIncomingDto.getTotalDueAmount())))
 				.setBorder(Border.NO_BORDER)
 				.setBold()
 				.setFontSize(10)
@@ -554,7 +555,7 @@ public class ReceiptPdfExporter {
 		
 		companyAndCustomerAndCreditsTable.addCell(new Cell(1,4).add(new Paragraph()).setBorder(Border.NO_BORDER));
 		companyAndCustomerAndCreditsTable.addCell(new Cell(1,2).add(new Paragraph("CREDITS REMAINING" + "\n"
-				+ "INR " + createInvoiceIncomingDto.getCreditsRemaining()))
+				+ customerMasterEntity.getCurrencyMasterEntity().getCurrencyName() + " " + createInvoiceIncomingDto.getCreditsRemaining()))
 				.setHeight(50)
 				.setBorder(new SolidBorder(new DeviceRgb(253,118,49), 1))
 				.setWidth(5)
@@ -823,7 +824,7 @@ public class ReceiptPdfExporter {
 				.setVerticalAlignment(VerticalAlignment.MIDDLE)
 				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
 		);
-		amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph("INR " + String.valueOf(createInvoiceIncomingDto.getCreditsRemaining())))
+		amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerMasterEntity.getCurrencyMasterEntity().getCurrencyName() + String.valueOf(createInvoiceIncomingDto.getCreditsRemaining())))
 				.setBorder(Border.NO_BORDER)
 				.setFontSize(8)
 				.setHeight(20)

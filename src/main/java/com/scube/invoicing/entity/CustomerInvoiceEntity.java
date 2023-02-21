@@ -77,4 +77,7 @@ public class CustomerInvoiceEntity extends BaseEntity {
 	@Column(name = "shipping_date")
 	private Date shippingDate;
 	
+	@Column(name = "payment_status")
+	private String paymentStatus;
+	
 }

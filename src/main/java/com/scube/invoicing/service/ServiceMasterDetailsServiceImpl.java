@@ -71,7 +71,7 @@ public class ServiceMasterDetailsServiceImpl implements ServiceMasterDetailsServ
 		
 		serviceMasterEntity.setServiceName(serviceMasterIncomingDto.getServiceName());
 		serviceMasterEntity.setIsdeleted("N");
-		serviceMasterEntity.setStatus(serviceMasterIncomingDto.getServiceStatus());
+		serviceMasterEntity.setStatus("ACTIVE");
 		
 		serviceMasterRepository.save(serviceMasterEntity);
 		
@@ -90,7 +90,8 @@ public class ServiceMasterDetailsServiceImpl implements ServiceMasterDetailsServ
 			throw BRSException.throwException(EntityType.SERVICE, ExceptionType.ENTITY_NOT_FOUND, serviceID);
 		}
 		
-		serviceMasterRepository.delete(serviceMasterEntity);
+		serviceMasterEntity.setStatus("INACTIVE");
+		serviceMasterRepository.save(serviceMasterEntity);
 		
 		return true;
 	}

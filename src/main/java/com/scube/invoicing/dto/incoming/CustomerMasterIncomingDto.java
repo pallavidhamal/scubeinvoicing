@@ -53,5 +53,7 @@ public class CustomerMasterIncomingDto {
 	private double openingBalance;
 	private String paymentDate;
 	private String paysWith;
+	
+	private String currencyName;
 
 }

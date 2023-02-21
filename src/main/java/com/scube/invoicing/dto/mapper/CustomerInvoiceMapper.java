@@ -7,6 +7,7 @@ import com.scube.invoicing.dto.CustomerServiceResponseDto;
 import com.scube.invoicing.entity.CompanyMasterEntity;
 import com.scube.invoicing.entity.CustomerInvoiceEntity;
 import com.scube.invoicing.util.DateUtils;
+import com.scube.invoicing.util.StringNullEmpty;
 
 public class CustomerInvoiceMapper {
 
@@ -59,6 +60,7 @@ public class CustomerInvoiceMapper {
 		return new CustomerServiceResponseDto() 
 				
 				.setCustomerID(customerInvoiceEntity.getCustomerMasterEntity().getId())
+				.setCustomerCompanyName(customerInvoiceEntity.getCustomerMasterEntity().getCompanyName())
 				.setCustEmailId(customerInvoiceEntity.getCustEmailId())
 				
 				.setInvoiceNo(customerInvoiceEntity.getInvoiceNo())
@@ -72,7 +74,9 @@ public class CustomerInvoiceMapper {
 				.setDiscounts(customerInvoiceEntity.getDiscounts())
 				.setTotalAmount(customerInvoiceEntity.getTotalAmount())
 				
-				.setDueDate(DateUtils.formattedDate(customerInvoiceEntity.getDueDate()));
+				.setDueDate(DateUtils.formattedDate(customerInvoiceEntity.getDueDate()))
+				
+				.setPaymentStatus(StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getPaymentStatus()));
 		
 	}
 	

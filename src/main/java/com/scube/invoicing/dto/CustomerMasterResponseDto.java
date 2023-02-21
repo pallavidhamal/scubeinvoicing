@@ -62,5 +62,10 @@ public class CustomerMasterResponseDto {
 	private double openingBalance;
 	private String paymentDate;
 	private String paysWith;
+	
+	
+	// Customer Currency Info
+	private String currencyID;
+	private String currencyName;
 
 }

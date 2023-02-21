@@ -24,6 +24,8 @@ import com.scube.invoicing.entity.CustomerInvoiceServiceEntity;
 import com.scube.invoicing.entity.CustomerMasterEntity;
 import com.scube.invoicing.entity.GSTMasterEntity;
 import com.scube.invoicing.exception.BRSException;
+import com.scube.invoicing.exception.EntityType;
+import com.scube.invoicing.exception.ExceptionType;
 import com.scube.invoicing.repository.CustomerInvoiceRepository;
 import com.scube.invoicing.repository.CustomerInvoiceServiceRepository;
 import com.scube.invoicing.util.DateUtils;
@@ -59,7 +61,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 			throw BRSException.throwException("Error : Customer ID cannot be blank or null");
 		}
 		
-		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("b547e09f95");
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("a0976ca4c2");
 		
 		if(companyMasterEntity == null) {
 			throw BRSException.throwException("Error : NO Company Details Found");
@@ -113,7 +115,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		customerInvoiceEntity.setDueDate(dueDate);
 		customerInvoiceEntity.setTrackingNo(customerServiceIncomingDto.getTrackingNo());
 		
-		customerInvoiceEntity.setInvoiceNo("INVOICE_"+number);
+		customerInvoiceEntity.setInvoiceNo("INVOICE-000"+number);
 		customerInvoiceEntity.setInvoiceDate(invoiceDate);
 		
 		customerInvoiceRepository.save(customerInvoiceEntity);
@@ -123,7 +125,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		for(CustomerInvoiceServiceIncomingDto customerInvoiceServiceIncomingDto : 
 			customerServiceIncomingDto.getCustomerInvoiceServiceDtos()) {
 			
-			GSTMasterEntity gstMasterEntity = gstMasterService.getGstMasterEntityByGstID(customerInvoiceServiceIncomingDto.getTax());
+			GSTMasterEntity gstMasterEntity = gstMasterService.getGstMasterEntityByGstID(customerInvoiceServiceIncomingDto.getGstID());
 			
 			if(gstMasterEntity == null) {
 				throw BRSException.throwException("Error : NO GST Tax Details Found");
@@ -220,7 +222,51 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		
 		return CustomerInvoiceMapper.toCustomerInvoiceResponseDtosList(customerInvoiceEntitiesList);
 	}
-	
-	
+
+	@Override
+	public boolean updateCustomerInvoicePaymentStatus(@Valid CustomerServiceIncomingDto customerServiceIncomingDto) {
+		// TODO Auto-generated method stub
+		
+		logger.info("----- CustomerInvoiceServiceImpl updateCustomerInvoicePaymentStatus ----");
+		
+		if(customerServiceIncomingDto.getCustomerID() == "" || customerServiceIncomingDto.getCustomerID().trim().isEmpty()) {
+			throw BRSException.throwException("Error : Customer ID cannot be empty or blank");
+		}
+		
+		if(customerServiceIncomingDto.getInvoiceNo() == "" || customerServiceIncomingDto.getInvoiceNo().trim().isEmpty()) {
+			throw BRSException.throwException("Error : Customer Invoice No cannot be empty or blank");
+		}
+		
+		CustomerMasterEntity customerMasterEntity = customerMasterService.getCustomerDetailsByCustomerId(customerServiceIncomingDto.getCustomerID());
+		
+		if(customerMasterEntity == null) {
+			throw BRSException.throwException("Error : NO Customer Records found.");
+		}
+		
+		CustomerInvoiceEntity customerInvoiceEntity = getCustomerInvoiceEntityByCustomerIDAndInvoiceNo(customerMasterEntity, 
+				customerServiceIncomingDto.getInvoiceNo());
+		
+		if(customerInvoiceEntity == null)  {
+			throw BRSException.throwException(EntityType.INVOICE, ExceptionType.ENTITY_NOT_FOUND, customerServiceIncomingDto.getInvoiceNo());
+		}
+		
+		customerInvoiceEntity.setPaymentStatus("Payment Completed");
+		customerInvoiceRepository.save(customerInvoiceEntity);
+		
+		return true;
+	}
+
+	@Override
+	public List<CustomerServiceResponseDto> getCustomerInvoiceListByCustomerID(String customerID) {
+		// TODO Auto-generated method stub
+		
+		logger.info("----- CustomerInvoiceServiceImpl getCustomerInvoiceListByCustomerID ----");
+		
+		CustomerMasterEntity customerMasterEntity = customerMasterService.getCustomerDetailsByCustomerId(customerID);
+		
+		List<CustomerInvoiceEntity> customerInvoiceEntityList = customerInvoiceRepository.findByCustomerMasterEntity(customerMasterEntity);
+		
+		return CustomerInvoiceMapper.toCustomerInvoiceResponseDtosList(customerInvoiceEntityList);
+	}
 
 }

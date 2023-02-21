@@ -21,6 +21,7 @@ public class CustomerServiceIncomingDto {
 	
 	private String customerServiceID;
 	
+	private String invoiceNo;
 	private String invoiceDate;
 	
 	private double subTotal;

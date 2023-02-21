@@ -79,7 +79,7 @@ public class CreateInvoiceServiceImpl implements CreateInvoiceService {
 			throw BRSException.throwException("Error : Mail body cannot be blank or null");
 		}
 		
-		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("b547e09f95");
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("a0976ca4c2");
 		
 		if(companyMasterEntity == null) {
 			throw BRSException.throwException("Error : NO Company Details Found");
@@ -110,7 +110,7 @@ public class CreateInvoiceServiceImpl implements CreateInvoiceService {
 		File attachedFile = null;
 		try {
 			attachedFile = receiptPdfExporter.generateInvoice(customerInvoiceServiceList, companyMasterEntity, 
-					customerInvoiceEntity, createInvoiceIncomingDto);
+					customerInvoiceEntity, createInvoiceIncomingDto, customerMasterEntity);
 			logger.info("File Path for Invoice :--- " + attachedFile);
 			
 			// Send Mail with Attachment Invoice
@@ -157,7 +157,7 @@ public class CreateInvoiceServiceImpl implements CreateInvoiceService {
 			throw BRSException.throwException("Error : Mail body cannot be blank or null");
 		}
 		
-		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("b547e09f95");
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("a0976ca4c2");
 		
 		if(companyMasterEntity == null) {
 			throw BRSException.throwException("Error : NO Company Details Found");

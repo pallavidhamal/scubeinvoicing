@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -100,5 +102,9 @@ public class CustomerMasterEntity extends BaseEntity {
 	
 	@Column(name = "pays_with")
 	private String paysWith;
+	
+	@OneToOne
+	@JoinColumn(name = "fk_currency")
+	private CurrencyMasterEntity currencyMasterEntity;
 	
 }

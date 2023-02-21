@@ -38,7 +38,7 @@ public class CustomerInvoiceServiceEntity extends BaseEntity {
 	private String quantity;
 	
 	@Column(name = "rate")
-	private String rate;
+	private double rate;
 	
 	@Column(name = "amount")
 	private double amount;

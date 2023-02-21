@@ -18,7 +18,7 @@ public interface CustomerInvoiceService {
 	
 	boolean removeCustomerInvoiceAndServiceData(String customerID, String invoiceNo);
 	
-//	CustomerServiceResponseDto getCustomerServiceDetailsByCustomerServiceId(String customerServiceID);
+	List<CustomerServiceResponseDto> getCustomerInvoiceListByCustomerID(String customerID);
 	
 //	List<CustomerServiceResponseDto> getAllCustomerServiceDetailsByCustomerServiceId(String customerServiceID);
 	
@@ -28,5 +28,7 @@ public interface CustomerInvoiceService {
 			CustomerMasterEntity customerMasterEntity, CustomerInvoiceEntity customerInvoiceEntity);
 	
 	List<CustomerServiceResponseDto> getAllCustomerInvoiceAndServiceList();
+	
+	boolean updateCustomerInvoicePaymentStatus(@Valid CustomerServiceIncomingDto customerServiceIncomingDto);
 
 }

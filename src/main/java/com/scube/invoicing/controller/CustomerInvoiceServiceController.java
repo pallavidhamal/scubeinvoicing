@@ -25,7 +25,7 @@ import com.scube.invoicing.service.CustomerInvoiceService;
 public class CustomerInvoiceServiceController {
 	
 	@Autowired
-	CustomerInvoiceService customerService;
+	CustomerInvoiceService customerInvoiceService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CustomerInvoiceServiceController.class);
 	
@@ -34,7 +34,17 @@ public class CustomerInvoiceServiceController {
   		
   		logger.info("----- CustomerInvoiceServiceController addCustomerInvoiceAndServiceData ----");
   		
-  		return Response.ok().setPayload(customerService.addCustomerInvoiceAndServiceData(customerServiceIncomingDto)) ;
+  		return Response.ok().setPayload(customerInvoiceService.addCustomerInvoiceAndServiceData(customerServiceIncomingDto)) ;
+  		
+  	}
+  	
+  	
+  	@PostMapping( value = "/updateCustomerInvoiceAndServiceData" , consumes = APPLICATION_JSON_VALUE)
+  	public Response updateCustomerInvoiceAndServiceData(@Valid @RequestBody CustomerServiceIncomingDto customerServiceIncomingDto) {
+  		
+  		logger.info("----- CustomerInvoiceServiceController addCustomerInvoiceAndServiceData ----");
+  		
+  		return Response.ok().setPayload(customerInvoiceService.updateCustomerServiceInfo(customerServiceIncomingDto)) ;
   		
   	}
   	
@@ -45,17 +55,36 @@ public class CustomerInvoiceServiceController {
   		
   		logger.info("----- CustomerInvoiceServiceController removeCustomerInvoiceAndServiceData ----");
   		
-  		return Response.ok().setPayload(customerService.removeCustomerInvoiceAndServiceData(customerID, invoiceNo));
+  		return Response.ok().setPayload(customerInvoiceService.removeCustomerInvoiceAndServiceData(customerID, invoiceNo));
   		
   	}
   	
+  	
+  	@GetMapping( value = "/getCustomerInvoiceListByCustomerID/{customerID}")
+  	public Response getCustomerInvoiceListByCustomerID(@PathVariable("customerID") String customerID) {
+  		
+  		logger.info("----- CustomerInvoiceServiceController getCustomerInvoiceListByCustomerID ----");
+  		
+  		return Response.ok().setPayload(customerInvoiceService.getCustomerInvoiceListByCustomerID(customerID));
+  		
+  	}
   	
   	@GetMapping( value = "/getAllCustomerInvoiceAndServiceList")
   	public Response getAllCustomerInvoiceAndServiceList() {
   		
   		logger.info("----- CustomerInvoiceServiceController getAllCustomerInvoiceAndServiceList ----");
   		
-  		return Response.ok().setPayload(customerService.getAllCustomerInvoiceAndServiceList());
+  		return Response.ok().setPayload(customerInvoiceService.getAllCustomerInvoiceAndServiceList());
+  		
+  	}
+  	
+  	
+  	@PostMapping( value = "/updateCustomerInvoicePaymentStatus", consumes = APPLICATION_JSON_VALUE)
+  	public Response updateCustomerInvoicePaymentStatus(@Valid @RequestBody CustomerServiceIncomingDto customerServiceIncomingDto) {
+  		
+  		logger.info("----- CustomerInvoiceServiceController updateCustomerInvoicePaymentStatus ----");
+  		
+  		return Response.ok().setPayload(customerInvoiceService.updateCustomerInvoicePaymentStatus(customerServiceIncomingDto));
   		
   	}
 	

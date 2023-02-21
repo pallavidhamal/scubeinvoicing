@@ -46,15 +46,16 @@ public class CustomerMasterMapper {
 				.setPaymentTerms(customerMasterEntity.getPaymentTerms())
 				.setOpeningBalance(customerMasterEntity.getOpeningBalance())
 			//	.setPaymentDate(null)
-				.setPaysWith(customerMasterEntity.getPaysWith());
+				.setPaysWith(customerMasterEntity.getPaysWith())
+				.setCurrencyID(customerMasterEntity.getCurrencyMasterEntity().getId())
+				.setCurrencyName(customerMasterEntity.getCurrencyMasterEntity().getCurrencyName());
 	}
 	
 	public static List<CustomerMasterResponseDto> toAllCustomerDataList(List<CustomerMasterEntity> customerMasterEntitiesList) {
 		// TODO Auto-generated method stub
 		
 		List<CustomerMasterResponseDto> customerMasterResponseDtos= new ArrayList<CustomerMasterResponseDto>();
-		for(CustomerMasterEntity customerMasterEntity :customerMasterEntitiesList)
-		{
+		for(CustomerMasterEntity customerMasterEntity :customerMasterEntitiesList) {
 			customerMasterResponseDtos.add(toCustomerMasterResponseDto(customerMasterEntity));			
 		}
 				

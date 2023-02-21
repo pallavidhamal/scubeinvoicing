@@ -5,8 +5,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +38,33 @@ public class ConfigurationMasterController {
 		logger.info("------- ConfigurationMasterController uploadLogo -------");
 		Response response = new Response();
 		String logoPath = configurationMasterService.uploadLogoAndSave(multipartFile);
+		response.setRespData(logoPath);
+		return ResponseEntity.ok(response);
+		
+	}
+	
+	@GetMapping("/getUploadedLogo/{companyID}")
+  	public ResponseEntity<Resource> getUploadedLogo(@PathVariable String companyID) throws Exception {
+  		
+  		logger.info("--------- UserInfoController getUploadedLogo --------");
+  		
+  		Resource res = configurationMasterService.getUploadedLogoFile(companyID);
+  		MediaType mediaType;
+  		mediaType = MediaType.IMAGE_PNG;
+		return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + res.getFilename() + "\"")
+                .body(res);
+  	}
+	
+	
+	@PostMapping(value = "/editUploadedLogoById")
+	public ResponseEntity<Response> editUploadedLogoById(@RequestParam("logo") MultipartFile multipartFile, 
+			@RequestParam("configID") String configID) {
+		
+		logger.info("------- ConfigurationMasterController uploadLogo -------");
+		Response response = new Response();
+		String logoPath = configurationMasterService.editUploadedLogoAndSave(multipartFile, configID);
 		response.setRespData(logoPath);
 		return ResponseEntity.ok(response);
 		

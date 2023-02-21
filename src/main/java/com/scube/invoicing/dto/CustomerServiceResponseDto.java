@@ -36,6 +36,8 @@ public class CustomerServiceResponseDto {
 	private String shippingVia;
 	private String shippingDate;
 	
+	private String customerCompanyName;
+	
 	private String invoiceNo;
 	private String invoiceDate;
 	
@@ -53,6 +55,8 @@ public class CustomerServiceResponseDto {
 	
 	private String dueDate;
 	private String trackingNo;
+	
+	private String paymentStatus;
 	
 	private Set<CustomerInvoiceServiceIncomingDto> customerInvoiceServiceDtos;
 

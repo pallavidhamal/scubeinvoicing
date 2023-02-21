@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.scube.invoicing.dto.CustomerMasterResponseDto;
 import com.scube.invoicing.dto.incoming.CustomerMasterIncomingDto;
 import com.scube.invoicing.dto.mapper.CustomerMasterMapper;
+import com.scube.invoicing.entity.CurrencyMasterEntity;
 import com.scube.invoicing.entity.CustomerMasterEntity;
 import com.scube.invoicing.exception.BRSException;
 import com.scube.invoicing.exception.EntityType;
@@ -28,6 +29,9 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 	
 	@Autowired
 	CustomerMasterRepository customerMasterRepository;
+	
+	@Autowired
+	CurrencyMasterService currencyMasterService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CustomerMasterServiceImpl.class);
 
@@ -53,6 +57,12 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 			// TODO Auto-generated catch block
 		}
 		
+		CustomerMasterEntity duplicateCompanyNameCheckEntity = customerMasterRepository.findByCompanyName(customerMasterIncomingDto.getCompanyName());
+		
+		if(duplicateCompanyNameCheckEntity != null) {
+			throw BRSException.throwException(EntityType.COMPANY, ALREADY_EXIST, customerMasterIncomingDto.getCompanyName());
+		}
+		
 		CustomerMasterEntity duplicatePanNoCheckEntity = customerMasterRepository.findByPanNo(customerMasterIncomingDto.getPanNo());
 		
 		if(duplicatePanNoCheckEntity != null) {
@@ -64,6 +74,8 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		if(checkDuplicateGstNoEntity != null) {
 			throw BRSException.throwException(EntityType.GSTNO, ALREADY_EXIST, customerMasterIncomingDto.getGstRegistrationNo());
 		}
+		
+		CurrencyMasterEntity currencyMasterEntity = currencyMasterService.getCurrencyMasterEntityByCurrencyId(customerMasterIncomingDto.getCurrencyName());
 		
 		CustomerMasterEntity customerMasterEntity = new CustomerMasterEntity();
 		
@@ -104,6 +116,8 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		
 		customerMasterEntity.setIsdeleted("N");
 		
+		customerMasterEntity.setCurrencyMasterEntity(currencyMasterEntity);
+		
 		customerMasterRepository.save(customerMasterEntity);
 		
 		return true;
@@ -132,6 +146,8 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		if(customerMasterEntity == null) {
 			throw BRSException.throwException("Error : No Customer Records Found ");
 		}
+		
+		CurrencyMasterEntity currencyMasterEntity = currencyMasterService.getCurrencyMasterEntityByCurrencyId(customerMasterIncomingDto.getCurrencyName());
 		
 		customerMasterEntity.setTitle(customerMasterIncomingDto.getTitle());
 		customerMasterEntity.setFirstName(customerMasterIncomingDto.getFirstName());
@@ -169,6 +185,8 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		customerMasterEntity.setPaysWith(customerMasterIncomingDto.getPaysWith());
 		
 		customerMasterEntity.setIsdeleted("N");
+		
+		customerMasterEntity.setCurrencyMasterEntity(currencyMasterEntity);
 		
 		customerMasterRepository.save(customerMasterEntity);
 		
