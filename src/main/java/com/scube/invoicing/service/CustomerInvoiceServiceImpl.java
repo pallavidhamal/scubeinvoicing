@@ -1,7 +1,5 @@
 package com.scube.invoicing.service;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -77,17 +75,6 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		Random randomNumber = new Random();
 		int number = randomNumber.nextInt(1000);
 		
-		Date invoiceDate = new Date();
-		Date shippingDate = new Date();
-		Date dueDate = new Date();
-		try {
-			invoiceDate = DateUtils.stringToDateConvert(customerServiceIncomingDto.getInvoiceDate());
-			shippingDate = DateUtils.stringToDateConvert(customerServiceIncomingDto.getShippingDate());
-			dueDate = DateUtils.stringToDateConvert(customerServiceIncomingDto.getDueDate());
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-		}
-		
 		CustomerInvoiceEntity customerInvoiceEntity = new CustomerInvoiceEntity();
 		
 		customerInvoiceEntity.setIsdeleted("N");
@@ -96,7 +83,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		
 		customerInvoiceEntity.setCustEmailId(customerServiceIncomingDto.getCustEmailId());
 		customerInvoiceEntity.setCustomerBillingAddress(customerServiceIncomingDto.getCustomerBillingAddress());
-		customerInvoiceEntity.setShippingDate(shippingDate);
+		customerInvoiceEntity.setShippingDate(DateUtils.stringToDateConvert(customerServiceIncomingDto.getShippingDate()));
 		customerInvoiceEntity.setShippingTo(customerServiceIncomingDto.getShippingTo());
 		customerInvoiceEntity.setShippingVia(customerServiceIncomingDto.getShippingVia());
 		customerInvoiceEntity.setTerms(customerServiceIncomingDto.getTerms());
@@ -112,11 +99,11 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		customerInvoiceEntity.setMessageInvoice(customerServiceIncomingDto.getMessageInvoice());
 		customerInvoiceEntity.setMessageStatement(customerServiceIncomingDto.getMessageStatement());
 		
-		customerInvoiceEntity.setDueDate(dueDate);
+		customerInvoiceEntity.setDueDate(DateUtils.stringToDateConvert(customerServiceIncomingDto.getDueDate()));
 		customerInvoiceEntity.setTrackingNo(customerServiceIncomingDto.getTrackingNo());
 		
 		customerInvoiceEntity.setInvoiceNo("INVOICE-000"+number);
-		customerInvoiceEntity.setInvoiceDate(invoiceDate);
+		customerInvoiceEntity.setInvoiceDate(DateUtils.stringToDateConvert(customerServiceIncomingDto.getInvoiceDate()));
 		
 		customerInvoiceRepository.save(customerInvoiceEntity);
 		

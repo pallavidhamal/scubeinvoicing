@@ -43,12 +43,12 @@ public class ConfigurationMasterController {
 		
 	}
 	
-	@GetMapping("/getUploadedLogo/{companyID}")
-  	public ResponseEntity<Resource> getUploadedLogo(@PathVariable String companyID) throws Exception {
+	@GetMapping("/getUploadedLogo/{configureID}")
+  	public ResponseEntity<Resource> getUploadedLogo(@PathVariable String configureID) throws Exception {
   		
   		logger.info("--------- UserInfoController getUploadedLogo --------");
   		
-  		Resource res = configurationMasterService.getUploadedLogoFile(companyID);
+  		Resource res = configurationMasterService.getUploadedLogoFile(configureID);
   		MediaType mediaType;
   		mediaType = MediaType.IMAGE_PNG;
 		return ResponseEntity.ok()

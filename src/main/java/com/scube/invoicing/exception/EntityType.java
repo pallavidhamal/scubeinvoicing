@@ -3,6 +3,8 @@ package com.scube.invoicing.exception;
  * Created by Keshav Patel.
  */
 public enum EntityType {
+	VENDOR,
+	CATEGORY,
 	SERVICE,
 	INVOICE,
 	CUSTOMER,

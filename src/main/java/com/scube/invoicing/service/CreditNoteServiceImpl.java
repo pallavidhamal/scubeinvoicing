@@ -1,7 +1,5 @@
 package com.scube.invoicing.service;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -59,7 +57,7 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 			throw BRSException.throwException("Error : Customer ID cannot be blank or null");
 		}
 		
-		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("a0976ca4c2");
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("8706b3eaa0");
 		
 		if(companyMasterEntity == null) {
 			throw BRSException.throwException("Error : NO Company Details Found");
@@ -78,13 +76,6 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		String generatedCreditNoteNo = "# CN-000"+number;
 		logger.info("---- Credit Note No ----- " + generatedCreditNoteNo);
 		
-		Date creditNoteDate = new Date();
-		try {
-			creditNoteDate = DateUtils.stringToDateConvert(creditNoteIncomingDto.getCreditNoteDate());
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-		}
-		
 		CustomerCreditNoteEntity customerCreditNoteEntity = new CustomerCreditNoteEntity();
 		
 		customerCreditNoteEntity.setIsdeleted("N");
@@ -93,9 +84,10 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		customerCreditNoteEntity.setSgstAmount(creditNoteIncomingDto.getSgstAmount());
 		customerCreditNoteEntity.setTotalAmount(creditNoteIncomingDto.getTotalAmount());
 		customerCreditNoteEntity.setSubTotal(creditNoteIncomingDto.getSubTotal());
+		customerCreditNoteEntity.setInvoiceNo(creditNoteIncomingDto.getInvoiceNo());
 		customerCreditNoteEntity.setCreditsRemaining(creditNoteIncomingDto.getCreditsRemaining());
 		customerCreditNoteEntity.setCreditNoteNo(generatedCreditNoteNo);
-		customerCreditNoteEntity.setCreditNoteDate(creditNoteDate);
+		customerCreditNoteEntity.setCreditNoteDate(DateUtils.stringToDateConvert(creditNoteIncomingDto.getCreditNoteDate()));
 		
 		creditNoteRepository.save(customerCreditNoteEntity);
 		

@@ -2,8 +2,6 @@ package com.scube.invoicing.service;
 
 import static com.scube.invoicing.exception.ExceptionType.ALREADY_EXIST;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -47,14 +45,6 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		
 		if(customerMasterIncomingDto.getLastName() == "" || customerMasterIncomingDto.getLastName().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Last Name cannot be empty");
-		}
-		
-		Date paymentDate = new Date();
-		try {
-			paymentDate = DateUtils.stringToDateConvert(customerMasterIncomingDto.getPaymentDate());
-			logger.info("--- Payment Date ---- " + paymentDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 		}
 		
 		CustomerMasterEntity duplicateCompanyNameCheckEntity = customerMasterRepository.findByCompanyName(customerMasterIncomingDto.getCompanyName());
@@ -111,7 +101,7 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		customerMasterEntity.setPrefDelieveryMethod(customerMasterIncomingDto.getPrefDelieveryMethod());
 		customerMasterEntity.setPaymentTerms(customerMasterIncomingDto.getPaymentTerms());
 		customerMasterEntity.setOpeningBalance(customerMasterIncomingDto.getOpeningBalance());
-		customerMasterEntity.setPaymentDate(paymentDate);
+		customerMasterEntity.setPaymentDate(DateUtils.stringToDateConvert(customerMasterIncomingDto.getPaymentDate()));
 		customerMasterEntity.setPaysWith(customerMasterIncomingDto.getPaysWith());
 		
 		customerMasterEntity.setIsdeleted("N");
@@ -131,14 +121,6 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		
 		if(customerMasterIncomingDto.getFirstName() == "" || customerMasterIncomingDto.getFirstName().trim().isEmpty()) {
 			throw BRSException.throwException("Error : First Name cannot be empty");
-		}
-		
-		Date paymentDate = new Date();
-		try {
-			paymentDate = DateUtils.stringToDateConvert(customerMasterIncomingDto.getPaymentDate());
-			logger.info("--- Payment Date ---- " + paymentDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 		}
 		
 		CustomerMasterEntity customerMasterEntity = customerMasterRepository.findById(customerMasterIncomingDto.getCustomerId()).get();
@@ -181,7 +163,7 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		customerMasterEntity.setPrefDelieveryMethod(customerMasterIncomingDto.getPrefDelieveryMethod());
 		customerMasterEntity.setPaymentTerms(customerMasterIncomingDto.getPaymentTerms());
 		customerMasterEntity.setOpeningBalance(customerMasterIncomingDto.getOpeningBalance());
-		customerMasterEntity.setPaymentDate(paymentDate);
+		customerMasterEntity.setPaymentDate(DateUtils.stringToDateConvert(customerMasterIncomingDto.getPaymentDate()));
 		customerMasterEntity.setPaysWith(customerMasterIncomingDto.getPaysWith());
 		
 		customerMasterEntity.setIsdeleted("N");

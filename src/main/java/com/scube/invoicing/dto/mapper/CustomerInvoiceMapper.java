@@ -84,7 +84,7 @@ public class CustomerInvoiceMapper {
 		// TODO Auto-generated method stub
 		
 		List<CustomerServiceResponseDto> customerServiceResponseDtos = new ArrayList<CustomerServiceResponseDto>();
-		for(CustomerInvoiceEntity customerInvoiceEntity :customerInvoiceEntitiesList) {
+		for(CustomerInvoiceEntity customerInvoiceEntity : customerInvoiceEntitiesList) {
 			customerServiceResponseDtos.add(toCustomerInvoiceResponseDto(customerInvoiceEntity));			
 		}
 				

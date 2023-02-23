@@ -50,33 +50,31 @@ public class ConfigurationMasterServiceImpl implements ConfigurationMasterServic
 	}
 
 	@Override
-	public Resource getUploadedLogoFile(String companyID) throws Exception {
+	public Resource getUploadedLogoFile(String configureID) throws Exception {
 		// TODO Auto-generated method stub
 		
 		logger.info("------- ConfigurationMasterServiceImpl getUploadedLogoFile -------");
 		
-		if(companyID == "" || companyID.trim().isEmpty()) {
-			throw BRSException.throwException("Error : Company ID cannot be blank or empty");
+		if(configureID == "" || configureID.trim().isEmpty()) {
+			throw BRSException.throwException("Error : Configure ID cannot be blank or empty");
 		}
 		
 		String fileName = "";
 		Path filePath = null ;
 		
-		ConfigurationMasterEntity configurationMasterEntity = configurationMasterRepository.findById(companyID).get();
+		ConfigurationMasterEntity configurationMasterEntity = configurationMasterRepository.findById(configureID).get();
 		
 		if(configurationMasterEntity == null) {
 			throw BRSException.throwException("Error : Logo is not Uploaded.");
 		}
-		/*
+		
 		try {
-			filePath = fileStorageService.loadFileAsResource(configurationMasterEntity.getLogoPath());
-			return fileStorageService.getFileResourceimg(filePath);
+			filePath = fileStorageService.getFileResourceforLogo(configurationMasterEntity);
+			return fileStorageService.getFileResource(filePath);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw new Exception("File not found " + fileName,e);
 		}
-		*/
-		return null;
 	}
 
 	@Override

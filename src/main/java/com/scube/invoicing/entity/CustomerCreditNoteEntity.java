@@ -40,5 +40,8 @@ public class CustomerCreditNoteEntity extends BaseEntity {
 	
 	@Column(name = "credits_remaining")
 	private double creditsRemaining;
+	
+	@Column(name = "invoice_no")
+	private String invoiceNo;
 
 }

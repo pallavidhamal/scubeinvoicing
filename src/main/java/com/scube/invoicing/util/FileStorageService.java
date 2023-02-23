@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import com.scube.invoicing.dto.ReportResponseDto;
+import com.scube.invoicing.entity.ConfigurationMasterEntity;
 import com.scube.invoicing.exception.FileStorageException;
 import com.scube.invoicing.repository.DumpDataRepository;
 
@@ -71,15 +72,15 @@ public class FileStorageService {
 	
 	 public Resource getFileResource(Path filePath) throws Exception {
 		 
-		 Resource resource  = new UrlResource(filePath.toUri());
-           if(resource.exists()) {
-           	logger.info("Inside IF(resource.exists)");
-               return resource;
-           } else {
-           	logger.info("Inside else()");
-               throw new Exception("File not found " + filePath);
-           }
-	 
+		Resource resource  = new UrlResource(filePath.toUri());
+        if(resource.exists()) {
+           logger.info("Inside IF(resource.exists)");
+           return resource;
+        } 
+        else {
+           logger.info("Inside else()");
+           throw new Exception("File not found " + filePath);
+        }
 	 }
 	 
 	 public String storeFile(MultipartFile multipartFile, String logoFor) {
@@ -114,6 +115,19 @@ public class FileStorageService {
 			// TODO: handle exception
 			throw new FileStorageException("Could not store file " + fileName + ". Please try again!", e);
 		}
+	 }
+	 
+	 public Path getFileResourceforLogo(ConfigurationMasterEntity configurationMasterEntity) throws Exception {
+		   
+		 Path filePath = null ;
+		 String newPath = this.fileBaseLocation+"/"+UploadPathContUtils.FILE_LOGO_DIR;
+		 logger.info("---- New Path ---- " + newPath);
 		 
+		 fileStorageLocation = Paths.get(newPath).toAbsolutePath().normalize();
+		 filePath = fileStorageLocation.resolve(configurationMasterEntity.getLogoPath()).normalize();
+		 logger.info("---- File Path ---- " + filePath);
+		 
+	     return filePath;
+	     
 	 }
 }

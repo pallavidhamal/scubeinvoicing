@@ -78,8 +78,14 @@ public class DateUtils {
         
     }
     
-    public static Date stringToDateConvert(String inputDate) throws ParseException {
-        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate);
+    public static Date stringToDateConvert(String inputDate) {
+        Date date = new Date();
+		try {
+			date = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return date;
     }
     

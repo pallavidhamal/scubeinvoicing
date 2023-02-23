@@ -9,6 +9,6 @@ public interface ConfigurationMasterService {
 	
 	String editUploadedLogoAndSave(MultipartFile multipartFile, String configID);
 	
-	public Resource getUploadedLogoFile(String companyID) throws Exception;
+	public Resource getUploadedLogoFile(String configureID) throws Exception;
 	
 }
