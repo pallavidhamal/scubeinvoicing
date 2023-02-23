@@ -218,7 +218,7 @@ public class CompanyMasterServiceImpl implements CompanyMasterService {
 		
 		logger.info("----- CompanyMasterServiceImpl getCompanyEntityByCompanyID -----");
 		
-		return companyMasterRepository.findById(companyID).orElseThrow();
+		return companyMasterRepository.findById(companyID).get();
 	}
 
 }
