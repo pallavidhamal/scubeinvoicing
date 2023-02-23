@@ -228,9 +228,12 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		logger.info("------- ExpenseInfoController getAllExpenseList ------");
 		
 		List<ExpenseInfoEntity> expenseInfoEntityList = expenseInfoRepository.findAll();
-		List<ExpenseCategoryItemListEntity> expenseCategoryItemListEntities = expenseItemListRepository.findAll();
+		Set<ExpenseCategoryItemListEntity> expenseCategoryItemListEntities = new HashSet<ExpenseCategoryItemListEntity>();
+		for(ExpenseInfoEntity expenseInfoEntity : expenseInfoEntityList) {
+			expenseCategoryItemListEntities = expenseItemListRepository.findByExpenseInfoEntity(expenseInfoEntity);
+		}
 		
-		return null;
+		return ExpenseInfoAndItemListMapper.toExpenseResponseDtosList(expenseInfoEntityList, expenseCategoryItemListEntities);
 	}
 
 }

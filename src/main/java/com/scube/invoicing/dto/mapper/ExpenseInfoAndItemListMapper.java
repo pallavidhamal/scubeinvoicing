@@ -23,14 +23,13 @@ public class ExpenseInfoAndItemListMapper {
 				.setExpenseItemList(ExpenseItemListResponseMapper.toExpenseResponseDtosList(expenseCategoryItemListEntity));
 	}
 	
-	
 	public static List<ExpenseResponseDto> toExpenseResponseDtosList(List<ExpenseInfoEntity> expenseInfoEntitiesList,
-			Set<ExpenseCategoryItemListEntity> expenseCategoryItemListEntitiesList) {
+			Set<ExpenseCategoryItemListEntity> expenseCategoryItemList) {
 		// TODO Auto-generated method stub
 		
 		List<ExpenseResponseDto> expenseResponseDtosList = new ArrayList<ExpenseResponseDto>();
 		for(ExpenseInfoEntity expenseInfoEntity : expenseInfoEntitiesList) {
-			expenseResponseDtosList.add(toExpenseResponseDto(expenseInfoEntity, expenseCategoryItemListEntitiesList));			
+			expenseResponseDtosList.add(toExpenseResponseDto(expenseInfoEntity, expenseCategoryItemList));			
 		}
 				
 		return expenseResponseDtosList;
