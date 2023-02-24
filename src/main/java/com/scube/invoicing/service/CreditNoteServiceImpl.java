@@ -15,15 +15,18 @@ import org.springframework.stereotype.Service;
 import com.scube.invoicing.dto.CreditNoteResponseDto;
 import com.scube.invoicing.dto.incoming.CreditNoteDetailsIncomingDto;
 import com.scube.invoicing.dto.incoming.CreditNoteIncomingDto;
+import com.scube.invoicing.dto.incoming.CustomerInvoiceIncomingDto;
 import com.scube.invoicing.dto.mapper.CustomerCreditNoteMapper;
 import com.scube.invoicing.entity.CompanyMasterEntity;
 import com.scube.invoicing.entity.CustomerCreditNoteDetailsEntity;
 import com.scube.invoicing.entity.CustomerCreditNoteEntity;
+import com.scube.invoicing.entity.CustomerInvoiceEntity;
 import com.scube.invoicing.entity.CustomerMasterEntity;
 import com.scube.invoicing.entity.GSTMasterEntity;
 import com.scube.invoicing.exception.BRSException;
 import com.scube.invoicing.repository.CreditNoteDetailsRepository;
 import com.scube.invoicing.repository.CreditNoteRepository;
+import com.scube.invoicing.repository.CustomerInvoiceRepository;
 import com.scube.invoicing.util.DateUtils;
 
 @Service
@@ -37,6 +40,12 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 	
 	@Autowired
 	CustomerMasterService customerMasterService;
+	
+	@Autowired
+	CustomerInvoiceService customerInvoiceService;
+	
+	@Autowired
+	CustomerInvoiceRepository customerInvoiceRepository;
 	
 	@Autowired
 	CreditNoteRepository creditNoteRepository;
@@ -57,7 +66,7 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 			throw BRSException.throwException("Error : Customer ID cannot be blank or null");
 		}
 		
-		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("8706b3eaa0");
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("a03964deb2");
 		
 		if(companyMasterEntity == null) {
 			throw BRSException.throwException("Error : NO Company Details Found");
@@ -68,6 +77,16 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		
 		if(customerMasterEntity == null) {
 			throw BRSException.throwException("Error : NO Customer Details Found");
+		}
+		
+		Set<CustomerInvoiceEntity> customerInvoiceSet = new HashSet<CustomerInvoiceEntity>(); 
+		
+		if(creditNoteIncomingDto.getCustomerInvoiceIncomingDtos() != null) {
+			for(CustomerInvoiceIncomingDto customerInvoiceIncomingDto :
+				creditNoteIncomingDto.getCustomerInvoiceIncomingDtos()) {
+				CustomerInvoiceEntity customerInvoiceEntity = customerInvoiceRepository.findById(customerInvoiceIncomingDto.getInvoiceID()).get();
+				customerInvoiceSet.add(customerInvoiceEntity);
+			}
 		}
 		
 		Random randomNumber = new Random();
@@ -84,10 +103,10 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		customerCreditNoteEntity.setSgstAmount(creditNoteIncomingDto.getSgstAmount());
 		customerCreditNoteEntity.setTotalAmount(creditNoteIncomingDto.getTotalAmount());
 		customerCreditNoteEntity.setSubTotal(creditNoteIncomingDto.getSubTotal());
-		customerCreditNoteEntity.setInvoiceNo(creditNoteIncomingDto.getInvoiceNo());
 		customerCreditNoteEntity.setCreditsRemaining(creditNoteIncomingDto.getCreditsRemaining());
 		customerCreditNoteEntity.setCreditNoteNo(generatedCreditNoteNo);
 		customerCreditNoteEntity.setCreditNoteDate(DateUtils.stringToDateConvert(creditNoteIncomingDto.getCreditNoteDate()));
+		customerCreditNoteEntity.setCustomerInvoiceEntity(customerInvoiceSet);
 		
 		creditNoteRepository.save(customerCreditNoteEntity);
 		

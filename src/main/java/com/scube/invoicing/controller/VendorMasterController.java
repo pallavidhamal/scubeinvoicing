@@ -30,6 +30,7 @@ public class VendorMasterController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CategoryMasterController.class);
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/addNewVendor", produces = APPLICATION_JSON_VALUE)
 	public Response addNewVendor(@Valid @RequestBody VendorMasterIncomingDto vendorMasterIncomingDto) {
 		logger.info("----- VendorMasterController addNewVendor ------");
@@ -37,6 +38,7 @@ public class VendorMasterController {
 	}
 	
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/updateVendor", produces = APPLICATION_JSON_VALUE)
 	public Response updateVendor(@Valid @RequestBody VendorMasterIncomingDto vendorMasterIncomingDto) {
 		logger.info("----- VendorMasterController updateVendor ------");
@@ -44,6 +46,7 @@ public class VendorMasterController {
 	}
 	
 	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/deleteVendorByVendorID/{categoryID}")
 	public Response deleteVendorByVendorID(@PathVariable("categoryID") String categoryID) {
 		logger.info("----- VendorMasterController deleteVendorByVendorID ------");
@@ -51,6 +54,7 @@ public class VendorMasterController {
 	}
 	
 	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/getVendorInfoByVendorID/{categoryID}")
 	public Response getVendorInfoByVendorID(@PathVariable("categoryID") String categoryID) {
 		logger.info("----- VendorMasterController getVendorInfoByVendorID ------");
@@ -58,6 +62,7 @@ public class VendorMasterController {
 	}
 	
 	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/getAllVendorList")
 	public Response getAllVendorList() {
 		logger.info("----- VendorMasterController getAllVendorList ------");

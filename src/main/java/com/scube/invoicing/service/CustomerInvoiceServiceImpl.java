@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.scube.invoicing.dto.CustomerServiceResponseDto;
 import com.scube.invoicing.dto.incoming.CustomerInvoiceServiceIncomingDto;
-import com.scube.invoicing.dto.incoming.CustomerServiceIncomingDto;
+import com.scube.invoicing.dto.incoming.CustomerInvoiceIncomingDto;
 import com.scube.invoicing.dto.mapper.CustomerInvoiceMapper;
 import com.scube.invoicing.entity.CompanyMasterEntity;
 import com.scube.invoicing.entity.CustomerInvoiceEntity;
@@ -49,7 +49,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	private static final Logger logger = LoggerFactory.getLogger(CustomerInvoiceServiceImpl.class);
 
 	@Override
-	public CustomerServiceResponseDto addCustomerInvoiceAndServiceData(@Valid CustomerServiceIncomingDto customerServiceIncomingDto) {
+	public CustomerServiceResponseDto addCustomerInvoiceAndServiceData(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto) {
 		// TODO Auto-generated method stub
 		
 		logger.info("----- CustomerInvoiceServiceImpl addCustomerInvoiceAndServiceData ----");
@@ -59,7 +59,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 			throw BRSException.throwException("Error : Customer ID cannot be blank or null");
 		}
 		
-		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("a0976ca4c2");
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("a03964deb2");
 		
 		if(companyMasterEntity == null) {
 			throw BRSException.throwException("Error : NO Company Details Found");
@@ -143,7 +143,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	}
 
 	@Override
-	public boolean updateCustomerServiceInfo(@Valid CustomerServiceIncomingDto customerServiceIncomingDto) {
+	public boolean updateCustomerServiceInfo(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto) {
 		// TODO Auto-generated method stub
 		
 		logger.info("----- CustomerInvoiceServiceImpl updateCustomerServiceInfo ----");
@@ -211,7 +211,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	}
 
 	@Override
-	public boolean updateCustomerInvoicePaymentStatus(@Valid CustomerServiceIncomingDto customerServiceIncomingDto) {
+	public boolean updateCustomerInvoicePaymentStatus(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto) {
 		// TODO Auto-generated method stub
 		
 		logger.info("----- CustomerInvoiceServiceImpl updateCustomerInvoicePaymentStatus ----");

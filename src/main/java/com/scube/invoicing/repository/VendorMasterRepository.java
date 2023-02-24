@@ -8,6 +8,6 @@ import com.scube.invoicing.entity.VendorMasterEntity;
 @Repository
 public interface VendorMasterRepository extends JpaRepository<VendorMasterEntity, String> {
 	
-	VendorMasterEntity findByVendorName(String vendorName);
+	VendorMasterEntity findByCompanyName(String vendorName);
 
 }

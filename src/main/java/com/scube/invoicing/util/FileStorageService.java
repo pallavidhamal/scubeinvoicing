@@ -8,14 +8,11 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import com.scube.invoicing.dto.ReportResponseDto;
 import com.scube.invoicing.entity.ConfigurationMasterEntity;
 import com.scube.invoicing.exception.FileStorageException;
-import com.scube.invoicing.repository.DumpDataRepository;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -28,14 +25,6 @@ public class FileStorageService {
 	private final String fileBaseLocation;
 	
 	private static final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
-	
-	@Autowired
-	DumpDataRepository dumpDataRepository;
-	
-	@Autowired
-	ReportResponseDto reportResponseDto;
-	
-	//@Value("${file.dumpdata.path}") private String dumpDataFilePath;
 
 	public FileStorageService(FileStorageProperties fileStorageProperties) 
 	  {    

@@ -32,5 +32,7 @@ public class CreditNoteIncomingDto {
 	private double creditsRemaining;
 	
 	private Set<CreditNoteDetailsIncomingDto> creditNoteDetailsIncomingDto;
+	
+	private Set<CustomerInvoiceIncomingDto> customerInvoiceIncomingDtos;
 
 }

@@ -5,16 +5,16 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.scube.invoicing.dto.CustomerServiceResponseDto;
-import com.scube.invoicing.dto.incoming.CustomerServiceIncomingDto;
+import com.scube.invoicing.dto.incoming.CustomerInvoiceIncomingDto;
 import com.scube.invoicing.entity.CustomerInvoiceEntity;
 import com.scube.invoicing.entity.CustomerInvoiceServiceEntity;
 import com.scube.invoicing.entity.CustomerMasterEntity;
 
 public interface CustomerInvoiceService {
 	
-	CustomerServiceResponseDto addCustomerInvoiceAndServiceData(@Valid CustomerServiceIncomingDto customerServiceIncomingDto);
+	CustomerServiceResponseDto addCustomerInvoiceAndServiceData(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
 	
-	boolean updateCustomerServiceInfo(@Valid CustomerServiceIncomingDto customerServiceIncomingDto);
+	boolean updateCustomerServiceInfo(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
 	
 	boolean removeCustomerInvoiceAndServiceData(String customerID, String invoiceNo);
 	
@@ -29,6 +29,6 @@ public interface CustomerInvoiceService {
 	
 	List<CustomerServiceResponseDto> getAllCustomerInvoiceAndServiceList();
 	
-	boolean updateCustomerInvoicePaymentStatus(@Valid CustomerServiceIncomingDto customerServiceIncomingDto);
+	boolean updateCustomerInvoicePaymentStatus(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
 
 }
