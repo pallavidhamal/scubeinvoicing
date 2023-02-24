@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.scube.invoicing.dto.incoming.CustomerServiceIncomingDto;
+import com.scube.invoicing.dto.incoming.CustomerInvoiceIncomingDto;
 import com.scube.invoicing.dto.response.Response;
 import com.scube.invoicing.service.CustomerInvoiceService;
 
@@ -30,7 +30,7 @@ public class CustomerInvoiceServiceController {
 	private static final Logger logger = LoggerFactory.getLogger(CustomerInvoiceServiceController.class);
 	
   	@PostMapping( value = "/addCustomerInvoiceAndServiceData" , consumes = APPLICATION_JSON_VALUE)
-  	public Response addCustomerInvoiceAndServiceData(@Valid @RequestBody CustomerServiceIncomingDto customerServiceIncomingDto) {
+  	public Response addCustomerInvoiceAndServiceData(@Valid @RequestBody CustomerInvoiceIncomingDto customerServiceIncomingDto) {
   		
   		logger.info("----- CustomerInvoiceServiceController addCustomerInvoiceAndServiceData ----");
   		
@@ -40,7 +40,7 @@ public class CustomerInvoiceServiceController {
   	
   	
   	@PostMapping( value = "/updateCustomerInvoiceAndServiceData" , consumes = APPLICATION_JSON_VALUE)
-  	public Response updateCustomerInvoiceAndServiceData(@Valid @RequestBody CustomerServiceIncomingDto customerServiceIncomingDto) {
+  	public Response updateCustomerInvoiceAndServiceData(@Valid @RequestBody CustomerInvoiceIncomingDto customerServiceIncomingDto) {
   		
   		logger.info("----- CustomerInvoiceServiceController addCustomerInvoiceAndServiceData ----");
   		
@@ -80,7 +80,7 @@ public class CustomerInvoiceServiceController {
   	
   	
   	@PostMapping( value = "/updateCustomerInvoicePaymentStatus", consumes = APPLICATION_JSON_VALUE)
-  	public Response updateCustomerInvoicePaymentStatus(@Valid @RequestBody CustomerServiceIncomingDto customerServiceIncomingDto) {
+  	public Response updateCustomerInvoicePaymentStatus(@Valid @RequestBody CustomerInvoiceIncomingDto customerServiceIncomingDto) {
   		
   		logger.info("----- CustomerInvoiceServiceController updateCustomerInvoicePaymentStatus ----");
   		
