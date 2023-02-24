@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CustomerServiceIncomingDto {
+public class CustomerInvoiceIncomingDto {
 	
 	private String customerID;
 	private String custEmailId;
@@ -21,6 +21,7 @@ public class CustomerServiceIncomingDto {
 	
 	private String customerServiceID;
 	
+	private String invoiceID;
 	private String invoiceNo;
 	private String invoiceDate;
 	
