@@ -58,6 +58,7 @@ public class VendorMasterResponseDto {
 	
 	
 	// Payment & Billing Info
+	private String paymentMethodID;
 	private String prefPaymentMethod;
 	private String prefDelieveryMethod;
 	private String paymentTerms;
@@ -65,6 +66,7 @@ public class VendorMasterResponseDto {
 	private String paymentDate;
 	private String paysWith;
 	
+	private String currencyID;
 	private String currencyName;
 
 }

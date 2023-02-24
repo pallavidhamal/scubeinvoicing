@@ -40,12 +40,15 @@ public class VendorMasterMapper {
 				.setCstRegistrationNo(vendorMasterEntity.getCstRegistrationNo())
 				.setPanNo(vendorMasterEntity.getPanNo())
 
+				.setPaymentMethodID(vendorMasterEntity.getPaymentMethodEntity().getId())
 				.setPrefDelieveryMethod(vendorMasterEntity.getPrefDelieveryMethod())
 				.setPaymentDate(DateUtils.formatDateToDDMMYYYYFormat(vendorMasterEntity.getPaymentDate()))
 				.setPaymentTerms(vendorMasterEntity.getPaymentTerms())
 				.setOpeningBalance(vendorMasterEntity.getOpeningBalance())
 				.setPaysWith(vendorMasterEntity.getPaysWith())
 				.setPrefPaymentMethod(vendorMasterEntity.getPaymentMethodEntity().getMethodName())
+				
+				.setCurrencyID(vendorMasterEntity.getCurrencyMasterEntity().getId())
 				.setCurrencyName(vendorMasterEntity.getCurrencyMasterEntity().getCurrencyName());
 	}
 	
