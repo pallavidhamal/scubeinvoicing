@@ -16,16 +16,22 @@ import lombok.experimental.Accessors;
 @ToString
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExpenseItemListResponseDto {
+public class CustomerInvoiceServiceResponseDto {
 	
-	private String expenseItemID;
+	private String invoiceServiceID;
 	
-	private String customer;
+	private String serviceID;	
+	private String serviceName;
 	
-	private String category;
+	private String hsnOrSac;
+	private String sku;
 	private String description;
-	
+	private String quantity;
+	private double rate;
 	private String amount;
-	private double tax;
+	
+	private String gstID;
+	private String gstTag;
+	private double gstValue;
 
 }

@@ -7,5 +7,7 @@ import com.scube.invoicing.entity.CompanyMasterEntity;
 
 @Repository
 public interface CompanyMasterRepository extends JpaRepository<CompanyMasterEntity, String> {
+	
+	CompanyMasterEntity findByCompanyName(String companyName);
 
 }

@@ -27,9 +27,11 @@ public class CreateInvoiceIncomingDto {
 	private double creditsRemaining;
 	
 	private double subTotal;
-	private double cgstAmount;
-	private double sgstAmount;
 	private double totalAmount;
 	private double totalDueAmount;
+	
+	private double cgstAmount;
+	private double sgstAmount;
+	private String igstAmount;
 
 }

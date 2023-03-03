@@ -1,7 +1,6 @@
 package com.scube.invoicing.repository;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,8 +17,17 @@ public interface CustomerInvoiceRepository extends JpaRepository<CustomerInvoice
 	
 	List<CustomerInvoiceEntity> findByCustomerMasterEntity(CustomerMasterEntity customerMasterEntity);
 	
-	@Query(value = "SELECT * FROM customer_credit_note where fk_customer_master=(?1) and created_at >=  STR_TO_DATE((?2), '%Y-%m-%d')"
+	@Query(value = "SELECT * FROM customer_invoice where fk_customer=(?1) and created_at >=  STR_TO_DATE((?2), '%Y-%m-%d')"
 			+ "and created_at <= STR_TO_DATE((?3), '%Y-%m-%d');", nativeQuery = true)
 	List<CustomerInvoiceEntity> getCustomerInvoiceListByCustomerIDAndDateRange(String customerID, String startDate, String endDate);
+	
+	@Query(value = "SELECT * FROM customer_invoice where fk_customer=(?1) and payment_status=(?2) and created_at >=  STR_TO_DATE((?3), '%Y-%m-%d')"
+			+ "and created_at <= STR_TO_DATE((?4), '%Y-%m-%d');", nativeQuery = true)
+	List<CustomerInvoiceEntity> getCustomerInvoiceListByCustomerIDAndPaymentStatusAndDateRange(String customerID, 
+			String paymentStatus, String startDate, String endDate);
+	
+	@Query(value = "SELECT * FROM customer_invoice where payment_status = 'Payment Completed' and created_at >=  STR_TO_DATE((?1), '%Y-%m-%d')"
+			+ "and created_at <= STR_TO_DATE((?2), '%Y-%m-%d');", nativeQuery = true)
+	List<CustomerInvoiceEntity> getCustomerInvoiceEntityForPaymentCompletedInvoiceByDateRange(String startDate, String endDate);
 
 }

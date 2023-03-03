@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.scube.invoicing.dto.incoming.CreateInvoiceIncomingDto;
@@ -42,6 +43,9 @@ public class CreateInvoiceServiceImpl implements CreateInvoiceService {
 	
 	@Autowired
 	EmailService emailService;
+	
+	@Value("${company.name}")
+	private String companyName;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CreateInvoiceServiceImpl.class);
 	
@@ -79,7 +83,8 @@ public class CreateInvoiceServiceImpl implements CreateInvoiceService {
 			throw BRSException.throwException("Error : Mail body cannot be blank or null");
 		}
 		
-		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("a0976ca4c2");
+		logger.info(companyName);
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyName(companyName);
 		
 		if(companyMasterEntity == null) {
 			throw BRSException.throwException("Error : NO Company Details Found");
@@ -114,7 +119,7 @@ public class CreateInvoiceServiceImpl implements CreateInvoiceService {
 			logger.info("File Path for Invoice :--- " + attachedFile);
 			
 			// Send Mail with Attachment Invoice
-	//		emailService.sendInvoiceMailToCustomer(createInvoiceIncomingDto, attachedFile);
+			emailService.sendInvoiceMailToCustomer(createInvoiceIncomingDto, attachedFile);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -157,7 +162,7 @@ public class CreateInvoiceServiceImpl implements CreateInvoiceService {
 			throw BRSException.throwException("Error : Mail body cannot be blank or null");
 		}
 		
-		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("a0976ca4c2");
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyName(companyName);
 		
 		if(companyMasterEntity == null) {
 			throw BRSException.throwException("Error : NO Company Details Found");

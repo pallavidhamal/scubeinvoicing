@@ -32,6 +32,7 @@ public class ConfigurationMasterController {
 	private static final Logger logger = LoggerFactory.getLogger(ConfigurationMasterController.class);
 	
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/uploadLogo")
 	public ResponseEntity<Response> uploadLogo(@RequestParam("logo") MultipartFile multipartFile) {
 		
@@ -58,6 +59,7 @@ public class ConfigurationMasterController {
   	}
 	
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/editUploadedLogoById")
 	public ResponseEntity<Response> editUploadedLogoById(@RequestParam("logo") MultipartFile multipartFile, 
 			@RequestParam("configID") String configID) {

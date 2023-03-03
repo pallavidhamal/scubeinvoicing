@@ -4,7 +4,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.scube.invoicing.dto.incoming.CustomerInvoiceServiceIncomingDto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,7 @@ import lombok.experimental.Accessors;
 @ToString
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CustomerServiceResponseDto {
+public class CustomerInvoiceResponseDto {
 	
 	private String companyName;
 	private String toEmailID;
@@ -41,14 +40,18 @@ public class CustomerServiceResponseDto {
 	private String invoiceNo;
 	private String invoiceDate;
 	
-	private double subTotal;
-	private double totalAmount;
-	private double discounts;
-	private double deposit;
-	private double balance;
+	private String subTotal;
+	private String totalAmount;
+	private String discounts;
+	private String deposit;
+	private String balance;
 	
-	private double cgstAmount;
-	private double sgstAmount;
+	private String actualTds;
+	private String invoiceTds;
+	
+	private String cgstAmount;
+	private String sgstAmount;
+	private String igstAmount;
 	
 	private String messageInvoice;
 	private String messageStatement;
@@ -58,6 +61,6 @@ public class CustomerServiceResponseDto {
 	
 	private String paymentStatus;
 	
-	private Set<CustomerInvoiceServiceIncomingDto> customerInvoiceServiceDtos;
+	private Set<CustomerInvoiceServiceResponseDto> customerInvoiceServiceResponseDtos;
 
 }

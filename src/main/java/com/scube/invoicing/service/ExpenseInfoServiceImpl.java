@@ -1,5 +1,7 @@
 package com.scube.invoicing.service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,6 +52,9 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 	
 	@Autowired
 	ExpenseItemListRepository expenseItemListRepository;
+	
+	Base64.Encoder encoder = Base64.getEncoder();
+	Base64.Decoder decoder = Base64.getDecoder();
 	
 	private static final Logger logger = LoggerFactory.getLogger(ExpenseInfoServiceImpl.class);
 
@@ -105,7 +110,8 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 			
 			ExpenseCategoryItemListEntity expenseCategoryItemListEntity = new ExpenseCategoryItemListEntity();
 			expenseCategoryItemListEntity.setIsdeleted("N");
-			expenseCategoryItemListEntity.setAmount(expenseItemListIncomingDto.getAmount());
+			expenseCategoryItemListEntity.setAmount(encoder.encodeToString(expenseItemListIncomingDto.getAmount()
+					.getBytes(StandardCharsets.UTF_8)));
 			expenseCategoryItemListEntity.setDescription(expenseItemListIncomingDto.getDescription());
 			expenseCategoryItemListEntity.setCustomerMasterEntity(customerMasterEntity);
 			expenseCategoryItemListEntity.setCategoryMasterEntity(categoryMasterEntity);
@@ -200,9 +206,6 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		logger.info("------- ExpenseInfoController deleteExpenseByExpenseID ------");
 		
 		ExpenseInfoEntity expenseInfoEntity = expenseInfoRepository.findById(expenseID).get();
-		Set<ExpenseCategoryItemListEntity> expenseCategoryItemListEntity = expenseItemListRepository.findByExpenseInfoEntity(expenseInfoEntity);
-		
-		expenseItemListRepository.deleteAll(expenseCategoryItemListEntity);
 		expenseInfoRepository.delete(expenseInfoEntity);
 		
 		logger.info("------- Record Deleted Successfully ------");
@@ -216,10 +219,8 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		logger.info("------- ExpenseInfoController getExpenseInfoByExpenseID ------");
 		
 		ExpenseInfoEntity expenseInfoEntity = expenseInfoRepository.findById(expenseID).get();
-		Set<ExpenseCategoryItemListEntity> expenseCategoryItemListEntities = expenseItemListRepository.
-				findByExpenseInfoEntity(expenseInfoEntity);
 		
-		return ExpenseInfoAndItemListMapper.toExpenseResponseDto(expenseInfoEntity, expenseCategoryItemListEntities);
+		return ExpenseInfoAndItemListMapper.toExpenseResponseDto(expenseInfoEntity);
 	}
 
 	@Override
@@ -228,12 +229,8 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		logger.info("------- ExpenseInfoController getAllExpenseList ------");
 		
 		List<ExpenseInfoEntity> expenseInfoEntityList = expenseInfoRepository.findAll();
-		Set<ExpenseCategoryItemListEntity> expenseCategoryItemListEntities = new HashSet<ExpenseCategoryItemListEntity>();
-		for(ExpenseInfoEntity expenseInfoEntity : expenseInfoEntityList) {
-			expenseCategoryItemListEntities = expenseItemListRepository.findByExpenseInfoEntity(expenseInfoEntity);
-		}
-		
-		return ExpenseInfoAndItemListMapper.toExpenseResponseDtosList(expenseInfoEntityList, expenseCategoryItemListEntities);
+
+		return ExpenseInfoAndItemListMapper.toExpenseResponseDtosList(expenseInfoEntityList);
 	}
 
 }

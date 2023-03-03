@@ -17,6 +17,8 @@ import lombok.experimental.Accessors;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceCreditNoteResponseDto {
+	
+	private String customerInvoiceID;
 
 	private String customerID;
 	private String customerCompanyName;
@@ -24,9 +26,15 @@ public class InvoiceCreditNoteResponseDto {
 	private String customerInvoiceNo;
 	private String customerInvoiceDate;
 	
+	private String customerInvoiceAmount;
+	
 	private String date;
 	
 	private String customerCreditNoteNo;
-	private double customerCreditsRemaining;
+	private String creditNoteDate;
+	
+	private String customerCreditsRemaining;
+	
+	private String amountPendingFlag;
 	
 }

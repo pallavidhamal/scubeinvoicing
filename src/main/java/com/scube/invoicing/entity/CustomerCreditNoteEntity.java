@@ -11,9 +11,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity
 @Table(name = "customer_credit_note")
 public class CustomerCreditNoteEntity extends BaseEntity {
@@ -42,43 +39,67 @@ public class CustomerCreditNoteEntity extends BaseEntity {
 		this.creditNoteDate = creditNoteDate;
 	}
 
-	public double getSubTotal() {
+	public String getSubTotal() {
 		return subTotal;
 	}
 
-	public void setSubTotal(double subTotal) {
+	public void setSubTotal(String subTotal) {
 		this.subTotal = subTotal;
 	}
 
-	public double getTotalAmount() {
+	public String getTotalAmount() {
 		return totalAmount;
 	}
 
-	public void setTotalAmount(double totalAmount) {
+	public void setTotalAmount(String totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 
-	public double getCgstAmount() {
+	public String getCgstAmount() {
 		return cgstAmount;
 	}
 
-	public void setCgstAmount(double cgstAmount) {
+	public void setCgstAmount(String cgstAmount) {
 		this.cgstAmount = cgstAmount;
 	}
 
-	public double getSgstAmount() {
+	public String getSgstAmount() {
 		return sgstAmount;
 	}
 
-	public void setSgstAmount(double sgstAmount) {
+	public void setSgstAmount(String sgstAmount) {
 		this.sgstAmount = sgstAmount;
 	}
+	
+	public String getIgstAmount() {
+		return igstAmount;
+	}
 
-	public double getCreditsRemaining() {
+	public String getCreditsRemaining() {
 		return creditsRemaining;
 	}
 
-	public void setCreditsRemaining(double creditsRemaining) {
+	public void setIgstAmount(String igstAmount) {
+		this.igstAmount = igstAmount;
+	}
+
+	public String getDeclaredTds() {
+		return declaredTds;
+	}
+
+	public void setDeclaredTds(String declaredTds) {
+		this.declaredTds = declaredTds;
+	}
+
+	public String getActualTds() {
+		return actualTds;
+	}
+
+	public void setActualTds(String actualTds) {
+		this.actualTds = actualTds;
+	}
+
+	public void setCreditsRemaining(String creditsRemaining) {
 		this.creditsRemaining = creditsRemaining;
 	}
 
@@ -91,7 +112,7 @@ public class CustomerCreditNoteEntity extends BaseEntity {
 	}
 
 	@OneToOne
-	@JoinColumn(name = "fk_customer_master")
+	@JoinColumn(name = "fk_customer")
 	private CustomerMasterEntity customerMasterEntity;
 	
 	@Column(name = "credit_note_no")
@@ -101,19 +122,28 @@ public class CustomerCreditNoteEntity extends BaseEntity {
 	private Date creditNoteDate;
 	
 	@Column(name = "sub_total")
-	private double subTotal;
+	private String subTotal;
 	
 	@Column(name = "total_amount")
-	private double totalAmount;
+	private String totalAmount;
 	
 	@Column(name = "cgst_amount")
-	private double cgstAmount;
+	private String cgstAmount;
 	
 	@Column(name = "sgst_amount")
-	private double sgstAmount;
+	private String sgstAmount;
+	
+	@Column(name = "igst_amount")
+	private String igstAmount;
+	
+	@Column(name = "declared_tds")
+	private String declaredTds;
+	
+	@Column(name = "actual_tds")
+	private String actualTds;
 	
 	@Column(name = "credits_remaining")
-	private double creditsRemaining;
+	private String creditsRemaining;
 	
 	@ManyToMany
 	@JoinTable

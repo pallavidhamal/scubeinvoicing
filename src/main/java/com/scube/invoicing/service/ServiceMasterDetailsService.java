@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import com.scube.invoicing.dto.ServiceMasterResponseDto;
 import com.scube.invoicing.dto.incoming.ServiceMasterIncomingDto;
+import com.scube.invoicing.entity.ServiceMasterEntity;
 
 public interface ServiceMasterDetailsService {
 	
@@ -19,4 +20,5 @@ public interface ServiceMasterDetailsService {
 	
 	List<ServiceMasterResponseDto> getAllServiceInfo();
 
+	ServiceMasterEntity getServiceMasterEntityByServiceID(String serviceID);
 }

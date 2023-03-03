@@ -29,49 +29,39 @@ public class CompanyMasterController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CompanyMasterController.class);
 	
+	@SuppressWarnings("rawtypes")
   	@PostMapping( value = "/addCompanyDetails" , consumes = APPLICATION_JSON_VALUE)
   	public Response addCompanyDetails(@Valid @RequestBody CompanyMasterIncomingDto companyMasterIncomingDto) {
-  		
   		logger.info("------- CompanyMasterController addCompanyDetails -------");
-  		
   		return Response.ok().setPayload(companyMasterService.addCompanyDetails(companyMasterIncomingDto));
-  		
   	}
 
+  	@SuppressWarnings("rawtypes")
   	@PostMapping( value = "/updateCompanyDetails" , consumes = APPLICATION_JSON_VALUE)
   	public Response updateCompanyDetails(@Valid @RequestBody CompanyMasterIncomingDto companyMasterIncomingDto) {
-  		
   		logger.info("------- CompanyMasterController updateCompanyDetails -------");
-  		
   		return Response.ok().setPayload(companyMasterService.updateCompanyDetails(companyMasterIncomingDto));
-  		
   	}
   	
+  	@SuppressWarnings("rawtypes")
   	@GetMapping( value = "/deleteCompanyDetailsByCompanyId/{companyID}")
   	public Response deleteCompanyDetailsByCompanyId(@PathVariable("companyID") String companyID) {
-  		
   		logger.info("------- CompanyMasterController deleteCompanyDetailsByCompanyId -------");
-  		
   		return Response.ok().setPayload(companyMasterService.deleteCompanyDetailsByCompanyId(companyID));
-  		
   	}
   	
+  	@SuppressWarnings("rawtypes")
   	@GetMapping( value = "/getCompanyDetailsByCompanyId/{companyID}")
   	public Response getCompanyDetailsByCompanyId(@PathVariable("companyID") String companyID) {
-  		
   		logger.info("------- CompanyMasterController getCompanyDetailsByCompanyId -------");
-  		
   		return Response.ok().setPayload(companyMasterService.getCompanyDetailsByCompanyId(companyID));
-  		
   	}
   	
-  	@GetMapping( value = "/getAllCompanyDetails")
+  	@SuppressWarnings("rawtypes")
+	@GetMapping( value = "/getAllCompanyDetails")
   	public Response getAllCompanyDetails() {
-  		
   		logger.info("------- CompanyMasterController getAllCompanyDetails -------");
-  		
   		return Response.ok().setPayload(companyMasterService.getAllCompanyDetails());
-  		
   	}
   	
 }

@@ -25,42 +25,43 @@ import com.scube.invoicing.service.CategoryMasterService;
 public class CategoryMasterController {
 	
 	@Autowired
-	CategoryMasterService expenseCategoryMasterService;
+	CategoryMasterService categoryMasterService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CategoryMasterController.class);
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/addNewExpenseCategory", produces = APPLICATION_JSON_VALUE)
 	public Response addNewExpenseCategory(@Valid @RequestBody CategoryMasterIncomingDto expenseCategoryMasterIncomingDto) {
 		logger.info("----- ExpenseCategoryMasterController addNewExpenseCategory ------");
-		return Response.ok().setPayload(expenseCategoryMasterService.addNewExpenseCategory(expenseCategoryMasterIncomingDto));
+		return Response.ok().setPayload(categoryMasterService.addNewExpenseCategory(expenseCategoryMasterIncomingDto));
 	}
 	
-	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/updateExpenseCategory", produces = APPLICATION_JSON_VALUE)
 	public Response updateExpenseCategory(@Valid @RequestBody CategoryMasterIncomingDto expenseCategoryMasterIncomingDto) {
 		logger.info("----- ExpenseCategoryMasterController updateExpenseCategory ------");
-		return Response.ok().setPayload(expenseCategoryMasterService.updateExpenseCategory(expenseCategoryMasterIncomingDto));
+		return Response.ok().setPayload(categoryMasterService.updateExpenseCategory(expenseCategoryMasterIncomingDto));
 	}
 	
-	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/deleteExpenseCategoryByCategoryID/{categoryID}")
 	public Response deleteExpenseCategoryByCategoryID(@PathVariable("categoryID") String categoryID) {
 		logger.info("----- ExpenseCategoryMasterController deleteExpenseCategoryByCategoryID ------");
-		return Response.ok().setPayload(expenseCategoryMasterService.deleteExpenseCategoryByCategoryID(categoryID));
+		return Response.ok().setPayload(categoryMasterService.deleteExpenseCategoryByCategoryID(categoryID));
 	}
 	
-	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/getExpenseCategoryInfoByCategoryID/{categoryID}")
 	public Response getExpenseCategoryInfoByCategoryID(@PathVariable("categoryID") String categoryID) {
 		logger.info("----- ExpenseCategoryMasterController getExpenseCategoryInfoByCategoryID ------");
-		return Response.ok().setPayload(expenseCategoryMasterService.getExpenseCategoryInfoByCategoryID(categoryID));
+		return Response.ok().setPayload(categoryMasterService.getExpenseCategoryInfoByCategoryID(categoryID));
 	}
 	
-	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/getAllExpenseCategoryList")
 	public Response getAllExpenseCategoryList() {
 		logger.info("----- ExpenseCategoryMasterController getAllExpenseCategoryList ------");
-		return Response.ok().setPayload(expenseCategoryMasterService.getAllExpenseCategoryList());
+		return Response.ok().setPayload(categoryMasterService.getAllExpenseCategoryList());
 	}
 
 }

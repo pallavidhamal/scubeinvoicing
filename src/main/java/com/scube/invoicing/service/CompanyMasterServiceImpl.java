@@ -213,12 +213,12 @@ public class CompanyMasterServiceImpl implements CompanyMasterService {
 	}
 
 	@Override
-	public CompanyMasterEntity getCompanyEntityByCompanyID(String companyID) {
+	public CompanyMasterEntity getCompanyEntityByCompanyName(String companyName) {
 		// TODO Auto-generated method stub
 		
-		logger.info("----- CompanyMasterServiceImpl getCompanyEntityByCompanyID -----");
+		logger.info("----- CompanyMasterServiceImpl getCompanyEntityByCompanyName -----");
 		
-		return companyMasterRepository.findById(companyID).get();
+		return companyMasterRepository.findByCompanyName(companyName);
 	}
 
 }

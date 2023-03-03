@@ -29,44 +29,39 @@ public class ServiceMasterController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ServiceMasterController.class);
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/addServiceInfo", produces = APPLICATION_JSON_VALUE)
 	public Response addServiceInfo(@Valid @RequestBody ServiceMasterIncomingDto serviceMasterIncomingDto) {
-		
 		logger.info("----- ServiceMasterController addServiceInfo ------");
 		return Response.ok().setPayload(serviceMasterDetailsService.addServiceInfoDetails(serviceMasterIncomingDto));
-	
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/updateServiceInfo", produces = APPLICATION_JSON_VALUE)
 	public Response updateServiceInfo(@Valid @RequestBody ServiceMasterIncomingDto serviceMasterIncomingDto) {
-		
 		logger.info("----- ServiceMasterController updateServiceInfo ------");
 		return Response.ok().setPayload(serviceMasterDetailsService.updateServiceInfoDetails(serviceMasterIncomingDto));
-	
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/deleteServiceInfo/{serviceID}")
 	public Response deleteServiceInfo(@Valid @PathVariable ("serviceID") String serviceID) {
-		
 		logger.info("----- ServiceMasterController deleteServiceInfo ------");
 		return Response.ok().setPayload(serviceMasterDetailsService.deleteServiceInfoByServiceID(serviceID));
-	
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/getServiceInfoByServiceID/{serviceID}")
 	public Response getServiceInfoByServiceID(@Valid @PathVariable ("serviceID") String serviceID) {
-		
 		logger.info("----- ServiceMasterController getServiceInfoByServiceID ------");
 		return Response.ok().setPayload(serviceMasterDetailsService.getServiceInfoByServiceID(serviceID));
-	
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/getAllServiceInfo")
 	public Response getAllServiceInfo() {
-		
 		logger.info("----- ServiceMasterController getAllServiceInfo ------");
 		return Response.ok().setPayload(serviceMasterDetailsService.getAllServiceInfo());
-	
 	}
 	
 }

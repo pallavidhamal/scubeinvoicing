@@ -8,10 +8,14 @@ import lombok.ToString;
 @ToString
 public class CreditNoteDetailsIncomingDto {
 	
-	private String itemsAndDescription;
+	private String service; 
+	private String description;
+	
 	private double quantity;
 	private double rate;
-	private double amount;
+	private String amount;
 	private String tax;
+	
+	private String serviceAmountWithGst;
 
 }

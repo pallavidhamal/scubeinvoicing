@@ -16,6 +16,7 @@ import com.scube.invoicing.dto.incoming.CustomerMasterIncomingDto;
 import com.scube.invoicing.dto.mapper.CustomerMasterMapper;
 import com.scube.invoicing.entity.CurrencyMasterEntity;
 import com.scube.invoicing.entity.CustomerMasterEntity;
+import com.scube.invoicing.entity.PaymentMethodEntity;
 import com.scube.invoicing.exception.BRSException;
 import com.scube.invoicing.exception.EntityType;
 import com.scube.invoicing.repository.CustomerMasterRepository;
@@ -30,6 +31,9 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 	
 	@Autowired
 	CurrencyMasterService currencyMasterService;
+	
+	@Autowired
+	PaymentMethodService paymentMethodService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(CustomerMasterServiceImpl.class);
 
@@ -66,7 +70,8 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		}
 		
 		CurrencyMasterEntity currencyMasterEntity = currencyMasterService.getCurrencyMasterEntityByCurrencyId(customerMasterIncomingDto.getCurrencyName());
-		
+		PaymentMethodEntity paymentMethodEntity = paymentMethodService.getPaymentMethodEntityByPaymentMethodID(customerMasterIncomingDto.getPrefPaymentMethod()); 
+	
 		CustomerMasterEntity customerMasterEntity = new CustomerMasterEntity();
 		
 		customerMasterEntity.setTitle(customerMasterIncomingDto.getTitle());
@@ -97,7 +102,7 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		customerMasterEntity.setCstRegistrationNo(customerMasterIncomingDto.getCstRegistrationNo());
 		customerMasterEntity.setPanNo(customerMasterIncomingDto.getPanNo());
 		
-		customerMasterEntity.setPrefPaymentMethod(customerMasterIncomingDto.getPrefPaymentMethod());
+		customerMasterEntity.setPaymentMethodEntity(paymentMethodEntity);
 		customerMasterEntity.setPrefDelieveryMethod(customerMasterIncomingDto.getPrefDelieveryMethod());
 		customerMasterEntity.setPaymentTerms(customerMasterIncomingDto.getPaymentTerms());
 		customerMasterEntity.setOpeningBalance(customerMasterIncomingDto.getOpeningBalance());
@@ -130,6 +135,7 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		}
 		
 		CurrencyMasterEntity currencyMasterEntity = currencyMasterService.getCurrencyMasterEntityByCurrencyId(customerMasterIncomingDto.getCurrencyName());
+		PaymentMethodEntity paymentMethodEntity = paymentMethodService.getPaymentMethodEntityByPaymentMethodID(customerMasterIncomingDto.getPrefPaymentMethod());
 		
 		customerMasterEntity.setTitle(customerMasterIncomingDto.getTitle());
 		customerMasterEntity.setFirstName(customerMasterIncomingDto.getFirstName());
@@ -159,7 +165,7 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		customerMasterEntity.setCstRegistrationNo(customerMasterIncomingDto.getCstRegistrationNo());
 		customerMasterEntity.setPanNo(customerMasterIncomingDto.getPanNo());
 		
-		customerMasterEntity.setPrefPaymentMethod(customerMasterIncomingDto.getPrefPaymentMethod());
+		customerMasterEntity.setPaymentMethodEntity(paymentMethodEntity);
 		customerMasterEntity.setPrefDelieveryMethod(customerMasterIncomingDto.getPrefDelieveryMethod());
 		customerMasterEntity.setPaymentTerms(customerMasterIncomingDto.getPaymentTerms());
 		customerMasterEntity.setOpeningBalance(customerMasterIncomingDto.getOpeningBalance());

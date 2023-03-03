@@ -85,8 +85,9 @@ public class CustomerMasterEntity extends BaseEntity {
 	@Column(name = "pan_no")
 	private String panNo;
 	
-	@Column(name = "pref_payment_method")
-	private String prefPaymentMethod;
+	@OneToOne
+	@JoinColumn(name = "fk_payment_method")
+	private PaymentMethodEntity paymentMethodEntity;
 	
 	@Column(name = "pref_delievery_method")
 	private String prefDelieveryMethod;

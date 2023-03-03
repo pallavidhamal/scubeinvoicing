@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.scube.invoicing.dto.CustomerMasterResponseDto;
 import com.scube.invoicing.entity.CustomerMasterEntity;
+import com.scube.invoicing.util.DateUtils;
 
 public class CustomerMasterMapper {
 	
@@ -41,12 +42,15 @@ public class CustomerMasterMapper {
 				.setCstRegistrationNo(customerMasterEntity.getCstRegistrationNo())
 				.setPanNo(customerMasterEntity.getPanNo())
 				
-				.setPrefPaymentMethod(customerMasterEntity.getPrefPaymentMethod())
+				.setPaymentMethodID(customerMasterEntity.getPaymentMethodEntity().getId())
+				.setPrefPaymentMethod(customerMasterEntity.getPaymentMethodEntity().getMethodName())
+				
 				.setPrefDelieveryMethod(customerMasterEntity.getPrefDelieveryMethod())
 				.setPaymentTerms(customerMasterEntity.getPaymentTerms())
 				.setOpeningBalance(customerMasterEntity.getOpeningBalance())
-			//	.setPaymentDate(null)
+				.setPaymentDate(DateUtils.formatDateToDDMMYYYYFormat(customerMasterEntity.getPaymentDate()))
 				.setPaysWith(customerMasterEntity.getPaysWith())
+				
 				.setCurrencyID(customerMasterEntity.getCurrencyMasterEntity().getId())
 				.setCurrencyName(customerMasterEntity.getCurrencyMasterEntity().getCurrencyName());
 	}

@@ -27,6 +27,7 @@ public class InvoiceAndCreditNoteReportController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(InvoiceAndCreditNoteReportController.class);
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/generateReportForInvoiceByCustomerIDAndDateRange", consumes = APPLICATION_JSON_VALUE)
 	public Response generateReportForInvoiceByCustomerIDAndDateRange(@Valid @RequestBody 
 			InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
@@ -36,7 +37,7 @@ public class InvoiceAndCreditNoteReportController {
 	
 	}
 	
-	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/generateReportForCreditNoteByCustomerIDAndDateRange", consumes = APPLICATION_JSON_VALUE)
 	public Response generateReportForCreditNoteByCustomerIDAndDateRange(@Valid @RequestBody 
 			InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
@@ -45,5 +46,62 @@ public class InvoiceAndCreditNoteReportController {
 		return Response.ok().setPayload(invoiceAndCreditNoteReportService.generateReportForCreditNoteByCustomerIDAndDateRange(invoiceCreditNoteReportIncomingDto));
 	
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@PostMapping(value = "/generateReportForInvoicePendingAndPaidAmountByDateRange", consumes = APPLICATION_JSON_VALUE)
+	public Response generateReportForInvoicePendingAndPaidAmountByDateRange(@Valid @RequestBody 
+			InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+		
+		logger.info("----- InvoiceAndCreditNoteReportController generateReportForPendingAndPaidAmountByDateRange ------");
+		return Response.ok().setPayload(invoiceAndCreditNoteReportService.generateReportForInvoicePendingAndPaidAmountByDateRange(invoiceCreditNoteReportIncomingDto));
+	
+	}
 
+	
+	@SuppressWarnings("rawtypes")
+	@PostMapping(value = "/generateGSTReportForPaidInvoiceByDateRange", consumes = APPLICATION_JSON_VALUE)
+	public Response generateGSTReportForPaidInvoiceByDateRange(@Valid @RequestBody 
+			InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+		
+		logger.info("----- InvoiceAndCreditNoteReportController generateGSTReportForInvoiceByDateRange ------");
+		return Response.ok()
+				.setPayload(invoiceAndCreditNoteReportService.generateGSTReportForPaidInvoiceByDateRange(invoiceCreditNoteReportIncomingDto))
+				.setRespData(invoiceAndCreditNoteReportService.calculateTotalAmountForGSTReportForInvoice(invoiceCreditNoteReportIncomingDto));
+	
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	@PostMapping(value = "/generateGSTReportForCreditNoteByDateRange", consumes = APPLICATION_JSON_VALUE)
+	public Response generateGSTReportForCreditNoteByDateRange(@Valid @RequestBody 
+			InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+		
+		logger.info("----- InvoiceAndCreditNoteReportController generateGSTReportForCreditNoteByDateRange ------");
+		return Response.ok()
+				.setPayload(invoiceAndCreditNoteReportService.generateGSTReportForCreditNoteByDateRange(invoiceCreditNoteReportIncomingDto))
+				.setRespData(invoiceAndCreditNoteReportService.calculateTotalAmountForGSTReportForCreditNote(invoiceCreditNoteReportIncomingDto));
+	
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	@PostMapping(value = "/generateTDSReportForInvoiceByDateRange", consumes = APPLICATION_JSON_VALUE)
+	public Response generateTDSReportForInvoiceByDateRange(@Valid @RequestBody 
+			InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+		
+		logger.info("----- InvoiceAndCreditNoteReportController generateTDSReportForInvoiceByDateRange ------");
+		return Response.ok().setPayload(invoiceAndCreditNoteReportService.generateTDSReportForInvoiceByDateRange(invoiceCreditNoteReportIncomingDto));
+	
+	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	@PostMapping(value = "/generateTDSReportForCreditNoteByDateRange", consumes = APPLICATION_JSON_VALUE)
+	public Response generateTDSReportForCreditNoteByDateRange(@Valid @RequestBody 
+			InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+		
+		logger.info("----- InvoiceAndCreditNoteReportController generateTDSReportForCreditNoteByDateRange ------");
+		return Response.ok().setPayload(invoiceAndCreditNoteReportService.generateTDSReportForInvoiceByDateRange(invoiceCreditNoteReportIncomingDto));
+	
+	}
 }

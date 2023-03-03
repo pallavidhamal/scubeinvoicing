@@ -15,15 +15,16 @@ import lombok.Setter;
 public class CustomerInvoiceServiceEntity extends BaseEntity {
 	
 	@OneToOne
-	@JoinColumn(name = "fk_customer_master")
+	@JoinColumn(name = "fk_customer")
 	private CustomerMasterEntity customerMasterEntity;
 	
 	@OneToOne
 	@JoinColumn(name = "fk_customer_invoice")
 	private CustomerInvoiceEntity customerInvoiceEntity;
 
-	@Column(name = "product_service")
-	private String productService;
+	@OneToOne
+	@JoinColumn(name = "fk_service")
+	private ServiceMasterEntity serviceMasterEntity;
 	
 	@Column(name = "hsn_sac")
 	private String hsnorSac;
@@ -41,7 +42,10 @@ public class CustomerInvoiceServiceEntity extends BaseEntity {
 	private double rate;
 	
 	@Column(name = "amount")
-	private double amount;
+	private String amount;
+	
+	@Column(name = "service_amount_with_gst")
+	private String serviceAmountWithGst;
 	
 	@OneToOne
 	@JoinColumn(name = "fk_tax")

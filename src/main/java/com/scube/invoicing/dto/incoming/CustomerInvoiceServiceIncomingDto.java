@@ -15,7 +15,8 @@ public class CustomerInvoiceServiceIncomingDto {
 	private String description;
 	private String quantity;
 	private double rate;
-	private double amount;
+	private String amount;
 	private String gstID;
+	private String serviceAmountWithGst;
 
 }

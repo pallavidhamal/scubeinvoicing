@@ -25,14 +25,18 @@ public class CustomerInvoiceIncomingDto {
 	private String invoiceNo;
 	private String invoiceDate;
 	
-	private double subTotal;
-	private double totalAmount;
-	private double discounts;
-	private double deposit;
-	private double balance;
+	private String subTotal;
+	private String totalAmount;
+	private String discounts;
+	private String deposit;
+	private String balance;
 	
-	private double cgstAmount;
-	private double sgstAmount;
+	private String cgstAmount;
+	private String sgstAmount;
+	private String igstAmount;
+	
+	private String invoiceTds;
+	private String actualTds;
 	
 	private String messageInvoice;
 	private String messageStatement;

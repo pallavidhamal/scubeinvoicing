@@ -20,6 +20,6 @@ public interface CompanyMasterService {
 	
 	List<CompanyMasterResponseDto> getAllCompanyDetails();
 	
-	CompanyMasterEntity getCompanyEntityByCompanyID(String companyID);
+	CompanyMasterEntity getCompanyEntityByCompanyName(String companyName);
 
 }

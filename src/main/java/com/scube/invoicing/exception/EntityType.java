@@ -54,5 +54,7 @@ public enum EntityType {
     PAYMENTFREQUENCY,
     PANNO,
     GSTNO,
-    CURRENCY
+    CURRENCY,
+    CREDITNOTE,
+    CREDITNOTESERVICE
 }

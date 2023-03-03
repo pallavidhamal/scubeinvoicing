@@ -30,7 +30,7 @@ public class ExpenseCategoryItemListEntity extends BaseEntity {
 	private String description;
 	
 	@Column(name = "amount")
-	private double amount;
+	private String amount;
 	
 	@OneToOne
 	@JoinColumn(name = "fk_customer")

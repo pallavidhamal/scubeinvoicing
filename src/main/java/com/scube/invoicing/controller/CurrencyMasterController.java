@@ -23,7 +23,7 @@ public class CurrencyMasterController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CurrencyMasterController.class);
 	
-	
+	@SuppressWarnings("rawtypes")
   	@GetMapping( value = "/getAllCurrencyLists")
   	public Response getAllCurrencyLists() {
   		logger.info("------- CurrencyMasterController getAllCurrencyLists -------");

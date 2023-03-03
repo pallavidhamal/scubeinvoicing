@@ -29,63 +29,51 @@ public class CustomerInvoiceServiceController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CustomerInvoiceServiceController.class);
 	
-  	@PostMapping( value = "/addCustomerInvoiceAndServiceData" , consumes = APPLICATION_JSON_VALUE)
+  	@SuppressWarnings("rawtypes")
+	@PostMapping( value = "/addCustomerInvoiceAndServiceData" , consumes = APPLICATION_JSON_VALUE)
   	public Response addCustomerInvoiceAndServiceData(@Valid @RequestBody CustomerInvoiceIncomingDto customerServiceIncomingDto) {
-  		
   		logger.info("----- CustomerInvoiceServiceController addCustomerInvoiceAndServiceData ----");
-  		
   		return Response.ok().setPayload(customerInvoiceService.addCustomerInvoiceAndServiceData(customerServiceIncomingDto)) ;
-  		
   	}
   	
   	
-  	@PostMapping( value = "/updateCustomerInvoiceAndServiceData" , consumes = APPLICATION_JSON_VALUE)
+  	@SuppressWarnings("rawtypes")
+	@PostMapping( value = "/updateCustomerInvoiceAndServiceData" , consumes = APPLICATION_JSON_VALUE)
   	public Response updateCustomerInvoiceAndServiceData(@Valid @RequestBody CustomerInvoiceIncomingDto customerServiceIncomingDto) {
-  		
   		logger.info("----- CustomerInvoiceServiceController addCustomerInvoiceAndServiceData ----");
-  		
   		return Response.ok().setPayload(customerInvoiceService.updateCustomerServiceInfo(customerServiceIncomingDto)) ;
-  		
   	}
   	
   	
-  	@GetMapping( value = "/removeCustomerInvoiceAndServiceData/{customerID}/{invoiceNo}")
+  	@SuppressWarnings("rawtypes")
+	@GetMapping( value = "/removeCustomerInvoiceAndServiceData/{customerID}/{invoiceNo}")
   	public Response removeCustomerInvoiceAndServiceData(@PathVariable("customerID") String customerID, 
   			@PathVariable("invoiceNo") String invoiceNo) {
-  		
   		logger.info("----- CustomerInvoiceServiceController removeCustomerInvoiceAndServiceData ----");
-  		
   		return Response.ok().setPayload(customerInvoiceService.removeCustomerInvoiceAndServiceData(customerID, invoiceNo));
-  		
   	}
   	
   	
-  	@GetMapping( value = "/getCustomerInvoiceListByCustomerID/{customerID}")
+  	@SuppressWarnings("rawtypes")
+	@GetMapping( value = "/getCustomerInvoiceListByCustomerID/{customerID}")
   	public Response getCustomerInvoiceListByCustomerID(@PathVariable("customerID") String customerID) {
-  		
   		logger.info("----- CustomerInvoiceServiceController getCustomerInvoiceListByCustomerID ----");
-  		
   		return Response.ok().setPayload(customerInvoiceService.getCustomerInvoiceListByCustomerID(customerID));
-  		
   	}
   	
-  	@GetMapping( value = "/getAllCustomerInvoiceAndServiceList")
+  	@SuppressWarnings("rawtypes")
+	@GetMapping( value = "/getAllCustomerInvoiceAndServiceList")
   	public Response getAllCustomerInvoiceAndServiceList() {
-  		
   		logger.info("----- CustomerInvoiceServiceController getAllCustomerInvoiceAndServiceList ----");
-  		
   		return Response.ok().setPayload(customerInvoiceService.getAllCustomerInvoiceAndServiceList());
-  		
   	}
   	
   	
-  	@PostMapping( value = "/updateCustomerInvoicePaymentStatus", consumes = APPLICATION_JSON_VALUE)
+  	@SuppressWarnings("rawtypes")
+	@PostMapping( value = "/updateCustomerInvoicePaymentStatus", consumes = APPLICATION_JSON_VALUE)
   	public Response updateCustomerInvoicePaymentStatus(@Valid @RequestBody CustomerInvoiceIncomingDto customerServiceIncomingDto) {
-  		
   		logger.info("----- CustomerInvoiceServiceController updateCustomerInvoicePaymentStatus ----");
-  		
   		return Response.ok().setPayload(customerInvoiceService.updateCustomerInvoicePaymentStatus(customerServiceIncomingDto));
-  		
   	}
 	
 	

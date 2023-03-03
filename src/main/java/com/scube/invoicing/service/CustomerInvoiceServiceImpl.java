@@ -1,8 +1,9 @@
 package com.scube.invoicing.service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -10,9 +11,10 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.scube.invoicing.dto.CustomerServiceResponseDto;
+import com.scube.invoicing.dto.CustomerInvoiceResponseDto;
 import com.scube.invoicing.dto.incoming.CustomerInvoiceServiceIncomingDto;
 import com.scube.invoicing.dto.incoming.CustomerInvoiceIncomingDto;
 import com.scube.invoicing.dto.mapper.CustomerInvoiceMapper;
@@ -21,12 +23,14 @@ import com.scube.invoicing.entity.CustomerInvoiceEntity;
 import com.scube.invoicing.entity.CustomerInvoiceServiceEntity;
 import com.scube.invoicing.entity.CustomerMasterEntity;
 import com.scube.invoicing.entity.GSTMasterEntity;
+import com.scube.invoicing.entity.ServiceMasterEntity;
 import com.scube.invoicing.exception.BRSException;
 import com.scube.invoicing.exception.EntityType;
 import com.scube.invoicing.exception.ExceptionType;
 import com.scube.invoicing.repository.CustomerInvoiceRepository;
 import com.scube.invoicing.repository.CustomerInvoiceServiceRepository;
 import com.scube.invoicing.util.DateUtils;
+import com.scube.invoicing.util.RandomUtils;
 
 @Service
 public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
@@ -38,6 +42,9 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	GSTMasterService gstMasterService;
 	
 	@Autowired
+	ServiceMasterDetailsService serviceMasterDetailsService;
+	
+	@Autowired
 	CompanyMasterService companyMasterService;
 	
 	@Autowired
@@ -46,106 +53,129 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	@Autowired
 	CustomerInvoiceRepository customerInvoiceRepository;
 	
+	@Value("${company.name}")
+	private String companyName;
+	
 	private static final Logger logger = LoggerFactory.getLogger(CustomerInvoiceServiceImpl.class);
 
+	Base64.Encoder baseEncoder = Base64.getEncoder();
+	Base64.Decoder baseDecoder = Base64.getDecoder();
+	
 	@Override
-	public CustomerServiceResponseDto addCustomerInvoiceAndServiceData(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto) {
+	public CustomerInvoiceResponseDto addCustomerInvoiceAndServiceData(@Valid CustomerInvoiceIncomingDto customerInvoiceIncomingDto) {
 		// TODO Auto-generated method stub
 		
 		logger.info("----- CustomerInvoiceServiceImpl addCustomerInvoiceAndServiceData ----");
 		
-		if(customerServiceIncomingDto.getCustomerID() == "" || 
-				customerServiceIncomingDto.getCustomerID().trim().isEmpty()) {
+		if(customerInvoiceIncomingDto.getCustomerID() == "" || 
+				customerInvoiceIncomingDto.getCustomerID().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Customer ID cannot be blank or null");
 		}
 		
-		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyID("a03964deb2");
-		
-		if(companyMasterEntity == null) {
-			throw BRSException.throwException("Error : NO Company Details Found");
-		}
-		
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyName(companyName);
 		CustomerMasterEntity customerMasterEntity = customerMasterService.getCustomerDetailsByCustomerId
-				(customerServiceIncomingDto.getCustomerID());
-		
-		if(customerMasterEntity == null) {
-			throw BRSException.throwException("Error : NO Customer Details Found");
-		}
-		
-		Random randomNumber = new Random();
-		int number = randomNumber.nextInt(1000);
+				(customerInvoiceIncomingDto.getCustomerID());
 		
 		CustomerInvoiceEntity customerInvoiceEntity = new CustomerInvoiceEntity();
 		
 		customerInvoiceEntity.setIsdeleted("N");
 		
+		// Customer Info
 		customerInvoiceEntity.setCustomerMasterEntity(customerMasterEntity);
 		
-		customerInvoiceEntity.setCustEmailId(customerServiceIncomingDto.getCustEmailId());
-		customerInvoiceEntity.setCustomerBillingAddress(customerServiceIncomingDto.getCustomerBillingAddress());
-		customerInvoiceEntity.setShippingDate(DateUtils.stringToDateConvert(customerServiceIncomingDto.getShippingDate()));
-		customerInvoiceEntity.setShippingTo(customerServiceIncomingDto.getShippingTo());
-		customerInvoiceEntity.setShippingVia(customerServiceIncomingDto.getShippingVia());
-		customerInvoiceEntity.setTerms(customerServiceIncomingDto.getTerms());
+		customerInvoiceEntity.setCustEmailId(customerInvoiceIncomingDto.getCustEmailId());
+		customerInvoiceEntity.setCustomerBillingAddress(customerInvoiceIncomingDto.getCustomerBillingAddress());
+		customerInvoiceEntity.setShippingDate(DateUtils.stringToDateConvert(customerInvoiceIncomingDto.getShippingDate()));
+		customerInvoiceEntity.setShippingTo(customerInvoiceIncomingDto.getShippingTo());
+		customerInvoiceEntity.setShippingVia(customerInvoiceIncomingDto.getShippingVia());
+		customerInvoiceEntity.setTerms(customerInvoiceIncomingDto.getTerms());
 		
-		customerInvoiceEntity.setBalance(customerServiceIncomingDto.getBalance());
-		customerInvoiceEntity.setCgstAmount(customerServiceIncomingDto.getCgstAmount());
-		customerInvoiceEntity.setSgstAmount(customerServiceIncomingDto.getSgstAmount());
-		customerInvoiceEntity.setDeposit(customerServiceIncomingDto.getDeposit());
-		customerInvoiceEntity.setDiscounts(customerServiceIncomingDto.getDiscounts());
-		customerInvoiceEntity.setTotalAmount(customerServiceIncomingDto.getTotalAmount());
-		customerInvoiceEntity.setSubTotal(customerServiceIncomingDto.getSubTotal());
+		// Balance
+		customerInvoiceEntity.setBalance(customerInvoiceIncomingDto.getBalance() != null ? 
+				baseEncoder.encodeToString(customerInvoiceIncomingDto.getBalance().getBytes(StandardCharsets.UTF_8)) : null);
 		
-		customerInvoiceEntity.setMessageInvoice(customerServiceIncomingDto.getMessageInvoice());
-		customerInvoiceEntity.setMessageStatement(customerServiceIncomingDto.getMessageStatement());
+		// CGST/ SGST/ IGST values
+		customerInvoiceEntity.setCgstAmount(customerInvoiceIncomingDto.getCgstAmount() != null ? 
+			baseEncoder.encodeToString(customerInvoiceIncomingDto.getCgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
+		customerInvoiceEntity.setSgstAmount(customerInvoiceIncomingDto.getSgstAmount() != null ? 
+			baseEncoder.encodeToString(customerInvoiceIncomingDto.getSgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
+		customerInvoiceEntity.setIgstAmount(customerInvoiceIncomingDto.getIgstAmount() != null ? 
+				baseEncoder.encodeToString(customerInvoiceIncomingDto.getIgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
 		
-		customerInvoiceEntity.setDueDate(DateUtils.stringToDateConvert(customerServiceIncomingDto.getDueDate()));
-		customerInvoiceEntity.setTrackingNo(customerServiceIncomingDto.getTrackingNo());
+		// Deposit/ Discounts/ Sub-total/ Total Amount
+		customerInvoiceEntity.setDeposit(customerInvoiceIncomingDto.getDeposit() != null ? 
+				baseEncoder.encodeToString(customerInvoiceIncomingDto.getDeposit().getBytes(StandardCharsets.UTF_8)) : null);
+		customerInvoiceEntity.setDiscounts(customerInvoiceIncomingDto.getDiscounts() != null ? 
+				baseEncoder.encodeToString(customerInvoiceIncomingDto.getDiscounts().getBytes(StandardCharsets.UTF_8)) : null);
+		customerInvoiceEntity.setTotalAmount(baseEncoder.encodeToString(String.valueOf(
+				customerInvoiceIncomingDto.getTotalAmount()).getBytes(StandardCharsets.UTF_8)));
+		customerInvoiceEntity.setSubTotal(baseEncoder.encodeToString(String.valueOf(
+				customerInvoiceIncomingDto.getSubTotal()).getBytes(StandardCharsets.UTF_8)));
 		
-		customerInvoiceEntity.setInvoiceNo("INVOICE-000"+number);
-		customerInvoiceEntity.setInvoiceDate(DateUtils.stringToDateConvert(customerServiceIncomingDto.getInvoiceDate()));
+		// Invoice and Actual TDS 
+		customerInvoiceEntity.setInvoiceTds(customerInvoiceIncomingDto.getInvoiceTds() != null ? 
+				baseEncoder.encodeToString(customerInvoiceIncomingDto.getInvoiceTds().getBytes(StandardCharsets.UTF_8)) : null);
+		customerInvoiceEntity.setActualTds(customerInvoiceIncomingDto.getActualTds() != null ? 
+				baseEncoder.encodeToString(customerInvoiceIncomingDto.getActualTds().getBytes(StandardCharsets.UTF_8)) : null);
 		
-		customerInvoiceRepository.save(customerInvoiceEntity);
+		// Message on Invoice and Statement
+		customerInvoiceEntity.setMessageInvoice(customerInvoiceIncomingDto.getMessageInvoice());
+		customerInvoiceEntity.setMessageStatement(customerInvoiceIncomingDto.getMessageStatement());
+		
+		// Invoice Due Date and Tracking No
+		customerInvoiceEntity.setDueDate(DateUtils.stringToDateConvert(customerInvoiceIncomingDto.getDueDate()));
+		customerInvoiceEntity.setTrackingNo(customerInvoiceIncomingDto.getTrackingNo());
+		
+		// Invoice No and Date
+		customerInvoiceEntity.setInvoiceNo("INVOICE-00"+RandomUtils.generateRandomNumber());
+		customerInvoiceEntity.setInvoiceDate(DateUtils.stringToDateConvert(customerInvoiceIncomingDto.getInvoiceDate()));
+		
+		// Invoice Payment Status
+		customerInvoiceEntity.setPaymentStatus("Payment Pending");
+		
+//		customerInvoiceRepository.save(customerInvoiceEntity);
 		
 		Set<CustomerInvoiceServiceEntity> customerInvoiceServiceEntityList = new HashSet<CustomerInvoiceServiceEntity>();
 		
 		for(CustomerInvoiceServiceIncomingDto customerInvoiceServiceIncomingDto : 
-			customerServiceIncomingDto.getCustomerInvoiceServiceDtos()) {
+			customerInvoiceIncomingDto.getCustomerInvoiceServiceDtos()) {
 			
 			GSTMasterEntity gstMasterEntity = gstMasterService.getGstMasterEntityByGstID(customerInvoiceServiceIncomingDto.getGstID());
-			
-			if(gstMasterEntity == null) {
-				throw BRSException.throwException("Error : NO GST Tax Details Found");
-			}
+			ServiceMasterEntity serviceMasterEntity = serviceMasterDetailsService.
+					getServiceMasterEntityByServiceID(customerInvoiceServiceIncomingDto.getProductService());
 			
 			CustomerInvoiceServiceEntity customerInvoiceServiceEntity = new CustomerInvoiceServiceEntity();
 			
 			customerInvoiceServiceEntity.setIsdeleted("N");
 			
+			// Set Customer/Invoice/GST/Service Entity
 			customerInvoiceServiceEntity.setCustomerMasterEntity(customerMasterEntity);
 			customerInvoiceServiceEntity.setCustomerInvoiceEntity(customerInvoiceEntity);
 			customerInvoiceServiceEntity.setGstMasterEntity(gstMasterEntity);
+			customerInvoiceServiceEntity.setServiceMasterEntity(serviceMasterEntity);
 			
-			customerInvoiceServiceEntity.setAmount(customerInvoiceServiceIncomingDto.getAmount());
+			// Add Invoice services
 			customerInvoiceServiceEntity.setDescription(customerInvoiceServiceIncomingDto.getDescription());
 			customerInvoiceServiceEntity.setHsnorSac(customerInvoiceServiceIncomingDto.getHsnOrSac());
-			customerInvoiceServiceEntity.setProductService(customerInvoiceServiceIncomingDto.getProductService());
+			customerInvoiceServiceEntity.setSku(customerInvoiceServiceIncomingDto.getSku());
 			customerInvoiceServiceEntity.setQuantity(customerInvoiceServiceIncomingDto.getQuantity());
 			customerInvoiceServiceEntity.setRate(customerInvoiceServiceIncomingDto.getRate());
-			customerInvoiceServiceEntity.setSku(customerInvoiceServiceIncomingDto.getSku());
+			customerInvoiceServiceEntity.setAmount(baseEncoder.encodeToString(
+					customerInvoiceServiceIncomingDto.getAmount().getBytes(StandardCharsets.UTF_8)));
+			customerInvoiceServiceEntity.setServiceAmountWithGst(baseEncoder.encodeToString(
+					customerInvoiceServiceIncomingDto.getServiceAmountWithGst().getBytes(StandardCharsets.UTF_8)));
 			
 			customerInvoiceServiceEntityList.add(customerInvoiceServiceEntity);
 			
 		}
-		customerInvoiceServiceRepository.saveAll(customerInvoiceServiceEntityList);
+//		customerInvoiceServiceRepository.saveAll(customerInvoiceServiceEntityList);
 		
-		return CustomerInvoiceMapper.toCustomerServiceAndCompanyResponseDto(customerInvoiceEntity, companyMasterEntity);
+		return CustomerInvoiceMapper.toCustomerServiceAndCompanyResponseMailDto(customerInvoiceEntity, companyMasterEntity);
 	}
 
 	@Override
-	public boolean updateCustomerServiceInfo(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto) {
+	public boolean updateCustomerServiceInfo(@Valid CustomerInvoiceIncomingDto customerInvoiceIncomingDto) {
 		// TODO Auto-generated method stub
-		
 		logger.info("----- CustomerInvoiceServiceImpl updateCustomerServiceInfo ----");
 		
 		return false;
@@ -154,7 +184,6 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	@Override
 	public boolean removeCustomerInvoiceAndServiceData(String customerID, String invoiceNo) {
 		// TODO Auto-generated method stub
-		
 		logger.info("----- CustomerInvoiceServiceImpl removeCustomerInvoiceAndServiceData ----");
 		
 		CustomerMasterEntity customerMasterEntity = customerMasterService.getCustomerDetailsByCustomerId(customerID);
@@ -194,49 +223,47 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	public List<CustomerInvoiceServiceEntity> getCustomerServiceInfoByCustomerDetailsAndInvoiceDetails (
 			CustomerMasterEntity customerMasterEntity, CustomerInvoiceEntity customerInvoiceEntity) {
 		// TODO Auto-generated method stub
-		logger.info("----- CustomerInvoiceServiceImpl removeCustomerInvoiceAndServiceData ----");
+		logger.info("----- CustomerInvoiceServiceImpl getCustomerServiceInfoByCustomerDetailsAndInvoiceDetails ----");
 		
 		return customerInvoiceServiceRepository.findByCustomerInvoiceEntityAndCustomerMasterEntity(customerInvoiceEntity, customerMasterEntity);
 	}
 
 	@Override
-	public List<CustomerServiceResponseDto> getAllCustomerInvoiceAndServiceList() {
+	public List<CustomerInvoiceResponseDto> getAllCustomerInvoiceAndServiceList() {
 		// TODO Auto-generated method stub
-		
 		logger.info("----- CustomerInvoiceServiceImpl getAllCustomerInvoiceAndServiceList ----");
 		
 		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = customerInvoiceRepository.findAll();
-		
 		return CustomerInvoiceMapper.toCustomerInvoiceResponseDtosList(customerInvoiceEntitiesList);
 	}
 
 	@Override
-	public boolean updateCustomerInvoicePaymentStatus(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto) {
+	public boolean updateCustomerInvoicePaymentStatus(@Valid CustomerInvoiceIncomingDto customerInvoiceIncomingDto) {
 		// TODO Auto-generated method stub
-		
 		logger.info("----- CustomerInvoiceServiceImpl updateCustomerInvoicePaymentStatus ----");
 		
-		if(customerServiceIncomingDto.getCustomerID() == "" || customerServiceIncomingDto.getCustomerID().trim().isEmpty()) {
+		if(customerInvoiceIncomingDto.getCustomerID() == "" || customerInvoiceIncomingDto.getCustomerID().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Customer ID cannot be empty or blank");
 		}
 		
-		if(customerServiceIncomingDto.getInvoiceNo() == "" || customerServiceIncomingDto.getInvoiceNo().trim().isEmpty()) {
+		if(customerInvoiceIncomingDto.getInvoiceNo() == "" || customerInvoiceIncomingDto.getInvoiceNo().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Customer Invoice No cannot be empty or blank");
 		}
 		
-		CustomerMasterEntity customerMasterEntity = customerMasterService.getCustomerDetailsByCustomerId(customerServiceIncomingDto.getCustomerID());
+		CustomerMasterEntity customerMasterEntity = customerMasterService.getCustomerDetailsByCustomerId(customerInvoiceIncomingDto.getCustomerID());
 		
 		if(customerMasterEntity == null) {
 			throw BRSException.throwException("Error : NO Customer Records found.");
 		}
 		
 		CustomerInvoiceEntity customerInvoiceEntity = getCustomerInvoiceEntityByCustomerIDAndInvoiceNo(customerMasterEntity, 
-				customerServiceIncomingDto.getInvoiceNo());
+				customerInvoiceIncomingDto.getInvoiceNo());
 		
 		if(customerInvoiceEntity == null)  {
-			throw BRSException.throwException(EntityType.INVOICE, ExceptionType.ENTITY_NOT_FOUND, customerServiceIncomingDto.getInvoiceNo());
+			throw BRSException.throwException(EntityType.INVOICE, ExceptionType.ENTITY_NOT_FOUND, customerInvoiceIncomingDto.getInvoiceNo());
 		}
 		
+		customerInvoiceEntity.setPaymentCompletedDate(DateUtils.today());
 		customerInvoiceEntity.setPaymentStatus("Payment Completed");
 		customerInvoiceRepository.save(customerInvoiceEntity);
 		
@@ -244,16 +271,24 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	}
 
 	@Override
-	public List<CustomerServiceResponseDto> getCustomerInvoiceListByCustomerID(String customerID) {
+	public List<CustomerInvoiceResponseDto> getCustomerInvoiceListByCustomerID(String customerID) {
 		// TODO Auto-generated method stub
-		
 		logger.info("----- CustomerInvoiceServiceImpl getCustomerInvoiceListByCustomerID ----");
 		
 		CustomerMasterEntity customerMasterEntity = customerMasterService.getCustomerDetailsByCustomerId(customerID);
-		
 		List<CustomerInvoiceEntity> customerInvoiceEntityList = customerInvoiceRepository.findByCustomerMasterEntity(customerMasterEntity);
 		
 		return CustomerInvoiceMapper.toCustomerInvoiceResponseDtosList(customerInvoiceEntityList);
+	}
+
+	@Override
+	public CustomerInvoiceResponseDto getCustomerInvoiceAndServiceResponseDto(String customerID) {
+		// TODO Auto-generated method stub
+		logger.info("----- CustomerInvoiceServiceImpl getCustomerInvoiceListByCustomerID ----");
+		
+		CustomerInvoiceEntity customerInvoiceEntity = customerInvoiceRepository.findById(customerID).get();
+		
+		return CustomerInvoiceMapper.toCustomerInvoiceResponseDto(customerInvoiceEntity);
 	}
 
 }

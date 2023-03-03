@@ -29,47 +29,39 @@ public class GSTMasterController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(GSTMasterController.class);
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/addGstInfoDetails", produces = APPLICATION_JSON_VALUE)
 	public Response addGstInfoDetails(@Valid @RequestBody GSTMasterIncomingDto gstMasterIncomingDto) {
-		
 		logger.info("-------- GSTMasterController addGstInfoDetails ------");
-		
 		return Response.ok().setPayload(gstMasterService.addGstInfoDetails(gstMasterIncomingDto));
 	}
 	
 	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/updateGstInfoDetails", produces = APPLICATION_JSON_VALUE)
 	public Response updateGstInfoDetails(@Valid @RequestBody GSTMasterIncomingDto gstMasterIncomingDto) {
-		
 		logger.info("-------- GSTMasterController updateGstInfoDetails ------");
-		
 		return Response.ok().setPayload(gstMasterService.updateGstInfoDetails(gstMasterIncomingDto));
 	}
 
-	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/deleteGstInfoDetailsByGstId/{gstID}")
 	public Response deleteGstInfoDetailsByGstId(@PathVariable String gstID) {
-		
 		logger.info("-------- GSTMasterController deleteGstInfoDetailsByGstId ------");
-		
 		return Response.ok().setPayload(gstMasterService.deleteGstInfoDetailsByGstId(gstID));
 	}
 	
-	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/getGstInfoDetailsByGstId/{gstID}")
 	public Response getGstInfoDetailsByGstId(@PathVariable String gstID) {
-		
 		logger.info("-------- GSTMasterController getGstInfoDetailsByGstId ------");
-		
 		return Response.ok().setPayload(gstMasterService.getGstInfoDetailsByGstId(gstID));
 	}
 	
-	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/getAllGstInfoDetails")
 	public Response getAllGstInfoDetails() {
-		
 		logger.info("-------- GSTMasterController getAllGstInfoDetails ------");
-		
 		return Response.ok().setPayload(gstMasterService.getAllGstInfoDetails());
 	}
 

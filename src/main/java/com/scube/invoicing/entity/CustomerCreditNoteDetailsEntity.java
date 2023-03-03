@@ -10,12 +10,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "customer_credit_note_details")
+@Table(name = "customer_credit_note_service")
 @Getter @Setter
 public class CustomerCreditNoteDetailsEntity extends BaseEntity {
 	
 	@OneToOne
-	@JoinColumn(name = "fk_customer_master")
+	@JoinColumn(name = "fk_customer")
 	private CustomerMasterEntity customerMasterEntity;
 	
 	@OneToOne
@@ -26,8 +26,12 @@ public class CustomerCreditNoteDetailsEntity extends BaseEntity {
 	@JoinColumn(name = "fk_credit_note")
 	private CustomerCreditNoteEntity customerCreditNoteEntity;
 	
-	@Column(name = "item_description")
-	private String itemDescription;
+	@OneToOne
+	@JoinColumn(name = "fk_service")
+	private ServiceMasterEntity serviceMasterEntity;
+	
+	@Column(name = "description")
+	private String description;
 	
 	@Column(name = "quantity")
 	private double quantity;
@@ -36,6 +40,9 @@ public class CustomerCreditNoteDetailsEntity extends BaseEntity {
 	private double rate;
 	
 	@Column(name = "amount")
-	private double amount;
+	private String amount;
+	
+	@Column(name = "service_amount_with_gst")
+	private String serviceAmountWithGst;
 
 }

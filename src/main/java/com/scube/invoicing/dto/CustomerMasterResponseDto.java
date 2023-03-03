@@ -56,6 +56,7 @@ public class CustomerMasterResponseDto {
 	
 	
 	// Payment & Billing Info
+	private String paymentMethodID;
 	private String prefPaymentMethod;
 	private String prefDelieveryMethod;
 	private String paymentTerms;

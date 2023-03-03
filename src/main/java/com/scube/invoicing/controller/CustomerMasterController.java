@@ -29,48 +29,39 @@ public class CustomerMasterController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CustomerMasterController.class);
 	
-	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/addCustomerInfoDetails", produces = APPLICATION_JSON_VALUE)
 	public Response addCustomerInfoDetails(@Valid @RequestBody CustomerMasterIncomingDto customerMasterIncomingDto) {
-		
 		logger.info("-------- CustomerMasterController addCustomerInfoDetails ------");
-		
 		return Response.ok().setPayload(customerMasterService.addCustomerInfoDetails(customerMasterIncomingDto));
 	}
 	
-	
+	@SuppressWarnings("rawtypes")
 	@PostMapping(value = "/updateCustomerInfoDetails", produces = APPLICATION_JSON_VALUE)
 	public Response updateCustomerInfoDetails(@Valid @RequestBody CustomerMasterIncomingDto customerMasterIncomingDto) {
-		
 		logger.info("-------- CustomerMasterController updateCustomerInfoDetails ------");
-		
 		return Response.ok().setPayload(customerMasterService.updateCustomerInfoDetails(customerMasterIncomingDto));
 	}
 
 	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/deleteCustomerInfoDetailsByCustomerId/{customerID}")
 	public Response deleteCustomerInfoDetailsByCustomerId(@PathVariable String customerID) {
-		
 		logger.info("-------- CustomerMasterController deleteCustomerInfoDetailsByCustomerId ------");
-		
 		return Response.ok().setPayload(customerMasterService.deleteCustomerInfoDetailsByCustomerId(customerID));
 	}
 	
-	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/getCustomerInfoDetailsByCustomerId/{customerID}")
 	public Response getCustomerInfoDetailsByCustomerId(@PathVariable String customerID) {
-		
 		logger.info("-------- CustomerMasterController getCustomerInfoDetailsByCustomerId ------");
-		
 		return Response.ok().setPayload(customerMasterService.getCustomerInfoDetailsByCustomerId(customerID));
 	}
 	
-	
+	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/getAllCustomerInfoDetails")
 	public Response getAllCustomerInfoDetails() {
-		
 		logger.info("-------- CustomerMasterController getAllCustomerInfoDetails ------");
-		
 		return Response.ok().setPayload(customerMasterService.getAllCustomerInfoDetails());
 	}
 	

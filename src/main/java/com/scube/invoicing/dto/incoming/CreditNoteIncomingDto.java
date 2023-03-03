@@ -25,11 +25,16 @@ public class CreditNoteIncomingDto {
 	private String creditNoteNo;
 	private String creditNoteDate;
 	
-	private double subTotal;
-	private double cgstAmount;
-	private double sgstAmount;
-	private double totalAmount;
-	private double creditsRemaining;
+	private String subTotal;
+	private String totalAmount;
+	private String creditsRemaining;
+	
+	private String cgstAmount;
+	private String sgstAmount;
+	private String igstAmount;
+	
+	private String declaredTds;
+	private String actualTds;
 	
 	private Set<CreditNoteDetailsIncomingDto> creditNoteDetailsIncomingDto;
 	

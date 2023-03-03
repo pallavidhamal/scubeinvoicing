@@ -15,7 +15,7 @@ public class ExpenseItemListIncomingDto {
 	private String category;
 	private String description;
 	
-	private double amount;
+	private String amount;
 	private String tax;
 	
 }

@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "customer_invoice_details")
+@Table(name = "customer_invoice")
 @Getter @Setter
 public class CustomerInvoiceEntity extends BaseEntity {
 	
@@ -27,25 +27,34 @@ public class CustomerInvoiceEntity extends BaseEntity {
 	private Date invoiceDate;
 	
 	@Column(name = "sub_total")
-	private double subTotal;
+	private String subTotal;
 	
 	@Column(name = "total_amount")
-	private double totalAmount;
+	private String totalAmount;
 	
 	@Column(name = "discounts")
-	private double discounts;
+	private String discounts;
 	
 	@Column(name = "deposit")
-	private double deposit;
+	private String deposit;
 	
 	@Column(name = "balance")
-	private double balance;
+	private String balance;
 	
 	@Column(name = "cgst_amount")
-	private double cgstAmount;
+	private String cgstAmount;
 	
 	@Column(name = "sgst_amount")
-	private double sgstAmount;
+	private String sgstAmount;
+	
+	@Column(name = "igst_amount")
+	private String igstAmount;
+	
+	@Column(name = "invoice_tds")
+	private String invoiceTds;
+	
+	@Column(name = "actual_tds")
+	private String actualTds;
 	
 	@Column(name = "message_invoice")
 	private String messageInvoice;
@@ -79,5 +88,8 @@ public class CustomerInvoiceEntity extends BaseEntity {
 	
 	@Column(name = "payment_status")
 	private String paymentStatus;
+	
+	@Column(name = "payment_completed_date")
+	private Date paymentCompletedDate;
 	
 }

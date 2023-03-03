@@ -126,4 +126,10 @@ public class ServiceMasterDetailsServiceImpl implements ServiceMasterDetailsServ
 		return ServiceMasterMapper.toAllServiceDataList(serviceMasterEntity);
 	}
 
+	@Override
+	public ServiceMasterEntity getServiceMasterEntityByServiceID(String serviceID) {
+		// TODO Auto-generated method stub
+		return serviceMasterRepository.findById(serviceID).get();
+	}
+
 }
