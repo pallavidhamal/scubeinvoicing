@@ -48,7 +48,7 @@ public class CustomerMasterMapper {
 				.setPrefDelieveryMethod(customerMasterEntity.getPrefDelieveryMethod())
 				.setPaymentTerms(customerMasterEntity.getPaymentTerms())
 				.setOpeningBalance(customerMasterEntity.getOpeningBalance())
-				.setPaymentDate(DateUtils.formatDateToDDMMYYYYFormat(customerMasterEntity.getPaymentDate()))
+				.setPaymentDate(DateUtils.formattedDate(customerMasterEntity.getPaymentDate()))
 				.setPaysWith(customerMasterEntity.getPaysWith())
 				
 				.setCurrencyID(customerMasterEntity.getCurrencyMasterEntity().getId())
