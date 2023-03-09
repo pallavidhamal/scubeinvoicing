@@ -37,6 +37,8 @@ public class CustomerCreditNoteMapper {
 						new String(decoder.decode(customerCreditNoteEntity.getSgstAmount())) : null)
 				.setIgstAmount(customerCreditNoteEntity.getIgstAmount() != null ? 
 						new String(decoder.decode(customerCreditNoteEntity.getIgstAmount())) : null)
+				.setGst4Amount(customerCreditNoteEntity.getGst4Amount() != null ? 
+						new String(decoder.decode(customerCreditNoteEntity.getGst4Amount())) : null)
 				
 				// Declared TDS/ Actual TDS
 				.setDeclaredTds(customerCreditNoteEntity.getDeclaredTds() != null ? 

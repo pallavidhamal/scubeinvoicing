@@ -52,6 +52,7 @@ public class CustomerInvoiceResponseDto {
 	private String cgstAmount;
 	private String sgstAmount;
 	private String igstAmount;
+	private String gst4Amount;
 	
 	private String messageInvoice;
 	private String messageStatement;

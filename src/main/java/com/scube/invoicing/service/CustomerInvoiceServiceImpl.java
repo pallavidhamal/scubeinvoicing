@@ -94,13 +94,15 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		customerInvoiceEntity.setBalance(customerInvoiceIncomingDto.getBalance() != null ? 
 				baseEncoder.encodeToString(customerInvoiceIncomingDto.getBalance().getBytes(StandardCharsets.UTF_8)) : null);
 		
-		// CGST/ SGST/ IGST values
+		// CGST/ SGST/ IGST/ GST4 values
 		customerInvoiceEntity.setCgstAmount(customerInvoiceIncomingDto.getCgstAmount() != null ? 
 			baseEncoder.encodeToString(customerInvoiceIncomingDto.getCgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
 		customerInvoiceEntity.setSgstAmount(customerInvoiceIncomingDto.getSgstAmount() != null ? 
 			baseEncoder.encodeToString(customerInvoiceIncomingDto.getSgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
 		customerInvoiceEntity.setIgstAmount(customerInvoiceIncomingDto.getIgstAmount() != null ? 
 				baseEncoder.encodeToString(customerInvoiceIncomingDto.getIgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
+		customerInvoiceEntity.setGst4Amount(customerInvoiceIncomingDto.getGst4Amount() != null ? 
+				baseEncoder.encodeToString(customerInvoiceIncomingDto.getGst4Amount().getBytes(StandardCharsets.UTF_8)) : null);
 		
 		// Deposit/ Discounts/ Sub-total/ Total Amount
 		customerInvoiceEntity.setDeposit(customerInvoiceIncomingDto.getDeposit() != null ? 
@@ -156,8 +158,10 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 			
 			// Add Invoice services
 			customerInvoiceServiceEntity.setDescription(customerInvoiceServiceIncomingDto.getDescription());
-			customerInvoiceServiceEntity.setHsnorSac(customerInvoiceServiceIncomingDto.getHsnOrSac());
-			customerInvoiceServiceEntity.setSku(customerInvoiceServiceIncomingDto.getSku());
+			customerInvoiceServiceEntity.setHsnorSac(customerInvoiceServiceIncomingDto.getHsnOrSac() != null ?
+					customerInvoiceServiceIncomingDto.getHsnOrSac() : null);
+			customerInvoiceServiceEntity.setSku(customerInvoiceServiceIncomingDto.getSku() != null ?
+					customerInvoiceServiceIncomingDto.getSku() : null);
 			customerInvoiceServiceEntity.setQuantity(customerInvoiceServiceIncomingDto.getQuantity());
 			customerInvoiceServiceEntity.setRate(customerInvoiceServiceIncomingDto.getRate());
 			customerInvoiceServiceEntity.setAmount(baseEncoder.encodeToString(

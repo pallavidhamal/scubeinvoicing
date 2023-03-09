@@ -50,6 +50,9 @@ public class CustomerInvoiceEntity extends BaseEntity {
 	@Column(name = "igst_amount")
 	private String igstAmount;
 	
+	@Column(name = "gst_4_amount")
+	private String gst4Amount;
+	
 	@Column(name = "invoice_tds")
 	private String invoiceTds;
 	

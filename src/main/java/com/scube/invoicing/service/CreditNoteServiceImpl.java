@@ -111,13 +111,15 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		// Set Customer Entity
 		customerCreditNoteEntity.setCustomerMasterEntity(customerMasterEntity);
 		
-		// CGST/ SGST/ IGST Amount values
+		// CGST/SGST/IGST/GST4 Amount values
 		customerCreditNoteEntity.setCgstAmount(creditNoteIncomingDto.getCgstAmount() != null ? 
 				encoder.encodeToString(creditNoteIncomingDto.getCgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
 		customerCreditNoteEntity.setSgstAmount(creditNoteIncomingDto.getSgstAmount() != null ? 
 				encoder.encodeToString(creditNoteIncomingDto.getSgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
 		customerCreditNoteEntity.setIgstAmount(creditNoteIncomingDto.getIgstAmount() != null ? 
 				encoder.encodeToString(creditNoteIncomingDto.getIgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
+		customerCreditNoteEntity.setGst4Amount(creditNoteIncomingDto.getGst4Amount() != null ? 
+				encoder.encodeToString(creditNoteIncomingDto.getGst4Amount().getBytes(StandardCharsets.UTF_8)) : null);
 		
 		customerCreditNoteEntity.setDeclaredTds(creditNoteIncomingDto.getDeclaredTds() != null ? 
 				encoder.encodeToString(creditNoteIncomingDto.getDeclaredTds().getBytes(StandardCharsets.UTF_8)) : null);

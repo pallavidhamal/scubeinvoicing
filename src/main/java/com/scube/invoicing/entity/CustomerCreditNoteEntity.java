@@ -136,6 +136,17 @@ public class CustomerCreditNoteEntity extends BaseEntity {
 	@Column(name = "igst_amount")
 	private String igstAmount;
 	
+	@Column(name = "gst_4_amount")
+	private String gst4Amount;
+	
+	public String getGst4Amount() {
+		return gst4Amount;
+	}
+
+	public void setGst4Amount(String gst4Amount) {
+		this.gst4Amount = gst4Amount;
+	}
+
 	@Column(name = "declared_tds")
 	private String declaredTds;
 	

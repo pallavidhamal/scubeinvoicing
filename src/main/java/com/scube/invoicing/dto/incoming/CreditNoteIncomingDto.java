@@ -32,6 +32,7 @@ public class CreditNoteIncomingDto {
 	private String cgstAmount;
 	private String sgstAmount;
 	private String igstAmount;
+	private String gst4Amount;
 	
 	private String declaredTds;
 	private String actualTds;

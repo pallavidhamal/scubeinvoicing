@@ -62,6 +62,8 @@ public class CustomerInvoiceMapper {
 						new String(decoder.decode(customerInvoiceEntity.getSgstAmount())) : null)
 				.setIgstAmount(customerInvoiceEntity.getIgstAmount() != null ?
 						new String(decoder.decode(customerInvoiceEntity.getIgstAmount())) : null)
+				.setGst4Amount(customerInvoiceEntity.getGst4Amount() != null ?
+						new String(decoder.decode(customerInvoiceEntity.getGst4Amount())) : null)
 				
 				.setInvoiceTds(customerInvoiceEntity.getInvoiceTds() != null ?
 						new String(decoder.decode(customerInvoiceEntity.getInvoiceTds())) : null)
@@ -95,6 +97,8 @@ public class CustomerInvoiceMapper {
 						new String(decoder.decode(customerInvoiceEntity.getSgstAmount())) : null)
 				.setIgstAmount(customerInvoiceEntity.getIgstAmount() != null ? 
 						new String(decoder.decode(customerInvoiceEntity.getIgstAmount())) : null)
+				.setGst4Amount(customerInvoiceEntity.getGst4Amount() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getGst4Amount())) : null)
 				
 				.setBalance(customerInvoiceEntity.getBalance() != null ? 
 						new String(decoder.decode(customerInvoiceEntity.getBalance())) : null)

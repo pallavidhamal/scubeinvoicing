@@ -34,6 +34,7 @@ public class CustomerInvoiceIncomingDto {
 	private String cgstAmount;
 	private String sgstAmount;
 	private String igstAmount;
+	private String gst4Amount;
 	
 	private String invoiceTds;
 	private String actualTds;
