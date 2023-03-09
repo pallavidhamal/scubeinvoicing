@@ -25,13 +25,5 @@ public class CreateInvoiceIncomingDto {
 	
 	private String creditNoteNo;
 	private double creditsRemaining;
-	
-	private double subTotal;
-	private double totalAmount;
-	private double totalDueAmount;
-	
-	private double cgstAmount;
-	private double sgstAmount;
-	private String igstAmount;
 
 }

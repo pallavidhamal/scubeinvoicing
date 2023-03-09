@@ -17,17 +17,35 @@ public interface CustomerInvoiceRepository extends JpaRepository<CustomerInvoice
 	
 	List<CustomerInvoiceEntity> findByCustomerMasterEntity(CustomerMasterEntity customerMasterEntity);
 	
+	// By Customer ID and Date Range
 	@Query(value = "SELECT * FROM customer_invoice where fk_customer=(?1) and created_at >=  STR_TO_DATE((?2), '%Y-%m-%d')"
 			+ "and created_at <= STR_TO_DATE((?3), '%Y-%m-%d');", nativeQuery = true)
 	List<CustomerInvoiceEntity> getCustomerInvoiceListByCustomerIDAndDateRange(String customerID, String startDate, String endDate);
 	
+	// For All Customer
+	@Query(value = "SELECT * FROM customer_invoice where created_at >=  STR_TO_DATE((?1), '%Y-%m-%d')"
+			+ "and created_at <= STR_TO_DATE((?2), '%Y-%m-%d');", nativeQuery = true)
+	List<CustomerInvoiceEntity> getAllCustomerInvoiceListByDateRange(String startDate, String endDate);
+	
+	//By Single Customer and Payment Status - Pending/Paid
 	@Query(value = "SELECT * FROM customer_invoice where fk_customer=(?1) and payment_status=(?2) and created_at >=  STR_TO_DATE((?3), '%Y-%m-%d')"
 			+ "and created_at <= STR_TO_DATE((?4), '%Y-%m-%d');", nativeQuery = true)
 	List<CustomerInvoiceEntity> getCustomerInvoiceListByCustomerIDAndPaymentStatusAndDateRange(String customerID, 
 			String paymentStatus, String startDate, String endDate);
 	
+	// For All Customer and Payment Status
+	@Query(value = "SELECT * FROM customer_invoice where payment_status=(?1) and created_at >=  STR_TO_DATE((?2), '%Y-%m-%d')"
+			+ "and created_at <= STR_TO_DATE((?3), '%Y-%m-%d');", nativeQuery = true)
+	List<CustomerInvoiceEntity> getAllCustomerInvoiceListByPaymentStatusAndDateRange(String paymentStatus, String startDate, String endDate);
+	
+	//By Single Customer and Payment Status -> Payment Completed (TDS Report - Invoice)
+	@Query(value = "SELECT * FROM customer_invoice where fk_customer=(?1) and payment_status = 'Payment Completed' and created_at >=  STR_TO_DATE((?2), '%Y-%m-%d')"
+			+ "and created_at <= STR_TO_DATE((?3), '%Y-%m-%d');", nativeQuery = true)
+	List<CustomerInvoiceEntity> getInvoiceListForPaymentCompletedInvoiceByCustomerIDAndDateRange(String customerID, String startDate, String endDate);
+	
+	// For All Customer and Payment Status -> Payment Completed (TDS Report - Invoice)
 	@Query(value = "SELECT * FROM customer_invoice where payment_status = 'Payment Completed' and created_at >=  STR_TO_DATE((?1), '%Y-%m-%d')"
 			+ "and created_at <= STR_TO_DATE((?2), '%Y-%m-%d');", nativeQuery = true)
-	List<CustomerInvoiceEntity> getCustomerInvoiceEntityForPaymentCompletedInvoiceByDateRange(String startDate, String endDate);
+	List<CustomerInvoiceEntity> getAllCustomerInvoiceListForPaymentCompletedInvoiceByDateRange(String startDate, String endDate);
 
 }

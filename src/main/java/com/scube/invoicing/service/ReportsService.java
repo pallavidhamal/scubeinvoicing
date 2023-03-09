@@ -6,35 +6,26 @@ import javax.validation.Valid;
 
 import com.scube.invoicing.dto.GSTReportResponseDto;
 import com.scube.invoicing.dto.InvoiceCreditNoteResponseDto;
-import com.scube.invoicing.dto.incoming.InvoiceCreditNoteReportIncomingDto;
+import com.scube.invoicing.dto.incoming.ReportsIncomingDto;
 
-public interface InvoiceAndCreditNoteReportService {
+public interface ReportsService {
 	
-	List<InvoiceCreditNoteResponseDto> generateReportForInvoiceByCustomerIDAndDateRange
-	(@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto);
+	List<InvoiceCreditNoteResponseDto> generateReportForInvoiceByCustomerIDAndDateRange (@Valid ReportsIncomingDto reportsIncomingDto);
 	
-	List<InvoiceCreditNoteResponseDto> generateReportForCreditNoteByCustomerIDAndDateRange
-	(@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto);
+	List<InvoiceCreditNoteResponseDto> generateReportForCreditNoteByCustomerIDAndDateRange (@Valid ReportsIncomingDto reportsIncomingDto);
 	
-	List<InvoiceCreditNoteResponseDto> generateReportForInvoicePendingAndPaidAmountByDateRange
-	(@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto);
+	List<InvoiceCreditNoteResponseDto> generateReportForInvoicePendingAndPaidAmountByDateRange (@Valid ReportsIncomingDto reportsIncomingDto);
 	
-	List<GSTReportResponseDto> generateGSTReportForPaidInvoiceByDateRange
-	(@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto);
+	List<GSTReportResponseDto> generateGSTReportForPaidInvoiceByDateRange (@Valid ReportsIncomingDto reportsIncomingDto);
 	
-	List<GSTReportResponseDto> generateGSTReportForCreditNoteByDateRange
-	(@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto);
+	List<GSTReportResponseDto> generateGSTReportForCreditNoteByDateRange (@Valid ReportsIncomingDto reportsIncomingDto);
 	
-	List<GSTReportResponseDto> generateTDSReportForInvoiceByDateRange
-	(@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto);
+	List<GSTReportResponseDto> generateTDSReportForInvoiceByDateRange(@Valid ReportsIncomingDto reportsIncomingDto);
 	
-	List<GSTReportResponseDto> generateTDSReportForCreditNoteByDateRange
-	(@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto);
+	List<GSTReportResponseDto> generateTDSReportForCreditNoteByDateRange(@Valid ReportsIncomingDto reportsIncomingDto);
 	
-	GSTReportResponseDto calculateTotalAmountForGSTReportForCreditNote
-	(@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto);
+	GSTReportResponseDto calculateTotalAmountForGSTReportForCreditNote (@Valid ReportsIncomingDto reportsIncomingDto);
 	
-	GSTReportResponseDto calculateTotalAmountForGSTReportForInvoice
-	(@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto);
+	GSTReportResponseDto calculateTotalAmountForGSTReportForInvoice (@Valid ReportsIncomingDto reportsIncomingDto);
 
 }

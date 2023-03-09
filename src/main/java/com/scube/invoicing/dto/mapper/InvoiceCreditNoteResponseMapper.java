@@ -22,7 +22,7 @@ public class InvoiceCreditNoteResponseMapper {
 				
 				// Invoice No and Invoice Date
 				.setCustomerInvoiceNo(customerInvoiceEntity.getInvoiceNo())
-				.setDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getInvoiceDate()))
+				.setInvoiceDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getInvoiceDate()))
 				
 				// Invoice Payment Status and Invoice Amount
 				.setCustomerInvoiceAmount(new String(decoder.decode(customerInvoiceEntity.getTotalAmount())))

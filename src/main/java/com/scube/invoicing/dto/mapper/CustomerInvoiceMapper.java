@@ -51,7 +51,8 @@ public class CustomerInvoiceMapper {
 				.setSubTotal(new String(decoder.decode(customerInvoiceEntity.getSubTotal())))
 				.setBalance(new String(decoder.decode(customerInvoiceEntity.getSubTotal())))
 				.setDeposit(new String(decoder.decode(customerInvoiceEntity.getDeposit())))
-				.setDiscounts(new String(decoder.decode(customerInvoiceEntity.getDiscounts())))
+				.setDiscounts(customerInvoiceEntity.getDiscounts() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getDiscounts())) : null)
 				.setTotalAmount(new String(decoder.decode(customerInvoiceEntity.getTotalAmount())))
 				
 				// CGST/ SGST/ IGST
@@ -61,6 +62,9 @@ public class CustomerInvoiceMapper {
 						new String(decoder.decode(customerInvoiceEntity.getSgstAmount())) : null)
 				.setIgstAmount(customerInvoiceEntity.getIgstAmount() != null ?
 						new String(decoder.decode(customerInvoiceEntity.getIgstAmount())) : null)
+				
+				.setInvoiceTds(customerInvoiceEntity.getInvoiceTds() != null ?
+						new String(decoder.decode(customerInvoiceEntity.getInvoiceTds())) : null)
 				
 				// Message on Invoice and Statement
 				.setMessageInvoice(customerInvoiceEntity.getMessageInvoice())

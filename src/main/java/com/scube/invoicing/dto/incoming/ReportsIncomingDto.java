@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @Getter
 @Setter @ToString
-public class InvoiceCreditNoteReportIncomingDto {
+public class ReportsIncomingDto {
 	
 	private String customerID;
 	

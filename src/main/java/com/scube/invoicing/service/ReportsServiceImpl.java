@@ -13,9 +13,10 @@ import org.springframework.stereotype.Service;
 
 import com.scube.invoicing.dto.GSTReportResponseDto;
 import com.scube.invoicing.dto.InvoiceCreditNoteResponseDto;
-import com.scube.invoicing.dto.incoming.InvoiceCreditNoteReportIncomingDto;
+import com.scube.invoicing.dto.incoming.ReportsIncomingDto;
 import com.scube.invoicing.dto.mapper.GSTReportResponseMapper;
 import com.scube.invoicing.dto.mapper.InvoiceCreditNoteResponseMapper;
+import com.scube.invoicing.dto.mapper.TDSReportResponseMapper;
 import com.scube.invoicing.entity.CustomerCreditNoteEntity;
 import com.scube.invoicing.entity.CustomerInvoiceEntity;
 import com.scube.invoicing.exception.BRSException;
@@ -24,7 +25,7 @@ import com.scube.invoicing.repository.CustomerInvoiceRepository;
 import com.scube.invoicing.util.DateUtils;
 
 @Service
-public class InvoiceAndCreditNoteReportServiceImpl implements InvoiceAndCreditNoteReportService {
+public class ReportsServiceImpl implements ReportsService {
 	
 	@Autowired
 	CustomerInvoiceRepository customerInvoiceRepository;
@@ -34,167 +35,182 @@ public class InvoiceAndCreditNoteReportServiceImpl implements InvoiceAndCreditNo
 	
 	Base64.Decoder decoder = Base64.getDecoder();
 	
-	private static final Logger logger = LoggerFactory.getLogger(InvoiceAndCreditNoteReportServiceImpl.class);
-
+	private static final Logger logger = LoggerFactory.getLogger(ReportsServiceImpl.class);
+	
+	// Report for Invoice by Customer and Date Range (All Customer/ Single Customer)
 	@Override
-	public List<InvoiceCreditNoteResponseDto> generateReportForInvoiceByCustomerIDAndDateRange(
-			@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+	public List<InvoiceCreditNoteResponseDto> generateReportForInvoiceByCustomerIDAndDateRange(@Valid ReportsIncomingDto reportsIncomingDto) {
 		// TODO Auto-generated method stub
-		
 		logger.info("----- InvoiceAndCreditNoteReportServiceImpl generateReportForInvoiceByCustomerIDAndDateRange ------");
 		
-		if(invoiceCreditNoteReportIncomingDto.getCustomerID() == "" || invoiceCreditNoteReportIncomingDto.getCustomerID().trim().isEmpty()) {
+		if(reportsIncomingDto.getCustomerID() == "" || reportsIncomingDto.getCustomerID().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Customer ID cannot be blank or empty.");
 		}
 		
-		if(invoiceCreditNoteReportIncomingDto.getStartDate() == "" || invoiceCreditNoteReportIncomingDto.getStartDate().trim().isEmpty()) {
+		if(reportsIncomingDto.getStartDate() == "" || reportsIncomingDto.getStartDate().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Start Date cannot be blank or empty.");
 		}
 		
-		if(invoiceCreditNoteReportIncomingDto.getEndDate() == "" || invoiceCreditNoteReportIncomingDto.getEndDate().trim().isEmpty()) {
+		if(reportsIncomingDto.getEndDate() == "" || reportsIncomingDto.getEndDate().trim().isEmpty()) {
 			throw BRSException.throwException("Error : End Date cannot be blank or empty.");
 		}
 		
-		logger.info("--- Customer ID :- " + invoiceCreditNoteReportIncomingDto.getCustomerID() 
-		+ "--- Start Date :- " + invoiceCreditNoteReportIncomingDto.getStartDate() + 
-		"--- End Date :- " + invoiceCreditNoteReportIncomingDto.getEndDate() + "--- Converted End Date :- " 
-		+ DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
+		logger.info("--- Customer ID :- " + reportsIncomingDto.getCustomerID() + "--- Start Date :- " + reportsIncomingDto.getStartDate() + 
+		"--- End Date :- " + reportsIncomingDto.getEndDate() + "--- Converted End Date :- " + DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
 		
-		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = customerInvoiceRepository.
-					getCustomerInvoiceListByCustomerIDAndDateRange(invoiceCreditNoteReportIncomingDto.getCustomerID(), 
-							invoiceCreditNoteReportIncomingDto.getStartDate(), 
-							DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
-		
+		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = new ArrayList<CustomerInvoiceEntity>();
+		if(reportsIncomingDto.getCustomerID().equals("All")) {
+			customerInvoiceEntitiesList = customerInvoiceRepository.getAllCustomerInvoiceListByDateRange(
+					reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		}
+		else {
+			customerInvoiceEntitiesList = customerInvoiceRepository.getCustomerInvoiceListByCustomerIDAndDateRange(reportsIncomingDto.getCustomerID(), 
+					reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		}
 		return InvoiceCreditNoteResponseMapper.toInvoiceResponseDtosList(customerInvoiceEntitiesList);
 	}
 
+	
+	// Report for Credit Note by Customer and Date Range (All Customer/ Single Customer)
 	@Override
-	public List<InvoiceCreditNoteResponseDto> generateReportForCreditNoteByCustomerIDAndDateRange(
-			@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+	public List<InvoiceCreditNoteResponseDto> generateReportForCreditNoteByCustomerIDAndDateRange(@Valid ReportsIncomingDto reportsIncomingDto) {
 		// TODO Auto-generated method stub
-		
 		logger.info("----- InvoiceAndCreditNoteReportServiceImpl generateReportForCreditNoteByCustomerIDAndDateRange ------");
 		
-		if(invoiceCreditNoteReportIncomingDto.getCustomerID() == "" || invoiceCreditNoteReportIncomingDto.getCustomerID().trim().isEmpty()) {
+		if(reportsIncomingDto.getCustomerID() == "" || reportsIncomingDto.getCustomerID().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Customer ID cannot be blank or empty.");
 		}
 		
-		if(invoiceCreditNoteReportIncomingDto.getStartDate() == "" || invoiceCreditNoteReportIncomingDto.getStartDate().trim().isEmpty()) {
+		if(reportsIncomingDto.getStartDate() == "" || reportsIncomingDto.getStartDate().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Start Date cannot be blank or empty.");
 		}
 		
-		if(invoiceCreditNoteReportIncomingDto.getEndDate() == "" || invoiceCreditNoteReportIncomingDto.getEndDate().trim().isEmpty()) {
+		if(reportsIncomingDto.getEndDate() == "" || reportsIncomingDto.getEndDate().trim().isEmpty()) {
 			throw BRSException.throwException("Error : End Date cannot be blank or empty.");
 		}
 		
-		logger.info("--- Customer ID :- " + invoiceCreditNoteReportIncomingDto.getCustomerID() 
-		+ "--- Start Date :- " + invoiceCreditNoteReportIncomingDto.getStartDate() + 
-		"--- End Date :- " + invoiceCreditNoteReportIncomingDto.getEndDate() + "--- Converted End Date :- " 
-		+ DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
+		logger.info("--- Customer ID :- " + reportsIncomingDto.getCustomerID() 
+		+ "--- Start Date :- " + reportsIncomingDto.getStartDate() + 
+		"--- End Date :- " + reportsIncomingDto.getEndDate() + "--- Converted End Date :- " 
+		+ DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
 		
-		List<CustomerCreditNoteEntity> customerCreditNoteEntitiesList = creditNoteRepository.
-				getCustomerCreditNoteListByCustomerIDAndDateRange(invoiceCreditNoteReportIncomingDto.getCustomerID(), 
-						invoiceCreditNoteReportIncomingDto.getStartDate(), 
-						DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
+		List<CustomerCreditNoteEntity> customerCreditNoteEntitiesList = new ArrayList<CustomerCreditNoteEntity>();
+		
+		if(reportsIncomingDto.getCustomerID().equals("All")) {
+			customerCreditNoteEntitiesList = creditNoteRepository.getCustomerCreditNoteListByCustomerIDAndDateRange(reportsIncomingDto.getCustomerID(), 
+					reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		}
+		else {
+			customerCreditNoteEntitiesList = creditNoteRepository.getAllCustomerCreditNoteListByDateRange(
+					reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		}
 		
 		return InvoiceCreditNoteResponseMapper.toCreditNoteResponseDtosList(customerCreditNoteEntitiesList);
 	}
-
+	
+	// Report for Invoice Pending/Paid by Customer and Date Range (All Customer/ Single Customer)
 	@Override
-	public List<InvoiceCreditNoteResponseDto> generateReportForInvoicePendingAndPaidAmountByDateRange(
-			@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+	public List<InvoiceCreditNoteResponseDto> generateReportForInvoicePendingAndPaidAmountByDateRange(@Valid ReportsIncomingDto reportsIncomingDto) {
 		// TODO Auto-generated method stub
 		logger.info("----- InvoiceAndCreditNoteReportServiceImpl generateReportForInvoicePendingAndPaidAmountByDateRange ------");
 		
-		if(invoiceCreditNoteReportIncomingDto.getCustomerID() == "" || invoiceCreditNoteReportIncomingDto.getCustomerID().trim().isEmpty()) {
+		if(reportsIncomingDto.getCustomerID() == "" || reportsIncomingDto.getCustomerID().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Customer ID cannot be blank or empty.");
 		}
 		
-		if(invoiceCreditNoteReportIncomingDto.getStartDate() == "" || invoiceCreditNoteReportIncomingDto.getStartDate().trim().isEmpty()) {
+		if(reportsIncomingDto.getStartDate() == "" || reportsIncomingDto.getStartDate().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Start Date cannot be blank or empty.");
 		}
 		
-		if(invoiceCreditNoteReportIncomingDto.getEndDate() == "" || invoiceCreditNoteReportIncomingDto.getEndDate().trim().isEmpty()) {
+		if(reportsIncomingDto.getEndDate() == "" || reportsIncomingDto.getEndDate().trim().isEmpty()) {
 			throw BRSException.throwException("Error : End Date cannot be blank or empty.");
 		}
 		
-		if(invoiceCreditNoteReportIncomingDto.getAmountPendingFlag() == "" || invoiceCreditNoteReportIncomingDto.getAmountPendingFlag().trim().isEmpty()) {
+		if(reportsIncomingDto.getAmountPendingFlag() == "" || reportsIncomingDto.getAmountPendingFlag().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Select if Amount is pending or paid cannot be blank or empty.");
 		}
 		
-		logger.info("--- Customer ID :- " + invoiceCreditNoteReportIncomingDto.getCustomerID() 
-		+ "--- Start Date :- " + invoiceCreditNoteReportIncomingDto.getStartDate() + 
-		"--- End Date :- " + invoiceCreditNoteReportIncomingDto.getEndDate() + "--- Converted End Date :- " 
-		+ DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
+		logger.info("--- Customer ID :- " + reportsIncomingDto.getCustomerID() 
+		+ "--- Start Date :- " + reportsIncomingDto.getStartDate() + 
+		"--- End Date :- " + reportsIncomingDto.getEndDate() + "--- Converted End Date :- " 
+		+ DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
 		
-		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = customerInvoiceRepository.
-				getCustomerInvoiceListByCustomerIDAndPaymentStatusAndDateRange(invoiceCreditNoteReportIncomingDto.getCustomerID(),
-						invoiceCreditNoteReportIncomingDto.getAmountPendingFlag(),
-						invoiceCreditNoteReportIncomingDto.getStartDate(), 
-						DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
+		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = new ArrayList<CustomerInvoiceEntity>();
 		
+		if(reportsIncomingDto.getCustomerID().equals("All")) {
+			customerInvoiceEntitiesList = customerInvoiceRepository.getAllCustomerInvoiceListByPaymentStatusAndDateRange(
+					reportsIncomingDto.getAmountPendingFlag(),reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		}
+		else {
+			customerInvoiceEntitiesList = customerInvoiceRepository.getCustomerInvoiceListByCustomerIDAndPaymentStatusAndDateRange(reportsIncomingDto.getCustomerID(),
+					reportsIncomingDto.getAmountPendingFlag(),reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		}
 		return InvoiceCreditNoteResponseMapper.toInvoiceResponseDtosList(customerInvoiceEntitiesList);
 	}
 
+	// Report for GST - Invoice by Customer and Date Range (All Customer/ Single Customer)
 	@Override
-	public List<GSTReportResponseDto> generateGSTReportForPaidInvoiceByDateRange(
-			@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+	public List<GSTReportResponseDto> generateGSTReportForPaidInvoiceByDateRange(@Valid ReportsIncomingDto reportsIncomingDto) {
 		// TODO Auto-generated method stub
 		logger.info("----- InvoiceAndCreditNoteReportServiceImpl generateGSTReportForInvoiceByDateRange ------");
 		
-		if(invoiceCreditNoteReportIncomingDto.getStartDate() == "" || invoiceCreditNoteReportIncomingDto.getStartDate().trim().isEmpty()) {
+		if(reportsIncomingDto.getStartDate() == "" || reportsIncomingDto.getStartDate().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Start Date cannot be blank or empty.");
 		}
 		
-		if(invoiceCreditNoteReportIncomingDto.getEndDate() == "" || invoiceCreditNoteReportIncomingDto.getEndDate().trim().isEmpty()) {
+		if(reportsIncomingDto.getEndDate() == "" || reportsIncomingDto.getEndDate().trim().isEmpty()) {
 			throw BRSException.throwException("Error : End Date cannot be blank or empty.");
 		}
 		
-		logger.info("--- Start Date :- " + invoiceCreditNoteReportIncomingDto.getStartDate() + 
-		"--- End Date :- " + invoiceCreditNoteReportIncomingDto.getEndDate() + "--- Converted End Date :- " 
-		+ DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
+		logger.info("--- Start Date :- " + reportsIncomingDto.getStartDate() + "--- End Date :- " + reportsIncomingDto.getEndDate() + 
+				"--- Converted End Date :- " + DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
 		
-		List<CustomerInvoiceEntity> customerInvoiceEntitiesList =  customerInvoiceRepository.
-				getCustomerInvoiceEntityForPaymentCompletedInvoiceByDateRange(invoiceCreditNoteReportIncomingDto.getStartDate(), 
-						DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
+		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = new ArrayList<CustomerInvoiceEntity>();
+		if(reportsIncomingDto.getCustomerID().equals("All")) {
+			customerInvoiceEntitiesList =  customerInvoiceRepository.getAllCustomerInvoiceListForPaymentCompletedInvoiceByDateRange(reportsIncomingDto.getStartDate(), 
+						DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		}
+		else {
+			customerInvoiceEntitiesList =  customerInvoiceRepository.getInvoiceListForPaymentCompletedInvoiceByCustomerIDAndDateRange(
+					reportsIncomingDto.getCustomerID(), reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		}
 		
 		return GSTReportResponseMapper.toGSTReportForInvoiceResponseDtosList(customerInvoiceEntitiesList);
 	}
 
+	// Report for GST - Credit Note by Customer and Date Range (All Customer/ Single Customer)
 	@Override
-	public List<GSTReportResponseDto> generateGSTReportForCreditNoteByDateRange(
-			@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+	public List<GSTReportResponseDto> generateGSTReportForCreditNoteByDateRange(@Valid ReportsIncomingDto reportsIncomingDto) {
 		// TODO Auto-generated method stub
 		logger.info("----- InvoiceAndCreditNoteReportServiceImpl generateGSTReportForCreditNoteByDateRange ------");
 		
-		if(invoiceCreditNoteReportIncomingDto.getStartDate() == "" || invoiceCreditNoteReportIncomingDto.getStartDate().trim().isEmpty()) {
+		if(reportsIncomingDto.getStartDate() == "" || reportsIncomingDto.getStartDate().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Start Date cannot be blank or empty.");
 		}
 		
-		if(invoiceCreditNoteReportIncomingDto.getEndDate() == "" || invoiceCreditNoteReportIncomingDto.getEndDate().trim().isEmpty()) {
+		if(reportsIncomingDto.getEndDate() == "" || reportsIncomingDto.getEndDate().trim().isEmpty()) {
 			throw BRSException.throwException("Error : End Date cannot be blank or empty.");
 		}
 		
-		logger.info("--- Start Date :- " + invoiceCreditNoteReportIncomingDto.getStartDate() + 
-		"--- End Date :- " + invoiceCreditNoteReportIncomingDto.getEndDate() + "--- Converted End Date :- " 
-		+ DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
+		logger.info("--- Start Date :- " + reportsIncomingDto.getStartDate() + "--- End Date :- " + reportsIncomingDto.getEndDate() + 
+				"--- Converted End Date :- " + DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
 		
 		List<CustomerCreditNoteEntity> customerCreditNoteEntitiesList =  creditNoteRepository.
-				getGSTReportForCreditNoteByDateRange(invoiceCreditNoteReportIncomingDto.getStartDate(), 
-						DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
+				getCustomerCreditNoteEntityByDateRange(reportsIncomingDto.getStartDate(), 
+						DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
 		
 		return GSTReportResponseMapper.toGSTReportForCreditNoteResponseDtosList(customerCreditNoteEntitiesList);
 	}
 
+	// Total Amount Calculation CGST/SGST/IGST/GST_4 - Credit Note Report
 	@Override
-	public GSTReportResponseDto calculateTotalAmountForGSTReportForCreditNote(
-			@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+	public GSTReportResponseDto calculateTotalAmountForGSTReportForCreditNote(@Valid ReportsIncomingDto reportsIncomingDto) {
 		// TODO Auto-generated method stub
 		logger.info("----- InvoiceAndCreditNoteReportServiceImpl calculateTotalAmountForGSTReportForCreditNote ------");
 		
 		List<CustomerCreditNoteEntity> customerCreditNoteEntitiesList =  creditNoteRepository.
-				getGSTReportForCreditNoteByDateRange(invoiceCreditNoteReportIncomingDto.getStartDate(), 
-						DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
+				getCustomerCreditNoteEntityByDateRange(reportsIncomingDto.getStartDate(), 
+						DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
 		
 		List<Double> cgstValues = new ArrayList<Double>();
 		List<Double> sgstValues = new ArrayList<Double>();
@@ -242,15 +258,16 @@ public class InvoiceAndCreditNoteReportServiceImpl implements InvoiceAndCreditNo
 		return gstReportResponseDto;
 	}
 
+	
+	// Total Amount Calculation CGST/SGST/IGST/GST_4 - Invoice Report
 	@Override
-	public GSTReportResponseDto calculateTotalAmountForGSTReportForInvoice(
-			@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+	public GSTReportResponseDto calculateTotalAmountForGSTReportForInvoice(@Valid ReportsIncomingDto reportsIncomingDto) {
 		// TODO Auto-generated method stub
 		logger.info("----- InvoiceAndCreditNoteReportServiceImpl calculateTotalAmountForGSTReportForInvoice ------");
 		
 		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = customerInvoiceRepository.
-				getCustomerInvoiceEntityForPaymentCompletedInvoiceByDateRange(invoiceCreditNoteReportIncomingDto.getStartDate(), 
-					DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
+				getAllCustomerInvoiceListForPaymentCompletedInvoiceByDateRange(reportsIncomingDto.getStartDate(), 
+					DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
 		
 		List<Double> cgstValues = new ArrayList<Double>();
 		List<Double> sgstValues = new ArrayList<Double>();
@@ -298,33 +315,60 @@ public class InvoiceAndCreditNoteReportServiceImpl implements InvoiceAndCreditNo
 		return gstReportResponseDto;
 	}
 	
-	
+	// TDS Report for Invoice - For All Customer/Single Customer By Date Range
 	@Override
-	public List<GSTReportResponseDto> generateTDSReportForInvoiceByDateRange(
-			@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+	public List<GSTReportResponseDto> generateTDSReportForInvoiceByDateRange(@Valid ReportsIncomingDto reportsIncomingDto) {
 		// TODO Auto-generated method stub
 		logger.info("----- InvoiceAndCreditNoteReportServiceImpl generateTDSReportForInvoiceByDateRange ------");
 		
-		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = customerInvoiceRepository.
-			getCustomerInvoiceEntityForPaymentCompletedInvoiceByDateRange(invoiceCreditNoteReportIncomingDto.getStartDate(),
-					DateUtils.add1DayToInputDate(invoiceCreditNoteReportIncomingDto.getEndDate()));
-		
-		for(int i=0; i<customerInvoiceEntitiesList.size(); i++) {
-			
+		if(reportsIncomingDto.getStartDate() == "" || reportsIncomingDto.getStartDate().trim().isEmpty()) {
+			throw BRSException.throwException("Error : Start Date cannot be blank or empty.");
 		}
 		
-		return null;
+		if(reportsIncomingDto.getEndDate() == "" || reportsIncomingDto.getEndDate().trim().isEmpty()) {
+			throw BRSException.throwException("Error : End Date cannot be blank or empty.");
+		}
+		
+		logger.info("--- Start Date :- " + reportsIncomingDto.getStartDate() + 
+				"--- End Date :- " + reportsIncomingDto.getEndDate() + "--- Converted End Date :- " 
+				+ DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		
+		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = new ArrayList<CustomerInvoiceEntity>();
+		
+		if(reportsIncomingDto.getCustomerID().equals("All")) {
+			customerInvoiceEntitiesList = customerInvoiceRepository.getAllCustomerInvoiceListForPaymentCompletedInvoiceByDateRange(reportsIncomingDto.getStartDate(),
+					DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		}
+		else {
+			customerInvoiceEntitiesList = customerInvoiceRepository.
+					getInvoiceListForPaymentCompletedInvoiceByCustomerIDAndDateRange(reportsIncomingDto.getCustomerID(), reportsIncomingDto.getStartDate(),
+						DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		}
+		
+		return TDSReportResponseMapper.toTDSReportForInvoiceResponseDtosList(customerInvoiceEntitiesList);
 	}
-
+	
+	// TDS Report for Credit Note - For All Customer/Single Customer By Date Range
 	@Override
-	public List<GSTReportResponseDto> generateTDSReportForCreditNoteByDateRange(
-			@Valid InvoiceCreditNoteReportIncomingDto invoiceCreditNoteReportIncomingDto) {
+	public List<GSTReportResponseDto> generateTDSReportForCreditNoteByDateRange(@Valid ReportsIncomingDto reportsIncomingDto) {
 		// TODO Auto-generated method stub
 		logger.info("----- InvoiceAndCreditNoteReportServiceImpl generateTDSReportForCreditNoteByDateRange ------");
 		
+		if(reportsIncomingDto.getStartDate() == "" || reportsIncomingDto.getStartDate().trim().isEmpty()) {
+			throw BRSException.throwException("Error : Start Date cannot be blank or empty.");
+		}
 		
+		if(reportsIncomingDto.getEndDate() == "" || reportsIncomingDto.getEndDate().trim().isEmpty()) {
+			throw BRSException.throwException("Error : End Date cannot be blank or empty.");
+		}
 		
-		return null;
+		logger.info("--- Start Date :- " + reportsIncomingDto.getStartDate() + "--- End Date :- " + reportsIncomingDto.getEndDate() + 
+				"--- Converted End Date :- " + DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		
+		List<CustomerCreditNoteEntity> customerCreditNoteEntitiesList = creditNoteRepository.getCustomerCreditNoteEntityByDateRange
+			(reportsIncomingDto.getStartDate(),DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		
+		return TDSReportResponseMapper.toTDSReportForCreditNoteResponseDtosList(customerCreditNoteEntitiesList);
 	}
 
 }

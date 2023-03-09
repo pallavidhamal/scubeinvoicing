@@ -121,8 +121,8 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		
 		customerCreditNoteEntity.setDeclaredTds(creditNoteIncomingDto.getDeclaredTds() != null ? 
 				encoder.encodeToString(creditNoteIncomingDto.getDeclaredTds().getBytes(StandardCharsets.UTF_8)) : null);
-		customerCreditNoteEntity.setActualTds(creditNoteIncomingDto.getActualTds() != null ? 
-				encoder.encodeToString(creditNoteIncomingDto.getActualTds().getBytes(StandardCharsets.UTF_8)) : null);
+/*		customerCreditNoteEntity.setActualTds(creditNoteIncomingDto.getActualTds() != null ? 
+				encoder.encodeToString(creditNoteIncomingDto.getActualTds().getBytes(StandardCharsets.UTF_8)) : null); */
 		
 		// Total Amount/ Sub total/ Credits Remaining
 		customerCreditNoteEntity.setTotalAmount(encoder.encodeToString

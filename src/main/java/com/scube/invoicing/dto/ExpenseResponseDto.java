@@ -23,7 +23,7 @@ public class ExpenseResponseDto {
 	private String expenseID;
 
 	private VendorMasterResponseDto vendorInfo;
-	private String paymentDate;
+	private String expenseDate;
 	private String paymentMethod;
 	private String referenceNo;
 	

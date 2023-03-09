@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.scube.invoicing.dto.incoming.CreateInvoiceIncomingDto;
 import com.scube.invoicing.dto.response.Response;
-import com.scube.invoicing.service.CreateInvoiceService;
+import com.scube.invoicing.service.GenerateInvoiceAndCreditNoteService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -22,15 +22,16 @@ import com.scube.invoicing.service.CreateInvoiceService;
 public class GenerateInvoiceAndCreditNoteController {
 	
 	@Autowired
-	CreateInvoiceService createInvoiceService;
+	GenerateInvoiceAndCreditNoteService generateInvoiceAndCreditNoteService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(GenerateInvoiceAndCreditNoteController.class);
-	
+
+	/*
   	@SuppressWarnings("rawtypes")
 	@PostMapping( value = "/generateInvoiceAndSendMailToCustomer" , consumes = APPLICATION_JSON_VALUE)
   	public Response generateInvoiceAndSendMailToCustomer(@Valid @RequestBody CreateInvoiceIncomingDto createInvoiceIncomingDto) {
   		logger.info("------ CreateInvoiceController generateInvoiceAndSendMailToCustomer ------");
-  		return Response.ok().setPayload(createInvoiceService.generateInvoiceAndSendMailToCustomer(createInvoiceIncomingDto));
+  		return Response.ok().setPayload(generateInvoiceAndCreditNoteService.generateInvoiceAndSendMailToCustomer(createInvoiceIncomingDto));
   	}
 	
   	
@@ -38,7 +39,22 @@ public class GenerateInvoiceAndCreditNoteController {
 	@PostMapping( value = "/generateCreditNoteForCustomer" , consumes = APPLICATION_JSON_VALUE)
   	public Response generateCreditNoteForCustomer(@Valid @RequestBody CreateInvoiceIncomingDto createInvoiceIncomingDto) {
   		logger.info("------ CreateInvoiceController generateCreditNoteForCustomer ------");
-  		return Response.ok().setPayload(createInvoiceService.generateCreditNoteForCustomer(createInvoiceIncomingDto));
+  		return Response.ok().setPayload(generateInvoiceAndCreditNoteService.generateCreditNoteForCustomer(createInvoiceIncomingDto));
+  	}*/
+  	
+  	
+  	@SuppressWarnings("rawtypes")
+	@PostMapping( value = "/saveInvoiceMailStatusForCustomer" , consumes = APPLICATION_JSON_VALUE)
+  	public Response saveInvoiceMailStatusForCustomer(@Valid @RequestBody CreateInvoiceIncomingDto createInvoiceIncomingDto) {
+  		logger.info("------ CreateInvoiceController saveInvoiceMailStatusForCustomer ------");
+  		return Response.ok().setPayload(generateInvoiceAndCreditNoteService.saveInvoiceMailStatusForCustomer(createInvoiceIncomingDto));
   	}
   	
+  	
+  	@SuppressWarnings("rawtypes")
+	@PostMapping( value = "/saveCreditNoteMailStatusForCustomer" , consumes = APPLICATION_JSON_VALUE)
+  	public Response saveCreditNoteMailStatusForCustomer(@Valid @RequestBody CreateInvoiceIncomingDto createInvoiceIncomingDto) {
+  		logger.info("------ CreateInvoiceController saveCreditNoteMailStatusForCustomer ------");
+  		return Response.ok().setPayload(generateInvoiceAndCreditNoteService.saveCreditNoteMailStatusForCustomer(createInvoiceIncomingDto));
+  	}
 }

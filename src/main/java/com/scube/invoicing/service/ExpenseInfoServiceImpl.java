@@ -28,6 +28,7 @@ import com.scube.invoicing.exception.BRSException;
 import com.scube.invoicing.repository.ExpenseInfoRepository;
 import com.scube.invoicing.repository.ExpenseItemListRepository;
 import com.scube.invoicing.util.DateUtils;
+import com.scube.invoicing.util.RandomUtils;
 
 @Service
 public class ExpenseInfoServiceImpl implements ExpenseInfoService {
@@ -90,7 +91,7 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		ExpenseInfoEntity expenseInfoEntity = new ExpenseInfoEntity();
 		expenseInfoEntity.setIsdeleted("N");
 		expenseInfoEntity.setPaymentDate(DateUtils.stringToDateConvert(expenseIncomingDto.getPaymentDate()));
-		expenseInfoEntity.setReferenceNo(expenseIncomingDto.getReferenceNo());
+		expenseInfoEntity.setReferenceNo("EXPENSE-00" + RandomUtils.generateRandomNumber());
 		expenseInfoEntity.setPaymentAccount(expenseIncomingDto.getPaymentAccount());
 		
 		expenseInfoEntity.setVendorMasterEntity(vendorMasterEntity);
@@ -161,7 +162,6 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		ExpenseInfoEntity expenseInfoEntity = expenseInfoRepository.findById(expenseIncomingDto.getExpenseID()).get();
 		expenseInfoEntity.setIsdeleted("N");
 		expenseInfoEntity.setPaymentDate(DateUtils.stringToDateConvert(expenseIncomingDto.getPaymentDate()));
-		expenseInfoEntity.setReferenceNo(expenseIncomingDto.getReferenceNo());
 		expenseInfoEntity.setPaymentAccount(expenseIncomingDto.getPaymentAccount());
 		
 		expenseInfoEntity.setVendorMasterEntity(vendorMasterEntity);

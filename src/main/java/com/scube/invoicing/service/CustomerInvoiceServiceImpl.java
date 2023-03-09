@@ -114,9 +114,9 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		
 		// Invoice and Actual TDS 
 		customerInvoiceEntity.setInvoiceTds(customerInvoiceIncomingDto.getInvoiceTds() != null ? 
-				baseEncoder.encodeToString(customerInvoiceIncomingDto.getInvoiceTds().getBytes(StandardCharsets.UTF_8)) : null);
-		customerInvoiceEntity.setActualTds(customerInvoiceIncomingDto.getActualTds() != null ? 
-				baseEncoder.encodeToString(customerInvoiceIncomingDto.getActualTds().getBytes(StandardCharsets.UTF_8)) : null);
+				baseEncoder.encodeToString(customerInvoiceIncomingDto.getInvoiceTds().getBytes(StandardCharsets.UTF_8)) : null); 
+/*		customerInvoiceEntity.setActualTds(customerInvoiceIncomingDto.getActualTds() != null ? 
+				baseEncoder.encodeToString(customerInvoiceIncomingDto.getActualTds().getBytes(StandardCharsets.UTF_8)) : null); */
 		
 		// Message on Invoice and Statement
 		customerInvoiceEntity.setMessageInvoice(customerInvoiceIncomingDto.getMessageInvoice());
@@ -133,7 +133,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		// Invoice Payment Status
 		customerInvoiceEntity.setPaymentStatus("Payment Pending");
 		
-//		customerInvoiceRepository.save(customerInvoiceEntity);
+		customerInvoiceRepository.save(customerInvoiceEntity);
 		
 		Set<CustomerInvoiceServiceEntity> customerInvoiceServiceEntityList = new HashSet<CustomerInvoiceServiceEntity>();
 		
@@ -168,7 +168,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 			customerInvoiceServiceEntityList.add(customerInvoiceServiceEntity);
 			
 		}
-//		customerInvoiceServiceRepository.saveAll(customerInvoiceServiceEntityList);
+		customerInvoiceServiceRepository.saveAll(customerInvoiceServiceEntityList);
 		
 		return CustomerInvoiceMapper.toCustomerServiceAndCompanyResponseMailDto(customerInvoiceEntity, companyMasterEntity);
 	}
@@ -263,6 +263,8 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 			throw BRSException.throwException(EntityType.INVOICE, ExceptionType.ENTITY_NOT_FOUND, customerInvoiceIncomingDto.getInvoiceNo());
 		}
 		
+		customerInvoiceEntity.setActualTds(customerInvoiceIncomingDto.getActualTds() != null ? 
+			baseEncoder.encodeToString(customerInvoiceIncomingDto.getActualTds().getBytes(StandardCharsets.UTF_8)) : null);
 		customerInvoiceEntity.setPaymentCompletedDate(DateUtils.today());
 		customerInvoiceEntity.setPaymentStatus("Payment Completed");
 		customerInvoiceRepository.save(customerInvoiceEntity);

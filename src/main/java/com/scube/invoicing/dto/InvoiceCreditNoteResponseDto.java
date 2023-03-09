@@ -28,7 +28,7 @@ public class InvoiceCreditNoteResponseDto {
 	
 	private String customerInvoiceAmount;
 	
-	private String date;
+	private String invoiceDate;
 	
 	private String customerCreditNoteNo;
 	private String creditNoteDate;

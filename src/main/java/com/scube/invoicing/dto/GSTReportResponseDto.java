@@ -18,6 +18,7 @@ import lombok.experimental.Accessors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GSTReportResponseDto {
 	
+	// Customer Info Details
 	private String customerName;
 	private String customerContactNo;
 	private String customerEmailID;
@@ -27,6 +28,11 @@ public class GSTReportResponseDto {
 	private String invoiceDate;
 	private String invoiceAmount;
 	private String invoicePaymentDate;
+	
+	// Invoice and Credit Note TDS Info
+	private String invoiceTds;
+	private String actualTds;
+	private String declaredTds;
 	
 	// Credit Note Details
 	private String creditNoteNo;
