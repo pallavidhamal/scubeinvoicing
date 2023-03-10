@@ -33,6 +33,16 @@ public class ExpenseInfoEntity extends BaseEntity {
 	@Column(name = "reference_no")
 	private String referenceNo;
 	
+	@Column(name = "sub_total")
+	private String subTotal;
 	
+	@Column(name = "total_amount")
+	private String totalAmount;
+	
+	@Column(name = "round_off_amount")
+	private String roundOffAmount;
+	
+	@Column(name = "memo")
+	private String memo;
 	
 }

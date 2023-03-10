@@ -94,6 +94,14 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		expenseInfoEntity.setReferenceNo("EXPENSE-00" + RandomUtils.generateRandomNumber());
 		expenseInfoEntity.setPaymentAccount(expenseIncomingDto.getPaymentAccount());
 		
+		// Sub-total/Total/Round off Amount
+		expenseInfoEntity.setSubTotal(encoder.encodeToString(expenseIncomingDto.getSubTotal().getBytes(StandardCharsets.UTF_8)));
+		expenseInfoEntity.setTotalAmount(encoder.encodeToString(expenseIncomingDto.getTotalAmount().getBytes(StandardCharsets.UTF_8)));
+		expenseInfoEntity.setRoundOffAmount(encoder.encodeToString(expenseIncomingDto.getRoundOffAmount().getBytes(StandardCharsets.UTF_8)));
+		
+		// Memo
+		expenseInfoEntity.setMemo(expenseIncomingDto.getMemo() != null ?expenseIncomingDto.getMemo() : null);
+		
 		expenseInfoEntity.setVendorMasterEntity(vendorMasterEntity);
 		expenseInfoEntity.setPaymentMethodEntity(paymentMethodEntity);
 		
@@ -170,6 +178,14 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		expenseInfoEntity.setIsdeleted("N");
 		expenseInfoEntity.setPaymentDate(DateUtils.stringToDateConvert(expenseIncomingDto.getPaymentDate()));
 		expenseInfoEntity.setPaymentAccount(expenseIncomingDto.getPaymentAccount());
+		
+		// Sub-total/ Total Amount/Round off Amount
+		expenseInfoEntity.setSubTotal(encoder.encodeToString(expenseIncomingDto.getSubTotal().getBytes(StandardCharsets.UTF_8)));
+		expenseInfoEntity.setTotalAmount(encoder.encodeToString(expenseIncomingDto.getTotalAmount().getBytes(StandardCharsets.UTF_8)));
+		expenseInfoEntity.setRoundOffAmount(encoder.encodeToString(expenseIncomingDto.getRoundOffAmount().getBytes(StandardCharsets.UTF_8)));
+		
+		// Memo
+		expenseInfoEntity.setMemo(expenseIncomingDto.getMemo() != null ? expenseIncomingDto.getMemo() : null);
 		
 		expenseInfoEntity.setVendorMasterEntity(vendorMasterEntity);
 		expenseInfoEntity.setPaymentMethodEntity(paymentMethodEntity);

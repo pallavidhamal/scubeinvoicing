@@ -29,6 +29,12 @@ public class ExpenseResponseDto {
 	
 	private String paymentAccount;
 	
+	private String roundOffAmount;
+	private String subTotal;
+	private String totalAmount;
+	
+	private String memo;
+	
 	private List<ExpenseItemListResponseDto> expenseItemList;
 	
 }

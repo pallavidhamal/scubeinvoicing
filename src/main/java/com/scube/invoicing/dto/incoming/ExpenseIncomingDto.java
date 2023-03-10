@@ -17,6 +17,12 @@ public class ExpenseIncomingDto {
 	private String paymentMethod;
 	private String referenceNo;
 	
+	private String roundOffAmount;
+	private String subTotal;
+	private String totalAmount;
+	
+	private String memo;
+	
 	private String paymentAccount;
 	
 	private Set<ExpenseItemListIncomingDto> expenseItemListIncomingDtos;
