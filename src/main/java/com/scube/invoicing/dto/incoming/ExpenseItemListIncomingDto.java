@@ -18,4 +18,6 @@ public class ExpenseItemListIncomingDto {
 	private String amount;
 	private String tax;
 	
+	private String serviceAmountWithGst;
+	
 }

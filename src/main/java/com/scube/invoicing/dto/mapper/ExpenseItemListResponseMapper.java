@@ -20,9 +20,10 @@ public class ExpenseItemListResponseMapper {
 				.setCategoryID(expenseCategoryItemListEntity.getCategoryMasterEntity().getId())
 				.setCategory(expenseCategoryItemListEntity.getCategoryMasterEntity().getExpenseCategoryName())
 				
-				// Description/ Amount
+				// Description/ Amount/ Service Amount with GST
 				.setDescription(expenseCategoryItemListEntity.getDescription())
 				.setAmount(new String(decoder.decode(expenseCategoryItemListEntity.getAmount())))
+				.setServiceAmountWithGst(new String(decoder.decode(expenseCategoryItemListEntity.getServiceAmountWithGst())))
 				
 				// GST Details
 				.setGstID(expenseCategoryItemListEntity.getGstMasterEntity().getId())

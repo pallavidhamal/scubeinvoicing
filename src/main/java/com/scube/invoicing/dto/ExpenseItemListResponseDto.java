@@ -1,5 +1,6 @@
 package com.scube.invoicing.dto;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -31,6 +32,8 @@ public class ExpenseItemListResponseDto {
 	private String gstID;
 	private String gstTag;
 	private double gstValue;
+	
+	private String serviceAmountWithGst;
 	
 	private CustomerMasterResponseDto customerMasterResponseDto;
 

@@ -32,6 +32,9 @@ public class ExpenseCategoryItemListEntity extends BaseEntity {
 	@Column(name = "amount")
 	private String amount;
 	
+	@Column(name = "service_amount_with_gst")
+	private String serviceAmountWithGst;
+	
 	@OneToOne
 	@JoinColumn(name = "fk_customer")
 	private CustomerMasterEntity customerMasterEntity;

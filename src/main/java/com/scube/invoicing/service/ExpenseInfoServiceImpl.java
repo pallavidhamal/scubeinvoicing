@@ -111,9 +111,16 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 			
 			ExpenseCategoryItemListEntity expenseCategoryItemListEntity = new ExpenseCategoryItemListEntity();
 			expenseCategoryItemListEntity.setIsdeleted("N");
+			// Amount and Service Amount with GST
 			expenseCategoryItemListEntity.setAmount(encoder.encodeToString(expenseItemListIncomingDto.getAmount()
 					.getBytes(StandardCharsets.UTF_8)));
+			expenseCategoryItemListEntity.setServiceAmountWithGst(encoder.encodeToString(expenseItemListIncomingDto.getServiceAmountWithGst()
+					.getBytes(StandardCharsets.UTF_8)));
+			
+			// Category Description
 			expenseCategoryItemListEntity.setDescription(expenseItemListIncomingDto.getDescription());
+			
+			// Customer/Category/Expense/GST Entity
 			expenseCategoryItemListEntity.setCustomerMasterEntity(customerMasterEntity);
 			expenseCategoryItemListEntity.setCategoryMasterEntity(categoryMasterEntity);
 			expenseCategoryItemListEntity.setExpenseInfoEntity(expenseInfoEntity);
@@ -186,8 +193,14 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 			
 			ExpenseCategoryItemListEntity expenseCategoryItemListEntity = expenseItemListRepository.findById(
 					expenseItemListIncomingDto.getExpenseItemID()).get();
+			
 			expenseCategoryItemListEntity.setIsdeleted("N");
-			expenseCategoryItemListEntity.setAmount(expenseItemListIncomingDto.getAmount());
+			
+			expenseCategoryItemListEntity.setAmount(encoder.encodeToString(expenseItemListIncomingDto.getAmount()
+					.getBytes(StandardCharsets.UTF_8)));
+			expenseCategoryItemListEntity.setServiceAmountWithGst(encoder.encodeToString(expenseItemListIncomingDto.getServiceAmountWithGst()
+					.getBytes(StandardCharsets.UTF_8)));
+			
 			expenseCategoryItemListEntity.setDescription(expenseItemListIncomingDto.getDescription());
 			expenseCategoryItemListEntity.setCustomerMasterEntity(customerMasterEntity);
 			expenseCategoryItemListEntity.setCategoryMasterEntity(categoryMasterEntity);
