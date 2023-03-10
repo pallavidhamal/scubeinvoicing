@@ -18,6 +18,8 @@ public interface CreditNoteService {
 	
 	boolean deleteCreditNoteByCustomerIDAndCreditNoteNo(String customerID, String creditNoteNo);
 	
+	CreditNoteResponseDto getCreditNoteDetailsByCreditNoteID(String creditNoteID);
+	
 	CustomerCreditNoteEntity getCustomerCreditNoteEntityByCustomerIDAndCreditNoteNo(CustomerMasterEntity customerMasterEntity, String creditNoteNo);
 	
 	List<CustomerCreditNoteDetailsEntity> getCreditNoteDetailsListByCustomerIDAndCreditNoteNo(

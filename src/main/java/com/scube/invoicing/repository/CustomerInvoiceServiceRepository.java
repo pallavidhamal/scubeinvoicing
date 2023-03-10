@@ -15,4 +15,6 @@ public interface CustomerInvoiceServiceRepository extends JpaRepository<Customer
 	List<CustomerInvoiceServiceEntity> findByCustomerInvoiceEntityAndCustomerMasterEntity(
 			CustomerInvoiceEntity customerInvoiceEntity, CustomerMasterEntity customerMasterEntity);
 	
+	List<CustomerInvoiceServiceEntity> findByCustomerInvoiceEntity(CustomerInvoiceEntity customerInvoiceEntity);
+	
 }

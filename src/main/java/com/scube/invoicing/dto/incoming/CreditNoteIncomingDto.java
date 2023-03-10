@@ -13,6 +13,8 @@ public class CreditNoteIncomingDto {
 	private String customerID;
 	private String custEmailId;
 	
+	private String creditNoteID;
+	
 	private String invoiceNo;
 	
 	private String companyName;

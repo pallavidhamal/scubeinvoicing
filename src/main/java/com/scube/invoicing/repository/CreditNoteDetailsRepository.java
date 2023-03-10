@@ -14,5 +14,7 @@ public interface CreditNoteDetailsRepository extends JpaRepository<CustomerCredi
 	
 	List<CustomerCreditNoteDetailsEntity> findByCustomerMasterEntityAndCustomerCreditNoteEntity(
 			CustomerMasterEntity customerMasterEntity, CustomerCreditNoteEntity customerCreditNoteEntity);
+	
+	List<CustomerCreditNoteDetailsEntity> findByCustomerCreditNoteEntity(CustomerCreditNoteEntity customerCreditNoteEntity);
 
 }

@@ -1,6 +1,6 @@
 package com.scube.invoicing.dto;
 
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -29,6 +29,6 @@ public class ExpenseResponseDto {
 	
 	private String paymentAccount;
 	
-	private Set<ExpenseItemListResponseDto> expenseItemList;
+	private List<ExpenseItemListResponseDto> expenseItemList;
 	
 }

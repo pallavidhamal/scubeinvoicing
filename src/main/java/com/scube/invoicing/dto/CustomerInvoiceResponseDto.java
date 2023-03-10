@@ -1,6 +1,6 @@
 package com.scube.invoicing.dto;
 
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,6 +37,7 @@ public class CustomerInvoiceResponseDto {
 	
 	private String customerCompanyName;
 	
+	private String invoiceID;
 	private String invoiceNo;
 	private String invoiceDate;
 	
@@ -62,6 +63,6 @@ public class CustomerInvoiceResponseDto {
 	
 	private String paymentStatus;
 	
-	private Set<CustomerInvoiceServiceResponseDto> customerInvoiceServiceResponseDtos;
+	private List<CustomerInvoiceServiceResponseDto> customerInvoiceServiceResponseDtos;
 
 }

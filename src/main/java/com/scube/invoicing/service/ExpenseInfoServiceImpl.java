@@ -79,11 +79,11 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		if(expenseIncomingDto.getPaymentMethod() == "" || expenseIncomingDto.getPaymentMethod().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Payment Method cannot be empty or blank");
 		}
-		
+/*		
 		if(expenseIncomingDto.getReferenceNo() == "" || expenseIncomingDto.getReferenceNo().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Reference No cannot be empty or blank");
 		}
-		
+*/		
 		VendorMasterEntity vendorMasterEntity = vendorMasterService.getVendorMasterEntityByVendorID(expenseIncomingDto.getVendorName());
 		
 		PaymentMethodEntity paymentMethodEntity = paymentMethodService.getPaymentMethodEntityByPaymentMethodID(expenseIncomingDto.getPaymentMethod());
@@ -169,6 +169,11 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		
 		expenseInfoRepository.save(expenseInfoEntity);
 		
+		List<ExpenseCategoryItemListEntity> expenseCategoryItemListEntityList = 
+				expenseItemListRepository.findByExpenseInfoEntity(expenseInfoEntity);
+		
+		expenseItemListRepository.deleteAll(expenseCategoryItemListEntityList);
+		
 		Set<ExpenseCategoryItemListEntity> expenseCategoryItemListEntitiesList = new HashSet<ExpenseCategoryItemListEntity>();
 		
 		for(ExpenseItemListIncomingDto expenseItemListIncomingDto : expenseIncomingDto.getExpenseItemListIncomingDtos()) {
@@ -206,6 +211,10 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		logger.info("------- ExpenseInfoController deleteExpenseByExpenseID ------");
 		
 		ExpenseInfoEntity expenseInfoEntity = expenseInfoRepository.findById(expenseID).get();
+		List<ExpenseCategoryItemListEntity> expenseCategoryItemListEntityList = 
+				expenseItemListRepository.findByExpenseInfoEntity(expenseInfoEntity);
+		
+		expenseItemListRepository.deleteAll(expenseCategoryItemListEntityList);
 		expenseInfoRepository.delete(expenseInfoEntity);
 		
 		logger.info("------- Record Deleted Successfully ------");
@@ -219,8 +228,9 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		logger.info("------- ExpenseInfoController getExpenseInfoByExpenseID ------");
 		
 		ExpenseInfoEntity expenseInfoEntity = expenseInfoRepository.findById(expenseID).get();
+		List<ExpenseCategoryItemListEntity> expenseCategoryItemListEntityList = expenseItemListRepository.findByExpenseInfoEntity(expenseInfoEntity);
 		
-		return ExpenseInfoAndItemListMapper.toExpenseResponseDto(expenseInfoEntity);
+		return ExpenseInfoAndItemListMapper.toExpenseAndExpenseItemListResponseDto(expenseInfoEntity, expenseCategoryItemListEntityList);
 	}
 
 	@Override

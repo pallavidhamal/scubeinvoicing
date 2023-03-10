@@ -7,6 +7,7 @@ import java.util.List;
 import com.scube.invoicing.dto.CustomerInvoiceResponseDto;
 import com.scube.invoicing.entity.CompanyMasterEntity;
 import com.scube.invoicing.entity.CustomerInvoiceEntity;
+import com.scube.invoicing.entity.CustomerInvoiceServiceEntity;
 import com.scube.invoicing.util.DateUtils;
 import com.scube.invoicing.util.StringNullEmpty;
 
@@ -78,7 +79,8 @@ public class CustomerInvoiceMapper {
 		
 	}
 	
-	public static CustomerInvoiceResponseDto toCustomerInvoiceResponseDto(CustomerInvoiceEntity customerInvoiceEntity) {
+	
+	public static CustomerInvoiceResponseDto toAllCustomerInvoiceResponseDtos(CustomerInvoiceEntity customerInvoiceEntity) {
 		
 		return new CustomerInvoiceResponseDto() 
 				
@@ -86,6 +88,7 @@ public class CustomerInvoiceMapper {
 				.setCustomerCompanyName(customerInvoiceEntity.getCustomerMasterEntity().getCompanyName())
 				.setCustEmailId(customerInvoiceEntity.getCustEmailId())
 				
+				.setInvoiceID(customerInvoiceEntity.getId())
 				.setInvoiceNo(customerInvoiceEntity.getInvoiceNo())
 				.setInvoiceDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getInvoiceDate()))
 				
@@ -115,15 +118,69 @@ public class CustomerInvoiceMapper {
 				
 				.setDueDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getDueDate()))
 				.setPaymentStatus(StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getPaymentStatus()));
-//				.setCustomerInvoiceServiceResponseDtos(CustomerInvoiceServiceMapper.toCustomerInvoiceServiceResponseDtosSet(customerInvoiceServiceEntities));	
 	}
 	
-	public static List<CustomerInvoiceResponseDto> toCustomerInvoiceResponseDtosList(List<CustomerInvoiceEntity> customerInvoiceEntitiesList) {
+	
+	public static List<CustomerInvoiceResponseDto> toAllCustomerInvoiceResponseDtosList(List<CustomerInvoiceEntity> customerInvoiceEntitiesList) {
 		// TODO Auto-generated method stub
 		
 		List<CustomerInvoiceResponseDto> customerServiceResponseDtos = new ArrayList<CustomerInvoiceResponseDto>();
 		for(CustomerInvoiceEntity customerInvoiceEntity : customerInvoiceEntitiesList) {
-			customerServiceResponseDtos.add(toCustomerInvoiceResponseDto(customerInvoiceEntity));			
+			customerServiceResponseDtos.add(toAllCustomerInvoiceResponseDtos(customerInvoiceEntity));			
+		}
+				
+		return customerServiceResponseDtos;
+	} 
+	
+	public static CustomerInvoiceResponseDto toCustomerInvoiceResponseDto(CustomerInvoiceEntity customerInvoiceEntity,
+			List<CustomerInvoiceServiceEntity> customerInvoiceServiceEntityList) {
+		
+		return new CustomerInvoiceResponseDto() 
+				
+				.setCustomerID(customerInvoiceEntity.getCustomerMasterEntity().getId())
+				.setCustomerCompanyName(customerInvoiceEntity.getCustomerMasterEntity().getCompanyName())
+				.setCustEmailId(customerInvoiceEntity.getCustEmailId())
+				
+				.setInvoiceID(customerInvoiceEntity.getId())
+				.setInvoiceNo(customerInvoiceEntity.getInvoiceNo())
+				.setInvoiceDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getInvoiceDate()))
+				
+				.setSubTotal(new String(decoder.decode(customerInvoiceEntity.getSubTotal())))
+				
+				.setCgstAmount(customerInvoiceEntity.getCgstAmount() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getCgstAmount())) : null)
+				.setSgstAmount(customerInvoiceEntity.getSgstAmount() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getSgstAmount())) : null)
+				.setIgstAmount(customerInvoiceEntity.getIgstAmount() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getIgstAmount())) : null)
+				.setGst4Amount(customerInvoiceEntity.getGst4Amount() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getGst4Amount())) : null)
+				
+				.setBalance(customerInvoiceEntity.getBalance() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getBalance())) : null)
+				.setDeposit(customerInvoiceEntity.getDeposit() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getDeposit())) : null)
+				.setDiscounts(customerInvoiceEntity.getDiscounts() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getDiscounts())) : null)
+				.setTotalAmount(new String(decoder.decode(customerInvoiceEntity.getTotalAmount())))
+				
+				.setActualTds(customerInvoiceEntity.getActualTds() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getActualTds())) : null)
+				.setInvoiceTds(customerInvoiceEntity.getInvoiceTds() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getInvoiceTds())) : null)
+				
+				.setDueDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getDueDate()))
+				.setPaymentStatus(StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getPaymentStatus()))
+				.setCustomerInvoiceServiceResponseDtos(CustomerInvoiceServiceMapper.toCustomerInvoiceServiceResponseDtosSet(customerInvoiceServiceEntityList));	
+	}
+	
+	public static List<CustomerInvoiceResponseDto> toCustomerInvoiceResponseDtosList(List<CustomerInvoiceEntity> customerInvoiceEntitiesList,
+			List<CustomerInvoiceServiceEntity> customerInvoiceServiceEntityList) {
+		// TODO Auto-generated method stub
+		
+		List<CustomerInvoiceResponseDto> customerServiceResponseDtos = new ArrayList<CustomerInvoiceResponseDto>();
+		for(CustomerInvoiceEntity customerInvoiceEntity : customerInvoiceEntitiesList) {
+			customerServiceResponseDtos.add(toCustomerInvoiceResponseDto(customerInvoiceEntity, customerInvoiceServiceEntityList));			
 		}
 				
 		return customerServiceResponseDtos;

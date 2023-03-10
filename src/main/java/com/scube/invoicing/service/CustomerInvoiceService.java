@@ -12,14 +12,21 @@ import com.scube.invoicing.entity.CustomerMasterEntity;
 
 public interface CustomerInvoiceService {
 	
-	CustomerInvoiceResponseDto addCustomerInvoiceAndServiceData(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
+	// Create New Invoice and Service Info
+	CustomerInvoiceResponseDto addCustomerInvoiceAndServiceInfo(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
 	
-	boolean updateCustomerServiceInfo(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
+	// Update Invoice and Service Info
+	CustomerInvoiceResponseDto updateCustomerInvoiceAndServiceInfo(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
 	
-	boolean removeCustomerInvoiceAndServiceData(String customerID, String invoiceNo);
+	// Remove Customer Invoice and Service Info 
+	boolean removeCustomerInvoiceAndServiceInfo(String customerID, String invoiceNo);
 	
 	CustomerInvoiceResponseDto getCustomerInvoiceAndServiceResponseDto(String customerID);
 	
+	// Get Customer Invoice and Service Details By Invoice ID
+	CustomerInvoiceResponseDto getCustomerInvoiceListByInvoiceID (String invoiceID);
+	
+	// Get List of Customer Invoice By Customer ID
 	List<CustomerInvoiceResponseDto> getCustomerInvoiceListByCustomerID(String customerID);
 	
 //	List<CustomerServiceResponseDto> getAllCustomerServiceDetailsByCustomerServiceId(String customerServiceID);

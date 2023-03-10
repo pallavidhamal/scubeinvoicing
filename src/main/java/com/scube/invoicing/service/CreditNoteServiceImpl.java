@@ -76,8 +76,7 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		
 		logger.info("------ CreditNoteServiceImpl addCreditNoteAndService -------");
 		
-		if(creditNoteIncomingDto.getCustomerID() == "" || 
-				creditNoteIncomingDto.getCustomerID().trim().isEmpty()) {
+		if(creditNoteIncomingDto.getCustomerID() == "" || creditNoteIncomingDto.getCustomerID().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Customer ID cannot be blank or null");
 		}
 		
@@ -181,6 +180,107 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		// TODO Auto-generated method stub
 		logger.info("------ CreditNoteServiceImpl updateCreditNoteAndService -------");
 		
+		if(creditNoteIncomingDto.getCustomerID() == "" || creditNoteIncomingDto.getCustomerID().trim().isEmpty()) {
+			throw BRSException.throwException("Error : Customer ID cannot be blank or null");
+		}
+		
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyName(companyName);
+		
+		if(companyMasterEntity == null) {
+			throw BRSException.throwException("Error : NO Company Details Found");
+		}
+		
+		CustomerMasterEntity customerMasterEntity = customerMasterService.getCustomerDetailsByCustomerId
+				(creditNoteIncomingDto.getCustomerID());
+		
+		if(customerMasterEntity == null) {
+			throw BRSException.throwException("Error : NO Customer Details Found");
+		}
+		
+		Set<CustomerInvoiceEntity> customerInvoiceSet = new HashSet<CustomerInvoiceEntity>(); 
+		
+		if(creditNoteIncomingDto.getCustomerInvoiceIncomingDtos() != null) {
+			for(CustomerInvoiceIncomingDto customerInvoiceIncomingDto :
+				creditNoteIncomingDto.getCustomerInvoiceIncomingDtos()) {
+				CustomerInvoiceEntity customerInvoiceEntity = customerInvoiceRepository.findById(customerInvoiceIncomingDto.getInvoiceID()).get();
+				customerInvoiceSet.add(customerInvoiceEntity);
+			}
+		}
+		
+		CustomerCreditNoteEntity customerCreditNoteEntity = creditNoteRepository.findById(creditNoteIncomingDto.getCreditNoteID()).get();
+		
+		customerCreditNoteEntity.setIsdeleted("N");
+		
+		// Set Customer Entity
+		customerCreditNoteEntity.setCustomerMasterEntity(customerMasterEntity);
+		
+		// CGST/SGST/IGST/GST4 Amount values
+		customerCreditNoteEntity.setCgstAmount(creditNoteIncomingDto.getCgstAmount() != null ? 
+				encoder.encodeToString(creditNoteIncomingDto.getCgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
+		customerCreditNoteEntity.setSgstAmount(creditNoteIncomingDto.getSgstAmount() != null ? 
+				encoder.encodeToString(creditNoteIncomingDto.getSgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
+		customerCreditNoteEntity.setIgstAmount(creditNoteIncomingDto.getIgstAmount() != null ? 
+				encoder.encodeToString(creditNoteIncomingDto.getIgstAmount().getBytes(StandardCharsets.UTF_8)) : null);
+		customerCreditNoteEntity.setGst4Amount(creditNoteIncomingDto.getGst4Amount() != null ? 
+				encoder.encodeToString(creditNoteIncomingDto.getGst4Amount().getBytes(StandardCharsets.UTF_8)) : null);
+		
+		customerCreditNoteEntity.setDeclaredTds(creditNoteIncomingDto.getDeclaredTds() != null ? 
+				encoder.encodeToString(creditNoteIncomingDto.getDeclaredTds().getBytes(StandardCharsets.UTF_8)) : null);
+/*		customerCreditNoteEntity.setActualTds(creditNoteIncomingDto.getActualTds() != null ? 
+				encoder.encodeToString(creditNoteIncomingDto.getActualTds().getBytes(StandardCharsets.UTF_8)) : null); */
+		
+		// Total Amount/ Sub total/ Credits Remaining
+		customerCreditNoteEntity.setTotalAmount(encoder.encodeToString
+				(creditNoteIncomingDto.getTotalAmount().getBytes(StandardCharsets.UTF_8)));
+		customerCreditNoteEntity.setSubTotal(encoder.encodeToString
+				(creditNoteIncomingDto.getSubTotal().getBytes(StandardCharsets.UTF_8)));
+		customerCreditNoteEntity.setCreditsRemaining(encoder.encodeToString
+				(creditNoteIncomingDto.getCreditsRemaining().getBytes(StandardCharsets.UTF_8)));
+		
+		// Credit Note No and Credit Note Date
+/*		customerCreditNoteEntity.setCreditNoteNo("CN-00"+RandomUtils.generateRandomNumber()); */
+		customerCreditNoteEntity.setCreditNoteDate(DateUtils.stringToDateConvert(creditNoteIncomingDto.getCreditNoteDate()));
+		customerCreditNoteEntity.setCustomerInvoiceEntity(customerInvoiceSet);
+		
+		creditNoteRepository.save(customerCreditNoteEntity);
+		
+		List<CustomerCreditNoteDetailsEntity> creditNoteDetailsEntityList = creditNoteDetailsRepository.
+				findByCustomerMasterEntityAndCustomerCreditNoteEntity(customerMasterEntity, customerCreditNoteEntity);
+		
+		creditNoteDetailsRepository.deleteAll(creditNoteDetailsEntityList);
+		
+		Set<CustomerCreditNoteDetailsEntity> customerCreditNoteDetailsEntities = new HashSet<CustomerCreditNoteDetailsEntity>();
+		
+		for(CreditNoteDetailsIncomingDto creditNoteDetailsIncomingDto : 
+			creditNoteIncomingDto.getCreditNoteDetailsIncomingDto()) {
+			
+			GSTMasterEntity gstMasterEntity = gstMasterService.getGstMasterEntityByGstID(creditNoteDetailsIncomingDto.getTax());
+			ServiceMasterEntity serviceMasterEntity = serviceMasterDetailsService.getServiceMasterEntityByServiceID(
+					creditNoteDetailsIncomingDto.getService());
+		
+			CustomerCreditNoteDetailsEntity customerCreditNoteDetailsEntity = new CustomerCreditNoteDetailsEntity();
+			
+			customerCreditNoteDetailsEntity.setIsdeleted("N");
+			
+			// GST/Customer/Credit Note/ Service Entity
+			customerCreditNoteDetailsEntity.setGstMasterEntity(gstMasterEntity);
+			customerCreditNoteDetailsEntity.setCustomerMasterEntity(customerMasterEntity);
+			customerCreditNoteDetailsEntity.setCustomerCreditNoteEntity(customerCreditNoteEntity);
+			customerCreditNoteDetailsEntity.setServiceMasterEntity(serviceMasterEntity);
+			
+			// Credit Note Service Details
+			customerCreditNoteDetailsEntity.setDescription(creditNoteDetailsIncomingDto.getDescription());
+			customerCreditNoteDetailsEntity.setRate(creditNoteDetailsIncomingDto.getRate());
+			customerCreditNoteDetailsEntity.setQuantity(creditNoteDetailsIncomingDto.getQuantity());
+			customerCreditNoteDetailsEntity.setAmount(encoder.encodeToString
+					(creditNoteDetailsIncomingDto.getAmount().getBytes(StandardCharsets.UTF_8)));
+			customerCreditNoteDetailsEntity.setServiceAmountWithGst(encoder.encodeToString
+					(creditNoteDetailsIncomingDto.getServiceAmountWithGst().getBytes(StandardCharsets.UTF_8)));
+			
+			customerCreditNoteDetailsEntities.add(customerCreditNoteDetailsEntity);
+		}
+		creditNoteDetailsRepository.saveAll(customerCreditNoteDetailsEntities);
+		
 		return true;
 	}
 
@@ -237,6 +337,18 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		creditNoteRepository.delete(customerCreditNoteEntity);
 		
 		return true;
+	}
+
+	@Override
+	public CreditNoteResponseDto getCreditNoteDetailsByCreditNoteID(String creditNoteID) {
+		// TODO Auto-generated method stub
+		logger.info("------ CreditNoteServiceImpl getCreditNoteDetailsByCreditNoteID -------");
+		
+		CustomerCreditNoteEntity customerCreditNoteEntity = creditNoteRepository.findById(creditNoteID).get();
+		List<CustomerCreditNoteDetailsEntity> customerCreditNoteDetailsEntityList = creditNoteDetailsRepository.
+				findByCustomerCreditNoteEntity(customerCreditNoteEntity);
+		
+		return CustomerCreditNoteMapper.toCreditNoteAndServiceResponseDto(customerCreditNoteEntity, customerCreditNoteDetailsEntityList);
 	}
 
 }

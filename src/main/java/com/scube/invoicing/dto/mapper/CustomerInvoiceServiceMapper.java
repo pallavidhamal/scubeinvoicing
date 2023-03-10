@@ -1,13 +1,16 @@
 package com.scube.invoicing.dto.mapper;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
 import com.scube.invoicing.dto.CustomerInvoiceServiceResponseDto;
 import com.scube.invoicing.entity.CustomerInvoiceServiceEntity;
 
 public class CustomerInvoiceServiceMapper {
 
+	static Base64.Decoder baseDecoder = Base64.getDecoder();
+	
 	public static CustomerInvoiceServiceResponseDto toCustomerInvoiceServiceResponseDto(CustomerInvoiceServiceEntity customerInvoiceServiceEntity) {
 		return new CustomerInvoiceServiceResponseDto()
 				.setInvoiceServiceID(customerInvoiceServiceEntity.getId())
@@ -20,16 +23,18 @@ public class CustomerInvoiceServiceMapper {
 				.setRate(customerInvoiceServiceEntity.getRate())
 				.setSku(customerInvoiceServiceEntity.getSku())
 				
-				.setAmount(customerInvoiceServiceEntity.getAmount())
+				.setAmount(new String(baseDecoder.decode(customerInvoiceServiceEntity.getAmount())))
 				.setGstID(customerInvoiceServiceEntity.getGstMasterEntity().getId())
 				.setGstTag(customerInvoiceServiceEntity.getGstMasterEntity().getDescription())
-				.setGstValue(customerInvoiceServiceEntity.getGstMasterEntity().getValue());
+				.setGstValue(customerInvoiceServiceEntity.getGstMasterEntity().getValue())
+				
+				.setServiceAmountWithGst(new String(baseDecoder.decode(customerInvoiceServiceEntity.getServiceAmountWithGst())));
 	}
 	
-	public static Set<CustomerInvoiceServiceResponseDto> toCustomerInvoiceServiceResponseDtosSet(Set<CustomerInvoiceServiceEntity> customerInvoiceServiceEntities) {
+	public static List<CustomerInvoiceServiceResponseDto> toCustomerInvoiceServiceResponseDtosSet(List<CustomerInvoiceServiceEntity> customerInvoiceServiceEntities) {
 		// TODO Auto-generated method stub
 		
-		Set<CustomerInvoiceServiceResponseDto> customerInvoiceServiceResponseDtos = new HashSet<CustomerInvoiceServiceResponseDto>();
+		List<CustomerInvoiceServiceResponseDto> customerInvoiceServiceResponseDtos = new ArrayList<CustomerInvoiceServiceResponseDto>();
 		for(CustomerInvoiceServiceEntity customerInvoiceServiceEntity : customerInvoiceServiceEntities) {
 			customerInvoiceServiceResponseDtos.add(toCustomerInvoiceServiceResponseDto(customerInvoiceServiceEntity));			
 		}

@@ -36,6 +36,14 @@ public class CreditNoteController {
   		return Response.ok().setPayload(creditNoteService.addCreditNoteAndService(creditNoteIncomingDto));
   	}
 	
+	// Update Customer Credit Note
+	@SuppressWarnings("rawtypes")
+	@PostMapping(value = "/updateCreditNoteAndService" , consumes = APPLICATION_JSON_VALUE)
+  	public Response updateCreditNoteAndService(@Valid @RequestBody CreditNoteIncomingDto creditNoteIncomingDto) {
+  		logger.info("------ CreditNoteController updateCreditNoteAndService ------");
+  		return Response.ok().setPayload(creditNoteService.updateCreditNoteAndService(creditNoteIncomingDto));
+  	}
+	
 	
 	@SuppressWarnings("rawtypes")
 	@GetMapping(value = "/deleteCreditNoteByCustomerIDAndCreditNoteNo/{customerID}/{creditNoteNo}")
@@ -43,6 +51,14 @@ public class CreditNoteController {
   			@PathVariable("creditNoteNo") String creditNoteNo) {
   		logger.info("------ CreditNoteController deleteCreditNoteByCustomerIDAndCreditNoteNo ------");
   		return Response.ok().setPayload(creditNoteService.deleteCreditNoteByCustomerIDAndCreditNoteNo(customerID, creditNoteNo));
+  	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	@GetMapping(value = "/getCreditNoteDetailsByCreditNoteID/{creditNoteID}")
+  	public Response getCreditNoteDetailsByCreditNoteID(@PathVariable("creditNoteID") String creditNoteID) {
+  		logger.info("------ CreditNoteController getCreditNoteDetailsByCreditNoteID ------");
+  		return Response.ok().setPayload(creditNoteService.getCreditNoteDetailsByCreditNoteID(creditNoteID));
   	}
 	
 	

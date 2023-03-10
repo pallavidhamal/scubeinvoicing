@@ -1,5 +1,7 @@
 package com.scube.invoicing.dto;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -17,6 +19,8 @@ import lombok.experimental.Accessors;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreditNoteResponseDto {
+	
+	private String creditNoteID;
 	
 	private String customerID;
 	private String customerName;
@@ -37,5 +41,7 @@ public class CreditNoteResponseDto {
 	
 	private String declaredTds;
 	private String actualTds;
+	
+	private List<CreditNoteServiceResponseDto> creditNoteServiceResponseDtos;
 
 }

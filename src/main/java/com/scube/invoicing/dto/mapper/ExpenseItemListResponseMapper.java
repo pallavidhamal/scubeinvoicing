@@ -1,8 +1,8 @@
 package com.scube.invoicing.dto.mapper;
 
+import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import com.scube.invoicing.dto.ExpenseItemListResponseDto;
 import com.scube.invoicing.entity.ExpenseCategoryItemListEntity;
@@ -13,20 +13,30 @@ public class ExpenseItemListResponseMapper {
 	
 	public static ExpenseItemListResponseDto toExpenseItemListResponseDto(ExpenseCategoryItemListEntity expenseCategoryItemListEntity) {
 		return new ExpenseItemListResponseDto()
+				// Expense Item ID
 				.setExpenseItemID(expenseCategoryItemListEntity.getId())
+				
+				// Category ID/ Category Name
+				.setCategoryID(expenseCategoryItemListEntity.getCategoryMasterEntity().getId())
 				.setCategory(expenseCategoryItemListEntity.getCategoryMasterEntity().getExpenseCategoryName())
+				
+				// Description/ Amount
 				.setDescription(expenseCategoryItemListEntity.getDescription())
-				.setCustomer(expenseCategoryItemListEntity.getCustomerMasterEntity().getTitle()
-						+ " " + expenseCategoryItemListEntity.getCustomerMasterEntity().getFirstName()
-						+ " " + expenseCategoryItemListEntity.getCustomerMasterEntity().getLastName())
 				.setAmount(new String(decoder.decode(expenseCategoryItemListEntity.getAmount())))
-				.setTax(expenseCategoryItemListEntity.getGstMasterEntity().getValue());
+				
+				// GST Details
+				.setGstID(expenseCategoryItemListEntity.getGstMasterEntity().getId())
+				.setGstTag(expenseCategoryItemListEntity.getGstMasterEntity().getDescription())
+				.setGstValue(expenseCategoryItemListEntity.getGstMasterEntity().getValue())
+				
+				// Customer Info
+				.setCustomerMasterResponseDto(CustomerMasterMapper.toCustomerMasterResponseDto(expenseCategoryItemListEntity.getCustomerMasterEntity()));
 	}
 	
-	public static Set<ExpenseItemListResponseDto> toExpenseResponseDtosList(Set<ExpenseCategoryItemListEntity> expenseCategoryItemListEntity2) {
+	public static List<ExpenseItemListResponseDto> toExpenseItemListResponseDtosList(List<ExpenseCategoryItemListEntity> expenseCategoryItemListEntity2) {
 		// TODO Auto-generated method stub
 		
-		Set<ExpenseItemListResponseDto> expenseItemListResponseDtosList = new HashSet<ExpenseItemListResponseDto>();
+		List<ExpenseItemListResponseDto> expenseItemListResponseDtosList = new ArrayList<ExpenseItemListResponseDto>();
 		for(ExpenseCategoryItemListEntity expenseCategoryItem : expenseCategoryItemListEntity2) {
 			expenseItemListResponseDtosList.add(toExpenseItemListResponseDto(expenseCategoryItem));			
 		}
