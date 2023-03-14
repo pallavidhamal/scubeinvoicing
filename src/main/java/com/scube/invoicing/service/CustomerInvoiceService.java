@@ -36,7 +36,11 @@ public interface CustomerInvoiceService {
 	List<CustomerInvoiceServiceEntity> getCustomerServiceInfoByCustomerDetailsAndInvoiceDetails(
 			CustomerMasterEntity customerMasterEntity, CustomerInvoiceEntity customerInvoiceEntity);
 	
+	// Get All Customer Invoice List for Data Table
 	List<CustomerInvoiceResponseDto> getAllCustomerInvoiceAndServiceList();
+	
+	// Get All Customer Invoice List By Date Range
+	List<CustomerInvoiceResponseDto> getAllCustomerInvoiceListByDateRange(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
 	
 	boolean updateCustomerInvoicePaymentStatus(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
 

@@ -78,6 +78,14 @@ public class CustomerInvoiceServiceController {
   	
   	
   	@SuppressWarnings("rawtypes")
+	@PostMapping( value = "/getAllCustomerInvoiceListByDateRange")
+  	public Response getAllCustomerInvoiceListByDateRange(@Valid @RequestBody CustomerInvoiceIncomingDto customerServiceIncomingDto) {
+  		logger.info("----- CustomerInvoiceServiceController getAllCustomerInvoiceListByDateRange ----");
+  		return Response.ok().setPayload(customerInvoiceService.getAllCustomerInvoiceListByDateRange(customerServiceIncomingDto));
+  	}
+  	
+  	
+  	@SuppressWarnings("rawtypes")
 	@PostMapping( value = "/updateCustomerInvoicePaymentStatus", consumes = APPLICATION_JSON_VALUE)
   	public Response updateCustomerInvoicePaymentStatus(@Valid @RequestBody CustomerInvoiceIncomingDto customerServiceIncomingDto) {
   		logger.info("----- CustomerInvoiceServiceController updateCustomerInvoicePaymentStatus ----");

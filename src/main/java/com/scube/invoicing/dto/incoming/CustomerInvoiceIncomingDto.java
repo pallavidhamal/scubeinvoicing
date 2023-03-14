@@ -11,6 +11,9 @@ import lombok.ToString;
 @ToString
 public class CustomerInvoiceIncomingDto {
 	
+	private String startDate;
+	private String endDate;
+	
 	private String customerID;
 	private String custEmailId;
 	private String customerBillingAddress;

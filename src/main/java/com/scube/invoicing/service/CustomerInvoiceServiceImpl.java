@@ -435,4 +435,17 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		return CustomerInvoiceMapper.toCustomerInvoiceResponseDto(customerInvoiceEntity, customerInvoiceServiceEntityList);
 	}
 
+	// Get All Customer Invoice List By Date Range
+	@Override
+	public List<CustomerInvoiceResponseDto> getAllCustomerInvoiceListByDateRange(CustomerInvoiceIncomingDto customerServiceIncomingDto) {
+		// TODO Auto-generated method stub
+		logger.info("----- CustomerInvoiceServiceImpl getAllCustomerInvoiceListByDateRange ----");
+		
+		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = customerInvoiceRepository.
+				getAllCustomerInvoiceListByPaymentStatusAndDateRange("Payment Completed", customerServiceIncomingDto.getStartDate(),
+						customerServiceIncomingDto.getEndDate());
+		
+		return CustomerInvoiceMapper.toAllCustomerInvoiceResponseDtosList(customerInvoiceEntitiesList);
+	}
+
 }
