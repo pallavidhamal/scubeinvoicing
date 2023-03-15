@@ -22,8 +22,16 @@ public class CreditNoteResponseDto {
 	
 	private String creditNoteID;
 	
+	private String companyName;
+	private String toEmailID;
+	private String fromEmailID;
+	private String subject;
+	private String bccEmailID;
+	private String mailBody;
+	
 	private String customerID;
 	private String customerName;
+	private String customerEmailID;
 	
 	private String customerCompanyName;
 	

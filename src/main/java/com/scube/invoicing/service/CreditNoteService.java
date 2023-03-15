@@ -12,7 +12,7 @@ import com.scube.invoicing.entity.CustomerMasterEntity;
 
 public interface CreditNoteService {
 	
-	boolean addCreditNoteAndService(@Valid CreditNoteIncomingDto creditNoteIncomingDto);
+	CreditNoteResponseDto addCreditNoteAndService(@Valid CreditNoteIncomingDto creditNoteIncomingDto);
 	
 	boolean updateCreditNoteAndService(@Valid CreditNoteIncomingDto creditNoteIncomingDto);
 	

@@ -71,7 +71,7 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 	private static final Logger logger = LoggerFactory.getLogger(CreditNoteServiceImpl.class);
 
 	@Override
-	public boolean addCreditNoteAndService(@Valid CreditNoteIncomingDto creditNoteIncomingDto) {
+	public CreditNoteResponseDto addCreditNoteAndService(@Valid CreditNoteIncomingDto creditNoteIncomingDto) {
 		// TODO Auto-generated method stub
 		
 		logger.info("------ CreditNoteServiceImpl addCreditNoteAndService -------");
@@ -172,7 +172,7 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		}
 		creditNoteDetailsRepository.saveAll(customerCreditNoteDetailsEntities);
 		
-		return true;
+		return CustomerCreditNoteMapper.toCustomerCreditNoteAndCompanyResponseMailDto(customerCreditNoteEntity, companyMasterEntity);
 	}
 
 	@Override
