@@ -150,8 +150,9 @@ public class CustomerCreditNoteMapper {
 						toCustomerCreditNoteServiceResponseDtosSet(customerCreditNoteDetailsEntity))
 				
 				// Credit Note and Customer Invoice Attachment
-				.setCustomerInvoiceResponseDtos(CustomerInvoiceMapper.
-						toAllCustomerInvoiceResponseDtosSet(customerCreditNoteEntity.getCustomerInvoiceEntity()));
+				.setCustomerInvoiceResponseDtos(customerCreditNoteEntity.getCustomerInvoiceEntity() != null ? 
+						CustomerInvoiceMapper.toAllCustomerInvoiceResponseDtosSet(customerCreditNoteEntity.getCustomerInvoiceEntity())
+						: null);
 	}
 	
 	public static List<CreditNoteResponseDto> toCustomerCreditNoteResponseDtos(List<CustomerCreditNoteEntity> customerCreditNoteEntitiesList) {
