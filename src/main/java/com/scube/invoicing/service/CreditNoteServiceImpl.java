@@ -176,7 +176,7 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 	}
 
 	@Override
-	public boolean updateCreditNoteAndService(@Valid CreditNoteIncomingDto creditNoteIncomingDto) {
+	public CreditNoteResponseDto updateCreditNoteAndService(@Valid CreditNoteIncomingDto creditNoteIncomingDto) {
 		// TODO Auto-generated method stub
 		logger.info("------ CreditNoteServiceImpl updateCreditNoteAndService -------");
 		
@@ -281,7 +281,7 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		}
 		creditNoteDetailsRepository.saveAll(customerCreditNoteDetailsEntities);
 		
-		return true;
+		return CustomerCreditNoteMapper.toCustomerCreditNoteAndCompanyResponseMailDto(customerCreditNoteEntity, companyMasterEntity);
 	}
 
 	@Override

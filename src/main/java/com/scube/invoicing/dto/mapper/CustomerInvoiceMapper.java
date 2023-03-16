@@ -2,7 +2,9 @@ package com.scube.invoicing.dto.mapper;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.scube.invoicing.dto.CustomerInvoiceResponseDto;
 import com.scube.invoicing.entity.CompanyMasterEntity;
@@ -131,6 +133,19 @@ public class CustomerInvoiceMapper {
 				
 		return customerServiceResponseDtos;
 	} 
+	
+	
+	
+	public static Set<CustomerInvoiceResponseDto> toAllCustomerInvoiceResponseDtosSet(Set<CustomerInvoiceEntity> customerInvoiceEntitiesList) {
+		// TODO Auto-generated method stub
+		
+		Set<CustomerInvoiceResponseDto> customerServiceResponseDtos = new HashSet<CustomerInvoiceResponseDto>();
+		for(CustomerInvoiceEntity customerInvoiceEntity : customerInvoiceEntitiesList) {
+			customerServiceResponseDtos.add(toAllCustomerInvoiceResponseDtos(customerInvoiceEntity));			
+		}
+				
+		return customerServiceResponseDtos;
+	}
 	
 	public static CustomerInvoiceResponseDto toCustomerInvoiceResponseDto(CustomerInvoiceEntity customerInvoiceEntity,
 			List<CustomerInvoiceServiceEntity> customerInvoiceServiceEntityList) {

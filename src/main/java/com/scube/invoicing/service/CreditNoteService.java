@@ -14,7 +14,7 @@ public interface CreditNoteService {
 	
 	CreditNoteResponseDto addCreditNoteAndService(@Valid CreditNoteIncomingDto creditNoteIncomingDto);
 	
-	boolean updateCreditNoteAndService(@Valid CreditNoteIncomingDto creditNoteIncomingDto);
+	CreditNoteResponseDto updateCreditNoteAndService(@Valid CreditNoteIncomingDto creditNoteIncomingDto);
 	
 	boolean deleteCreditNoteByCustomerIDAndCreditNoteNo(String customerID, String creditNoteNo);
 	
