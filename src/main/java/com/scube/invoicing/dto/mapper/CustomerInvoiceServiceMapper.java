@@ -20,6 +20,7 @@ public class CustomerInvoiceServiceMapper {
 				
 				.setHsnOrSac(customerInvoiceServiceEntity.getHsnorSac())
 				.setDescription(customerInvoiceServiceEntity.getDescription())
+				.setQuantity(customerInvoiceServiceEntity.getQuantity())
 				.setRate(customerInvoiceServiceEntity.getRate())
 				.setSku(customerInvoiceServiceEntity.getSku())
 				
