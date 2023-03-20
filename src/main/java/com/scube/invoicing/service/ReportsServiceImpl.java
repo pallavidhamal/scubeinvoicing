@@ -97,11 +97,11 @@ public class ReportsServiceImpl implements ReportsService {
 		List<CustomerCreditNoteEntity> customerCreditNoteEntitiesList = new ArrayList<CustomerCreditNoteEntity>();
 		
 		if(reportsIncomingDto.getCustomerID().equals("All")) {
-			customerCreditNoteEntitiesList = creditNoteRepository.getCustomerCreditNoteListByCustomerIDAndDateRange(reportsIncomingDto.getCustomerID(), 
+			customerCreditNoteEntitiesList = creditNoteRepository.getAllCustomerCreditNoteListByDateRange( 
 					reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
 		}
 		else {
-			customerCreditNoteEntitiesList = creditNoteRepository.getAllCustomerCreditNoteListByDateRange(
+			customerCreditNoteEntitiesList = creditNoteRepository.getCustomerCreditNoteListByCustomerIDAndDateRange(reportsIncomingDto.getCustomerID(),
 					reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
 		}
 		
