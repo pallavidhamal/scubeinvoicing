@@ -21,6 +21,7 @@ public class CustomerCreditNoteServiceMapper {
 				
 				.setDescription(customerCreditNoteDetailsEntity.getDescription())
 				.setQuantity(customerCreditNoteDetailsEntity.getQuantity())
+				.setRate(customerCreditNoteDetailsEntity.getRate())
 				
 				.setAmount(new String(baseDecoder.decode(customerCreditNoteDetailsEntity.getAmount())))
 				.setGstID(customerCreditNoteDetailsEntity.getGstMasterEntity().getId())
