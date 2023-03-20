@@ -53,7 +53,8 @@ public class CustomerInvoiceMapper {
 				// Sub-total/ Total/ Balance/ Deposit/ Discounts
 				.setSubTotal(new String(decoder.decode(customerInvoiceEntity.getSubTotal())))
 				.setBalance(new String(decoder.decode(customerInvoiceEntity.getSubTotal())))
-				.setDeposit(new String(decoder.decode(customerInvoiceEntity.getDeposit())))
+				.setDeposit(customerInvoiceEntity.getDeposit() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getDeposit())) : null)
 				.setDiscounts(customerInvoiceEntity.getDiscounts() != null ? 
 						new String(decoder.decode(customerInvoiceEntity.getDiscounts())) : null)
 				.setTotalAmount(new String(decoder.decode(customerInvoiceEntity.getTotalAmount())))
