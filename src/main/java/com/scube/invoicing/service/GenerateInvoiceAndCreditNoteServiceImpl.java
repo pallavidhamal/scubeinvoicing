@@ -312,6 +312,7 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 		checkMailStatusEntity.setFromMailID(createInvoiceIncomingDto.getFromEmailID());
 		checkMailStatusEntity.setToMailID(createInvoiceIncomingDto.getToEmailID());
 		checkMailStatusEntity.setBccMailID(createInvoiceIncomingDto.getBccEmailID());
+		checkMailStatusEntity.setSubject(createInvoiceIncomingDto.getSubject());
 		checkMailStatusEntity.setCustomerMasterEntity(customerMasterEntity);
 		checkMailStatusEntity.setCustomerInvoiceEntity(customerInvoiceEntity);
 		
@@ -377,6 +378,7 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 		checkCreditNoteMailStatusEntity.setIsdeleted("N");
 		checkCreditNoteMailStatusEntity.setMailStatus("N");
 		checkCreditNoteMailStatusEntity.setFromMailID(createInvoiceIncomingDto.getFromEmailID());
+		checkCreditNoteMailStatusEntity.setSubject(createInvoiceIncomingDto.getSubject());
 		checkCreditNoteMailStatusEntity.setToMailID(createInvoiceIncomingDto.getToEmailID());
 		checkCreditNoteMailStatusEntity.setBccMailID(createInvoiceIncomingDto.getBccEmailID());
 		checkCreditNoteMailStatusEntity.setCustomerMasterEntity(customerMasterEntity);
