@@ -29,9 +29,14 @@ public class GSTReportResponseMapper {
 				.setCustomerEmailID(customerInvoiceEntity.getCustomerMasterEntity().getEmailId())
 				
 				// CGST/SGST/ IGST Amount values
-				.setCgstAmount(new String(decoder.decode(customerInvoiceEntity.getCgstAmount())))
-				.setSgstAmount(new String(decoder.decode(customerInvoiceEntity.getCgstAmount())))
-				.setIgstAmount(new String(decoder.decode(customerInvoiceEntity.getIgstAmount())));
+				.setCgstAmount(customerInvoiceEntity.getCgstAmount() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getCgstAmount())) : "")
+				.setSgstAmount(customerInvoiceEntity.getSgstAmount() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getSgstAmount())) : "")
+				.setIgstAmount(customerInvoiceEntity.getIgstAmount() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getIgstAmount())) : "")
+				.setGst4Amount(customerInvoiceEntity.getGst4Amount() != null ? 
+						new String(decoder.decode(customerInvoiceEntity.getGst4Amount())) : "");
 	}
 	
 	public static List<GSTReportResponseDto> toGSTReportForInvoiceResponseDtosList(List<CustomerInvoiceEntity> customerInvoiceEntitiesList) {
@@ -67,7 +72,9 @@ public class GSTReportResponseMapper {
 				.setSgstAmount(customerCreditNoteEntity.getSgstAmount() != null ?
 						new String(decoder.decode(customerCreditNoteEntity.getSgstAmount())) : null)
 				.setIgstAmount(customerCreditNoteEntity.getIgstAmount() != null ?
-						new String(decoder.decode(customerCreditNoteEntity.getIgstAmount())) : null);
+						new String(decoder.decode(customerCreditNoteEntity.getIgstAmount())) : null)
+				.setGst4Amount(customerCreditNoteEntity.getGst4Amount() != null ?
+						new String(decoder.decode(customerCreditNoteEntity.getGst4Amount())) : null);
 	}
 	
 	public static List<GSTReportResponseDto> toGSTReportForCreditNoteResponseDtosList(List<CustomerCreditNoteEntity> customerCreditNoteEntityList) {

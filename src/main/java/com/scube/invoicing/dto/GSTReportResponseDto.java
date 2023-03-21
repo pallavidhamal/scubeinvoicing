@@ -42,6 +42,7 @@ public class GSTReportResponseDto {
 	private String cgstAmount;
 	private String sgstAmount;
 	private String igstAmount;
+	private String gst4Amount;
 	
 	// Total CGST/ SGST/ IGST/ Total GST Fields -- Invoice
 	private String invoiceTotalCgstAmount;
