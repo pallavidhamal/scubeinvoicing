@@ -138,13 +138,27 @@ public class ReportsServiceImpl implements ReportsService {
 		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = new ArrayList<CustomerInvoiceEntity>();
 		
 		if(reportsIncomingDto.getCustomerID().equals("All")) {
+			
+			if(reportsIncomingDto.getAmountPendingFlag().equals("All")) {
+				customerInvoiceEntitiesList = customerInvoiceRepository.getAllCustomerInvoiceListByDateRange(reportsIncomingDto.getStartDate(), 
+						DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+			}
+			else {
 			customerInvoiceEntitiesList = customerInvoiceRepository.getAllCustomerInvoiceListByPaymentStatusAndDateRange(
 					reportsIncomingDto.getAmountPendingFlag(),reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+			}
 		}
 		else {
-			customerInvoiceEntitiesList = customerInvoiceRepository.getCustomerInvoiceListByCustomerIDAndPaymentStatusAndDateRange(reportsIncomingDto.getCustomerID(),
+			if(reportsIncomingDto.getAmountPendingFlag().equals("All")) {
+				customerInvoiceEntitiesList = customerInvoiceRepository.getCustomerInvoiceListByCustomerIDAndDateRange(reportsIncomingDto.getCustomerID(),
+						reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+			}
+			else {
+				customerInvoiceEntitiesList = customerInvoiceRepository.getCustomerInvoiceListByCustomerIDAndPaymentStatusAndDateRange(reportsIncomingDto.getCustomerID(),
 					reportsIncomingDto.getAmountPendingFlag(),reportsIncomingDto.getStartDate(), DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+			}
 		}
+		
 		return InvoiceCreditNoteResponseMapper.toInvoiceResponseDtosList(customerInvoiceEntitiesList);
 	}
 
