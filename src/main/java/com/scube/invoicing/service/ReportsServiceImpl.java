@@ -218,9 +218,12 @@ public class ReportsServiceImpl implements ReportsService {
 //		List<Double> totalCreditsValues = new ArrayList<Double>();
 		
 		for(int i=0; i<customerCreditNoteEntitiesList.size(); i++) {
-			cgstValues.add(Double.valueOf(new String(decoder.decode(customerCreditNoteEntitiesList.get(i).getCgstAmount()))));
-			sgstValues.add(Double.valueOf(new String(decoder.decode(customerCreditNoteEntitiesList.get(i).getSgstAmount()))));
-			sgstValues.add(Double.valueOf(new String(decoder.decode(customerCreditNoteEntitiesList.get(i).getSgstAmount()))));
+			cgstValues.add(customerCreditNoteEntitiesList.get(i).getCgstAmount() != null ?
+					Double.valueOf(new String(decoder.decode(customerCreditNoteEntitiesList.get(i).getCgstAmount()))) : null);
+			sgstValues.add(customerCreditNoteEntitiesList.get(i).getSgstAmount() != null ?
+					Double.valueOf(new String(decoder.decode(customerCreditNoteEntitiesList.get(i).getSgstAmount()))) : null);
+			igstValues.add(customerCreditNoteEntitiesList.get(i).getIgstAmount() != null ?
+					Double.valueOf(new String(decoder.decode(customerCreditNoteEntitiesList.get(i).getIgstAmount()))) : null);
 //			totalCreditValues.add(Double.valueOf(new String(decoder.decode(customerCreditNoteEntitiesList.get(i).getCreditsRemaining()))));
 		}
 		
@@ -274,10 +277,12 @@ public class ReportsServiceImpl implements ReportsService {
 		List<Double> igstValues = new ArrayList<Double>();
 		
 		for(int i=0; i<customerInvoiceEntitiesList.size(); i++) {
-			cgstValues.add(Double.valueOf(new String(decoder.decode(customerInvoiceEntitiesList.get(i).getCgstAmount()))));
+			cgstValues.add(customerInvoiceEntitiesList.get(i).getCgstAmount() != null ?
+					Double.valueOf(new String(decoder.decode(customerInvoiceEntitiesList.get(i).getCgstAmount()))) : null);
 			sgstValues.add(customerInvoiceEntitiesList.get(i).getSgstAmount() != null ?
 				Double.valueOf(new String(decoder.decode(customerInvoiceEntitiesList.get(i).getSgstAmount()))) : null);
-			igstValues.add(Double.valueOf(new String(decoder.decode(customerInvoiceEntitiesList.get(i).getIgstAmount()))));
+			igstValues.add(customerInvoiceEntitiesList.get(i).getIgstAmount() != null ?
+					Double.valueOf(new String(decoder.decode(customerInvoiceEntitiesList.get(i).getIgstAmount()))) : null);
 		}
 		
 		double cgstTotal = 0;
