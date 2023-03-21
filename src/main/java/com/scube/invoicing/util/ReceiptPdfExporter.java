@@ -581,8 +581,7 @@ public class ReceiptPdfExporter {
 		companyAndCustomerAndCreditsTable.addCell(new Cell(1,4).add(new Paragraph()).setBorder(Border.NO_BORDER));
 		companyAndCustomerAndCreditsTable.addCell(new Cell(1,2).add(new Paragraph("CREDITS REMAINING" + "\n"
 				+ customerCreditNoteEntity.getCustomerMasterEntity().getCurrencyMasterEntity().getCurrencyName() + " " + 
-				customerCreditNoteEntity.getCreditsRemaining() != null ? 
-						new String(baseDecoder.decode(customerCreditNoteEntity.getCreditsRemaining())) : "NA"))
+						new String(baseDecoder.decode(customerCreditNoteEntity.getCreditsRemaining()))))
 				.setHeight(50)
 				.setBorder(new SolidBorder(new DeviceRgb(253,118,49), 1))
 				.setWidth(5)
