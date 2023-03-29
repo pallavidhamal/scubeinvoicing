@@ -236,7 +236,7 @@ public class EmailService {
 		
 		String mailTextContent = "Dear, " + userName + "\r\r" + 
 						"We have received your reset password request. Please click link below to reset your password."
-					+"<a href='http://" + resetPwdUrl +"/goldrattBharat/resetPassword?" + encodedUserMobileNo +"'><strong>Reset Link</strong></a>" +
+					+"<a href='http://" + resetPwdUrl +"/invoicingweb/resetPassword?" + encodedUserMobileNo +"'><strong>Reset Link</strong></a>" +
 					"<br><br> Thanks, <br> Team SCUBE Technologies";
 		
 		String subjectLine = "Link to reset your password";
@@ -716,6 +716,8 @@ public void sendMailForExcelNotPresent() throws Exception {
 			mimeMessage.addRecipients(Message.RecipientType.TO, 
 	                InternetAddress.parse(createInvoiceIncomingDto.getToEmailID()));
 			mimeMessage.addRecipients(Message.RecipientType.CC, 
+	                InternetAddress.parse(createInvoiceIncomingDto.getCc()));
+			mimeMessage.addRecipients(Message.RecipientType.BCC, 
 	                InternetAddress.parse(createInvoiceIncomingDto.getBccEmailID()));
 			
 			MimeBodyPart fileMimeBodyPart = new MimeBodyPart();
@@ -840,6 +842,9 @@ public void sendMailForExcelNotPresent() throws Exception {
 			mimeMessage.addRecipients(Message.RecipientType.TO, 
 	                InternetAddress.parse(createInvoiceIncomingDto.getToEmailID()));
 			mimeMessage.addRecipients(Message.RecipientType.CC, 
+	                InternetAddress.parse(createInvoiceIncomingDto.getCc()));
+			logger.info("------------" + "getcc" + "---------------" + createInvoiceIncomingDto.getCc());
+			mimeMessage.addRecipients(Message.RecipientType.BCC, 
 	                InternetAddress.parse(createInvoiceIncomingDto.getBccEmailID()));
 			
 			MimeBodyPart fileMimeBodyPart = new MimeBodyPart();

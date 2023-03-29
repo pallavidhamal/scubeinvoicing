@@ -52,7 +52,9 @@ public class InvoiceCreditNoteResponseMapper {
 				.setCreditNoteDate(DateUtils.formatDateToDDMMYYYYFormat(creditNoteEntity.getCreditNoteDate()))
 				
 				// Customer Credits Remaining
-				.setCustomerCreditsRemaining(new String(decoder.decode(creditNoteEntity.getCreditsRemaining())));
+				.setCustomerCreditAmount(new String(decoder.decode(creditNoteEntity.getTotalAmount())));
+				//.setCustomerCreditsRemaining(new String(decoder.decode(creditNoteEntity.getCreditsRemaining())));
+				
 	}
 	
 	public static List<InvoiceCreditNoteResponseDto> toCreditNoteResponseDtosList(List<CustomerCreditNoteEntity> creditNoteEntitiesList) {

@@ -47,6 +47,9 @@ public class CustomerInvoiceServiceEntity extends BaseEntity {
 	@Column(name = "service_amount_with_gst")
 	private String serviceAmountWithGst;
 	
+	@Column(name = "gst_amount")
+	private String gstAmount;
+	
 	@OneToOne
 	@JoinColumn(name = "fk_tax")
 	private GSTMasterEntity gstMasterEntity;

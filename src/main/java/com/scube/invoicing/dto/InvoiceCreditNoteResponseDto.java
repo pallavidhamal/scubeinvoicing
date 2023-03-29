@@ -33,7 +33,7 @@ public class InvoiceCreditNoteResponseDto {
 	private String customerCreditNoteNo;
 	private String creditNoteDate;
 	
-	private String customerCreditsRemaining;
+	private String customerCreditAmount;
 	
 	private String amountPendingFlag;
 	

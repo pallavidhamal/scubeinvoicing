@@ -39,5 +39,8 @@ public class CheckCreditNoteMailStatusEntity extends BaseEntity {
 	
 	@Column(name = "mail_body")
 	private String mailBody;
+	
+	@Column(name = "cc")
+	private String cc;
 
 }

@@ -36,6 +36,7 @@ public class CustomerInvoiceMapper {
 				.setSubject(customerInvoiceEntity.getInvoiceNo() + " from " + 
 						companyMasterEntity.getCompanyName())
 				.setMailBody(mailBody)
+				.setCc(companyMasterEntity.getCc())
 				
 				// Customer Info
 				.setCustomerID(customerInvoiceEntity.getCustomerMasterEntity().getId())

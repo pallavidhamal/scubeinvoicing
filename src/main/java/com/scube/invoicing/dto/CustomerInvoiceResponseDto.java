@@ -26,6 +26,7 @@ public class CustomerInvoiceResponseDto {
 	private String subject;
 	private String bccEmailID;
 	private String mailBody;
+	private String cc;
 	
 	private String customerID;
 	private String custEmailId;

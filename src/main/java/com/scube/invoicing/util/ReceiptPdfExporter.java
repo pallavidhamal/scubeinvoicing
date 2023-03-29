@@ -25,6 +25,7 @@ import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.HorizontalAlignment;
+import com.itextpdf.layout.properties.Leading;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.properties.VerticalAlignment;
@@ -329,21 +330,42 @@ public class ReceiptPdfExporter {
 				.setTextAlignment(TextAlignment.LEFT)
 				.setHorizontalAlignment(HorizontalAlignment.LEFT)
 			);
-		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph("SGST @ 9% on "))
-				.setBorder(Border.NO_BORDER)
-				.setFontSize(8)
-				.setTextAlignment(TextAlignment.LEFT)
-				.setHorizontalAlignment(HorizontalAlignment.LEFT)
-				.setFontColor(new DeviceRgb(58,70,109))
-		);
-		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerInvoiceEntity.getSgstAmount() != null ?
-				new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getSubTotal()))) : "NA"))
-				.setBorder(Border.NO_BORDER)
-				.setFontSize(8)
-				.setTextAlignment(TextAlignment.RIGHT)
-				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
-				.setFontColor(new DeviceRgb(58,70,109))
-		);
+		
+		//SGST
+		if (customerInvoiceEntity.getSgstAmount() != null) {
+			bankDetailsTable.addCell(new Cell(1,3).add(new Paragraph("SGST @ 9% on "))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.LEFT)
+					.setHorizontalAlignment(HorizontalAlignment.LEFT)
+					.setFontColor(new DeviceRgb(58,70,109))
+			);
+			bankDetailsTable.addCell(new Cell(1,3).add(new Paragraph(customerInvoiceEntity.getSgstAmount() != null ?
+					new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getSubTotal()))) : ""))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+					.setFontColor(new DeviceRgb(58,70,109))
+			);
+		}
+		else {
+			bankDetailsTable.addCell(new Cell(1,3).add(new Paragraph())
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.LEFT)
+					.setHorizontalAlignment(HorizontalAlignment.LEFT)
+					.setFontColor(new DeviceRgb(58,70,109))
+			);
+			bankDetailsTable.addCell(new Cell(1,3).add(new Paragraph(customerInvoiceEntity.getSgstAmount() != null ?
+					new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getSubTotal()))) : ""))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+					.setFontColor(new DeviceRgb(58,70,109))
+			);
+		}
 		
 		bankDetailsTable.addCell(new Cell(1,3).add(new Paragraph("Account No : " + companyMasterEntity.getCompanyBankAccNo()))
 				.setBorder(Border.NO_BORDER)
@@ -351,6 +373,9 @@ public class ReceiptPdfExporter {
 				.setTextAlignment(TextAlignment.LEFT)
 				.setHorizontalAlignment(HorizontalAlignment.LEFT)
 			);
+		
+		//IGST
+		if (customerInvoiceEntity.getIgstAmount() != null) {
 		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph("IGST  "))
 				.setBorder(Border.NO_BORDER)
 				.setFontSize(8)
@@ -359,13 +384,33 @@ public class ReceiptPdfExporter {
 				.setFontColor(new DeviceRgb(58,70,109))
 		);
 		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerInvoiceEntity.getIgstAmount() != null ?
-				new String(baseDecoder.decode(customerInvoiceEntity.getIgstAmount())) : "NA"))
+				new String(baseDecoder.decode(customerInvoiceEntity.getIgstAmount())) : ""))
 				.setBorder(Border.NO_BORDER)
 				.setFontSize(8)
 				.setTextAlignment(TextAlignment.RIGHT)
 				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
 				.setFontColor(DeviceRgb.makeLighter(new DeviceRgb(32,46,90)))
 		);
+		}else {
+			
+			bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph())
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.LEFT)
+					.setHorizontalAlignment(HorizontalAlignment.LEFT)
+					.setFontColor(new DeviceRgb(58,70,109))
+			);
+			bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerInvoiceEntity.getIgstAmount() != null ?
+					new String(baseDecoder.decode(customerInvoiceEntity.getIgstAmount())) : ""))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+					.setFontColor(DeviceRgb.makeLighter(new DeviceRgb(32,46,90)))
+			);
+			
+			
+		}
 		
 		bankDetailsTable.addCell(new Cell(1,3).add(new Paragraph("Address : " + companyMasterEntity.getBankAddress()))
 				.setBorder(Border.NO_BORDER)
@@ -373,6 +418,11 @@ public class ReceiptPdfExporter {
 				.setTextAlignment(TextAlignment.LEFT)
 				.setHorizontalAlignment(HorizontalAlignment.LEFT)
 			);
+		
+		
+		
+		//TDS
+		if (customerInvoiceEntity.getInvoiceTds() != null) {
 		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph("TDS  "))
 				.setBorder(Border.NO_BORDER)
 				.setFontSize(8)
@@ -381,13 +431,33 @@ public class ReceiptPdfExporter {
 				.setFontColor(new DeviceRgb(58,70,109))
 		);
 		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerInvoiceEntity.getInvoiceTds() != null ?
-				new String(baseDecoder.decode(customerInvoiceEntity.getInvoiceTds())) : "NA"))
+				new String(baseDecoder.decode(customerInvoiceEntity.getInvoiceTds())) : ""))
 				.setBorder(Border.NO_BORDER)
 				.setFontSize(8)
 				.setTextAlignment(TextAlignment.RIGHT)
 				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
 				.setFontColor(DeviceRgb.makeLighter(new DeviceRgb(32,46,90)))
 		);
+		}else {
+			
+			bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph())
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.LEFT)
+					.setHorizontalAlignment(HorizontalAlignment.LEFT)
+					.setFontColor(new DeviceRgb(58,70,109))
+			);
+			bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerInvoiceEntity.getInvoiceTds() != null ?
+					new String(baseDecoder.decode(customerInvoiceEntity.getInvoiceTds())) : ""))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+					.setFontColor(DeviceRgb.makeLighter(new DeviceRgb(32,46,90)))
+			);
+			
+			
+		}
 		
 		bankDetailsTable.addCell(new Cell(1,3).add(new Paragraph("SWIFT CODE : " + companyMasterEntity.getSwiftCode()))
 				.setBorder(Border.NO_BORDER)
@@ -799,50 +869,114 @@ public class ReceiptPdfExporter {
 				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
 		);
 		
-		amountDetailsTable.addCell(new Cell(1,3).add(new Paragraph()).setBorder(Border.NO_BORDER));
-		amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph("CGST "))
-				.setBorder(Border.NO_BORDER)
-				.setFontSize(8)
-				.setTextAlignment(TextAlignment.RIGHT)
-				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
-		);
-		amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerCreditNoteEntity.getCgstAmount() != null ?
-				new String(baseDecoder.decode(customerCreditNoteEntity.getCgstAmount())) : "NA"))
-				.setBorder(Border.NO_BORDER)
-				.setFontSize(8)
-				.setTextAlignment(TextAlignment.RIGHT)
-				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
-		);
+		if (customerCreditNoteEntity.getCgstAmount() != null) {
+			
+			amountDetailsTable.addCell(new Cell(1,3).add(new Paragraph()).setBorder(Border.NO_BORDER));
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph("CGST "))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerCreditNoteEntity.getCgstAmount() != null ?
+					new String(baseDecoder.decode(customerCreditNoteEntity.getCgstAmount())) : ""))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
+			
+		}else {
+			
+			amountDetailsTable.addCell(new Cell(1,3).add(new Paragraph()).setBorder(Border.NO_BORDER));
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph())
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerCreditNoteEntity.getCgstAmount() != null ?
+					new String(baseDecoder.decode(customerCreditNoteEntity.getCgstAmount())) : ""))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
+			
+			
+		}
+
+		if (customerCreditNoteEntity.getSgstAmount() != null) {
+			
+			amountDetailsTable.addCell(new Cell(1,3).add(new Paragraph()).setBorder(Border.NO_BORDER));
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph("SGST "))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerCreditNoteEntity.getSgstAmount() != null ?
+					new String(baseDecoder.decode(String.valueOf(customerCreditNoteEntity.getSgstAmount()))) : ""))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
 		
-		amountDetailsTable.addCell(new Cell(1,3).add(new Paragraph()).setBorder(Border.NO_BORDER));
-		amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph("SGST "))
-				.setBorder(Border.NO_BORDER)
-				.setFontSize(8)
-				.setTextAlignment(TextAlignment.RIGHT)
-				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
-		);
-		amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerCreditNoteEntity.getSgstAmount() != null ?
-				new String(baseDecoder.decode(String.valueOf(customerCreditNoteEntity.getSgstAmount()))) : "NA"))
-				.setBorder(Border.NO_BORDER)
-				.setFontSize(8)
-				.setTextAlignment(TextAlignment.RIGHT)
-				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
-		);
-		
-		amountDetailsTable.addCell(new Cell(1,3).add(new Paragraph()).setBorder(Border.NO_BORDER));
-		amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph("IGST "))
-				.setBorder(Border.NO_BORDER)
-				.setFontSize(8)
-				.setTextAlignment(TextAlignment.RIGHT)
-				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
-		);
-		amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerCreditNoteEntity.getIgstAmount() != null ?
-				new String(baseDecoder.decode(String.valueOf(customerCreditNoteEntity.getIgstAmount()))) : "NA"))
-				.setBorder(Border.NO_BORDER)
-				.setFontSize(8)
-				.setTextAlignment(TextAlignment.RIGHT)
-				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
-		);
+		}else {
+			
+			amountDetailsTable.addCell(new Cell(1,3).add(new Paragraph()).setBorder(Border.NO_BORDER));
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph())
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerCreditNoteEntity.getSgstAmount() != null ?
+					new String(baseDecoder.decode(String.valueOf(customerCreditNoteEntity.getSgstAmount()))) : ""))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
+		}
+
+		if (customerCreditNoteEntity.getIgstAmount()!= null ) {
+			
+			amountDetailsTable.addCell(new Cell(1,3).add(new Paragraph()).setBorder(Border.NO_BORDER));
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph("IGST "))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerCreditNoteEntity.getIgstAmount() != null ?
+					new String(baseDecoder.decode(String.valueOf(customerCreditNoteEntity.getIgstAmount()))) : ""))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
+			
+		}else {
+			
+			amountDetailsTable.addCell(new Cell(1,3).add(new Paragraph()).setBorder(Border.NO_BORDER));
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph())
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
+			amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph(customerCreditNoteEntity.getIgstAmount() != null ?
+					new String(baseDecoder.decode(String.valueOf(customerCreditNoteEntity.getIgstAmount()))) : ""))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+			);
+			
+		}
+
 		
 		amountDetailsTable.addCell(new Cell(1,3).add(new Paragraph()).setBorder(Border.NO_BORDER));
 		amountDetailsTable.addCell(new Cell(1,2).add(new Paragraph("Total"))

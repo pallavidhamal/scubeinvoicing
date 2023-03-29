@@ -44,5 +44,9 @@ public class CustomerCreditNoteDetailsEntity extends BaseEntity {
 	
 	@Column(name = "service_amount_with_gst")
 	private String serviceAmountWithGst;
+	
+	@Column(name = "gst_Amount")
+	private String gstAmount;
+	
 
 }

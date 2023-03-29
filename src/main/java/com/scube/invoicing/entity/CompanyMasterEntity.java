@@ -57,4 +57,7 @@ public class CompanyMasterEntity extends BaseEntity {
 	@Column(name = "bank_address")
 	private String bankAddress;
 	
+	@Column(name = "cc")
+	private String cc;
+	
 }

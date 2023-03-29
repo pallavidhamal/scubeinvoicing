@@ -22,11 +22,13 @@ public class CustomerCreditNoteServiceMapper {
 				.setDescription(customerCreditNoteDetailsEntity.getDescription())
 				.setQuantity(customerCreditNoteDetailsEntity.getQuantity())
 				.setRate(customerCreditNoteDetailsEntity.getRate())
+				.setGstAmount(new String(baseDecoder.decode(customerCreditNoteDetailsEntity.getGstAmount())))
 				
 				.setAmount(new String(baseDecoder.decode(customerCreditNoteDetailsEntity.getAmount())))
 				.setGstID(customerCreditNoteDetailsEntity.getGstMasterEntity().getId())
 				.setGstTag(customerCreditNoteDetailsEntity.getGstMasterEntity().getDescription())
 				.setGstValue(customerCreditNoteDetailsEntity.getGstMasterEntity().getValue())
+				
 				
 				.setServiceAmountWithGst(new String(baseDecoder.decode(customerCreditNoteDetailsEntity.getServiceAmountWithGst())));
 	}

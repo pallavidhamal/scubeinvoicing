@@ -18,6 +18,7 @@ public class CreateInvoiceIncomingDto {
 	private String subject;
 	private String bccEmailID;
 	private String mailBody;
+	private String cc;
 	
 	private String invoiceNo;
 	private String invoiceDate;

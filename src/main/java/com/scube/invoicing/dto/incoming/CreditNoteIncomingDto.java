@@ -22,6 +22,7 @@ public class CreditNoteIncomingDto {
 	private String fromEmailID;
 	private String subject;
 	private String bccEmailID;
+	private String cc;
 	private String mailBody;
 	
 	private String creditNoteNo;

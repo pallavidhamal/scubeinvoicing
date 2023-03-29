@@ -2,7 +2,6 @@ package com.scube.invoicing.service;
 
 import java.io.File;
 import java.util.List;
-
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -233,6 +232,7 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 				createInvoiceIncomingDto.setToEmailID(checkMailStatusEntityList.get(i).getToMailID());
 				createInvoiceIncomingDto.setFromEmailID(checkMailStatusEntityList.get(i).getFromMailID());
 				createInvoiceIncomingDto.setBccEmailID(checkMailStatusEntityList.get(i).getBccMailID());
+				createInvoiceIncomingDto.setCc(checkMailStatusEntityList.get(i).getCc());
 				createInvoiceIncomingDto.setSubject("# " + checkMailStatusEntityList.get(i).getCustomerInvoiceEntity().
 						getInvoiceNo() + " from " + companyName);
 				createInvoiceIncomingDto.setMailBody("Please find the Invoice. "
@@ -271,6 +271,10 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 		
 		if(createInvoiceIncomingDto.getBccEmailID() == "" || createInvoiceIncomingDto.getBccEmailID().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Company Accountant Email ID cannot be blank or null");
+		}
+		
+		if(createInvoiceIncomingDto.getCc() == "" || createInvoiceIncomingDto.getCc().trim().isEmpty()) {
+			throw BRSException.throwException("Error : CC Email ID cannot be blank or null");
 		}
 		
 		if(createInvoiceIncomingDto.getInvoiceNo() == "" || createInvoiceIncomingDto.getInvoiceNo().trim().isEmpty()) {
@@ -312,6 +316,7 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 		checkMailStatusEntity.setFromMailID(createInvoiceIncomingDto.getFromEmailID());
 		checkMailStatusEntity.setToMailID(createInvoiceIncomingDto.getToEmailID());
 		checkMailStatusEntity.setBccMailID(createInvoiceIncomingDto.getBccEmailID());
+		checkMailStatusEntity.setCc(createInvoiceIncomingDto.getCc());
 		checkMailStatusEntity.setSubject(createInvoiceIncomingDto.getSubject());
 		checkMailStatusEntity.setCustomerMasterEntity(customerMasterEntity);
 		checkMailStatusEntity.setCustomerInvoiceEntity(customerInvoiceEntity);
@@ -340,6 +345,10 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 		
 		if(createInvoiceIncomingDto.getBccEmailID() == "" || createInvoiceIncomingDto.getBccEmailID().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Company Accountant Email ID cannot be blank or null");
+		}
+		
+		if(createInvoiceIncomingDto.getCc() == "" || createInvoiceIncomingDto.getCc().trim().isEmpty()) {
+			throw BRSException.throwException("Error : CC Email ID cannot be blank or null");
 		}
 		
 		if(createInvoiceIncomingDto.getCreditNoteNo() == "" || createInvoiceIncomingDto.getCreditNoteNo().trim().isEmpty()) {
@@ -381,6 +390,7 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 		checkCreditNoteMailStatusEntity.setSubject(createInvoiceIncomingDto.getSubject());
 		checkCreditNoteMailStatusEntity.setToMailID(createInvoiceIncomingDto.getToEmailID());
 		checkCreditNoteMailStatusEntity.setBccMailID(createInvoiceIncomingDto.getBccEmailID());
+		checkCreditNoteMailStatusEntity.setCc(createInvoiceIncomingDto.getCc());
 		checkCreditNoteMailStatusEntity.setCustomerMasterEntity(customerMasterEntity);
 		checkCreditNoteMailStatusEntity.setCustomerCreditNoteEntity(customerCreditNoteEntity);
 		
@@ -404,6 +414,7 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 				createInvoiceIncomingDto.setToEmailID(checkCreditNoteMailStatusEntityList.get(i).getToMailID());
 				createInvoiceIncomingDto.setFromEmailID(checkCreditNoteMailStatusEntityList.get(i).getFromMailID());
 				createInvoiceIncomingDto.setBccEmailID(checkCreditNoteMailStatusEntityList.get(i).getBccMailID());
+				createInvoiceIncomingDto.setCc(checkCreditNoteMailStatusEntityList.get(i).getCc());
 				createInvoiceIncomingDto.setSubject("# " + checkCreditNoteMailStatusEntityList.get(i).getCustomerCreditNoteEntity().
 						getCreditNoteNo() + " from " + companyName);
 				createInvoiceIncomingDto.setMailBody("Please find the Invoice. "

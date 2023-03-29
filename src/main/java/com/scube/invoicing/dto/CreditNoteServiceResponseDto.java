@@ -35,5 +35,6 @@ public class CreditNoteServiceResponseDto {
 	private double gstValue;
 	
 	private String serviceAmountWithGst;
+	private String gstAmount;
 	
 }

@@ -207,8 +207,7 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 					getCategoryMasterEntityByCategoryID(expenseItemListIncomingDto.getCategory());
 			GSTMasterEntity gstMasterEntity = gstMasterService.getGstMasterEntityByGstID(expenseItemListIncomingDto.getTax());
 			
-			ExpenseCategoryItemListEntity expenseCategoryItemListEntity = expenseItemListRepository.findById(
-					expenseItemListIncomingDto.getExpenseItemID()).get();
+			ExpenseCategoryItemListEntity expenseCategoryItemListEntity = new ExpenseCategoryItemListEntity();
 			
 			expenseCategoryItemListEntity.setIsdeleted("N");
 			

@@ -23,6 +23,7 @@ public class CustomerInvoiceServiceMapper {
 				.setQuantity(customerInvoiceServiceEntity.getQuantity())
 				.setRate(customerInvoiceServiceEntity.getRate())
 				.setSku(customerInvoiceServiceEntity.getSku())
+				.setGstAmount(new String(baseDecoder.decode(customerInvoiceServiceEntity.getGstAmount())))
 				
 				.setAmount(new String(baseDecoder.decode(customerInvoiceServiceEntity.getAmount())))
 				.setGstID(customerInvoiceServiceEntity.getGstMasterEntity().getId())

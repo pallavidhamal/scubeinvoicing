@@ -171,6 +171,9 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 			customerInvoiceServiceEntity.setServiceAmountWithGst(baseEncoder.encodeToString(
 					customerInvoiceServiceIncomingDto.getServiceAmountWithGst().getBytes(StandardCharsets.UTF_8)));
 			
+			customerInvoiceServiceEntity.setGstAmount(baseEncoder.encodeToString(
+					customerInvoiceServiceIncomingDto.getGstAmount().getBytes(StandardCharsets.UTF_8)));
+			
 			customerInvoiceServiceEntityList.add(customerInvoiceServiceEntity);
 			
 		}
@@ -292,6 +295,8 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 			customerInvoiceServiceEntity.setServiceAmountWithGst(baseEncoder.encodeToString(
 					customerInvoiceServiceIncomingDto.getServiceAmountWithGst().getBytes(StandardCharsets.UTF_8)));
 			
+			customerInvoiceServiceEntity.setGstAmount(baseEncoder.encodeToString(
+					customerInvoiceServiceIncomingDto.getGstAmount().getBytes(StandardCharsets.UTF_8)));
 			customerInvoiceServiceEntityList.add(customerInvoiceServiceEntity);
 		}
 		customerInvoiceServiceRepository.saveAll(customerInvoiceServiceEntityList);

@@ -35,5 +35,6 @@ public class CustomerInvoiceServiceResponseDto {
 	private double gstValue;
 	
 	private String serviceAmountWithGst;
+	private String gstAmount;
 
 }

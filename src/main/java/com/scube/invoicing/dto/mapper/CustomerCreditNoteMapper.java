@@ -34,6 +34,7 @@ public class CustomerCreditNoteMapper {
 				.setSubject(customerCreditNoteEntity.getCreditNoteNo() + " from " + 
 						companyMasterEntity.getCompanyName())
 				.setMailBody(mailBody)
+				.setCc(companyMasterEntity.getCc())
 				
 				// Customer Info
 				.setCustomerID(customerCreditNoteEntity.getCustomerMasterEntity().getId())

@@ -17,5 +17,6 @@ public class CreditNoteDetailsIncomingDto {
 	private String tax;
 	
 	private String serviceAmountWithGst;
+	private String gstAmount;
 
 }
