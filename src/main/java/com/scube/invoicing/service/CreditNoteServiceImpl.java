@@ -167,7 +167,7 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 					(creditNoteDetailsIncomingDto.getAmount().getBytes(StandardCharsets.UTF_8)));
 			customerCreditNoteDetailsEntity.setServiceAmountWithGst(encoder.encodeToString
 					(creditNoteDetailsIncomingDto.getServiceAmountWithGst().getBytes(StandardCharsets.UTF_8)));
-			customerCreditNoteDetailsEntity.setGstAmount(encoder.encodeToString(creditNoteDetailsIncomingDto.getAmount().getBytes(StandardCharsets.UTF_8)));
+			customerCreditNoteDetailsEntity.setGstAmount(encoder.encodeToString(creditNoteDetailsIncomingDto.getGstAmount().getBytes(StandardCharsets.UTF_8)));
 			
 			customerCreditNoteDetailsEntities.add(customerCreditNoteDetailsEntity);
 		}
