@@ -26,6 +26,7 @@ public class InvoiceCreditNoteResponseMapper {
 				
 				// Invoice Payment Status and Invoice Amount
 				.setCustomerInvoiceAmount(new String(decoder.decode(customerInvoiceEntity.getTotalAmount())))
+				.setCurrency(customerInvoiceEntity.getCustomerMasterEntity().getCurrencyMasterEntity().getCurrencyName())
 				.setAmountPendingFlag(customerInvoiceEntity.getPaymentStatus());
 	}
 	

@@ -47,5 +47,9 @@ public interface CustomerInvoiceRepository extends JpaRepository<CustomerInvoice
 	@Query(value = "SELECT * FROM customer_invoice where payment_status = 'Payment Completed' and created_at >=  STR_TO_DATE((?1), '%Y-%m-%d')"
 			+ "and created_at <= STR_TO_DATE((?2), '%Y-%m-%d');", nativeQuery = true)
 	List<CustomerInvoiceEntity> getAllCustomerInvoiceListForPaymentCompletedInvoiceByDateRange(String startDate, String endDate);
+	
+	//for all customer invoices list by status N
+	@Query(value = "SELECT * FROM invoicing.customer_invoice where is_deleted='N';", nativeQuery = true)
+	List<CustomerInvoiceEntity> getAllCustomerInvoiceListByStatus();
 
 }

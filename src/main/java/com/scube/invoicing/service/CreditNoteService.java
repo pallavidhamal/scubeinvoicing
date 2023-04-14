@@ -20,6 +20,8 @@ public interface CreditNoteService {
 	
 	CreditNoteResponseDto getCreditNoteDetailsByCreditNoteID(String creditNoteID);
 	
+	CustomerCreditNoteEntity getCreditNoteEntityByCreditNoteID(String creditNoteID);
+	
 	CustomerCreditNoteEntity getCustomerCreditNoteEntityByCustomerIDAndCreditNoteNo(CustomerMasterEntity customerMasterEntity, String creditNoteNo);
 	
 	List<CustomerCreditNoteDetailsEntity> getCreditNoteDetailsListByCustomerIDAndCreditNoteNo(

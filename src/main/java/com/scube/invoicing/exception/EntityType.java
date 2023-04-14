@@ -56,5 +56,6 @@ public enum EntityType {
     GSTNO,
     CURRENCY,
     CREDITNOTE,
-    CREDITNOTESERVICE
+    CREDITNOTESERVICE,
+    DESCRIPTION
 }

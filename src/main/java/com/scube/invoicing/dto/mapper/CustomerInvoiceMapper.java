@@ -22,6 +22,7 @@ public class CustomerInvoiceMapper {
 		
 		String mailBody = "Please find the Invoice. If you have any clarification kindly contact." 
 				+ "Thanks for your Business!,"
+				+ "Please click link below to view or download the invoice."
 				+ companyMasterEntity.getCompanyName();
 		
 //		String subTotal = 
@@ -79,7 +80,7 @@ public class CustomerInvoiceMapper {
 				
 				// Tracking no and Due Date
 				.setTrackingNo(customerInvoiceEntity.getTrackingNo())
-				.setDueDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getDueDate()));
+				.setDueDate(DateUtils.formattedDate(customerInvoiceEntity.getDueDate()));
 		
 	}
 	
@@ -94,7 +95,7 @@ public class CustomerInvoiceMapper {
 				
 				.setInvoiceID(customerInvoiceEntity.getId())
 				.setInvoiceNo(customerInvoiceEntity.getInvoiceNo())
-				.setInvoiceDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getInvoiceDate()))
+				.setInvoiceDate(DateUtils.formattedDate(customerInvoiceEntity.getInvoiceDate()))
 				
 				.setSubTotal(new String(decoder.decode(customerInvoiceEntity.getSubTotal())))
 				
@@ -120,7 +121,7 @@ public class CustomerInvoiceMapper {
 				.setInvoiceTds(customerInvoiceEntity.getInvoiceTds() != null ? 
 						new String(decoder.decode(customerInvoiceEntity.getInvoiceTds())) : null)
 				
-				.setDueDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getDueDate()))
+				.setDueDate(DateUtils.formattedDate(customerInvoiceEntity.getDueDate()))
 				.setPaymentStatus(StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getPaymentStatus()));
 	}
 	
@@ -160,7 +161,16 @@ public class CustomerInvoiceMapper {
 				
 				.setInvoiceID(customerInvoiceEntity.getId())
 				.setInvoiceNo(customerInvoiceEntity.getInvoiceNo())
-				.setInvoiceDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getInvoiceDate()))
+				.setInvoiceDate(DateUtils.formattedDate(customerInvoiceEntity.getInvoiceDate()))
+				
+				//shipping details
+				.setTerms(customerInvoiceEntity.getTerms())
+				.setShippingVia(customerInvoiceEntity.getShippingVia())
+				.setShippingDate(DateUtils.formattedDate(customerInvoiceEntity.getShippingDate()))
+				.setTrackingNo(customerInvoiceEntity.getTrackingNo())
+				.setShippingAddress(customerInvoiceEntity.getShippingTo())
+				.setMessageInvoice(customerInvoiceEntity.getMessageInvoice())
+				.setMessageStatement(customerInvoiceEntity.getMessageStatement())
 				
 				.setSubTotal(new String(decoder.decode(customerInvoiceEntity.getSubTotal())))
 				
@@ -186,7 +196,7 @@ public class CustomerInvoiceMapper {
 				.setInvoiceTds(customerInvoiceEntity.getInvoiceTds() != null ? 
 						new String(decoder.decode(customerInvoiceEntity.getInvoiceTds())) : null)
 				
-				.setDueDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getDueDate()))
+				.setDueDate(DateUtils.formattedDate(customerInvoiceEntity.getDueDate()))
 				.setPaymentStatus(StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getPaymentStatus()))
 				.setCustomerInvoiceServiceResponseDtos(CustomerInvoiceServiceMapper.toCustomerInvoiceServiceResponseDtosSet(customerInvoiceServiceEntityList));	
 	}

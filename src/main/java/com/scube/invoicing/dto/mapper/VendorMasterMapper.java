@@ -42,7 +42,7 @@ public class VendorMasterMapper {
 
 				.setPaymentMethodID(vendorMasterEntity.getPaymentMethodEntity().getId())
 				.setPrefDelieveryMethod(vendorMasterEntity.getPrefDelieveryMethod())
-				.setPaymentDate(DateUtils.formatDateToDDMMYYYYFormat(vendorMasterEntity.getPaymentDate()))
+				.setPaymentDate(DateUtils.formattedDate(vendorMasterEntity.getPaymentDate()))
 				.setPaymentTerms(vendorMasterEntity.getPaymentTerms())
 				.setOpeningBalance(vendorMasterEntity.getOpeningBalance())
 				.setPaysWith(vendorMasterEntity.getPaysWith())

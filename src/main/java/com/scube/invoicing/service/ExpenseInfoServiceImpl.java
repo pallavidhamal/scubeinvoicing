@@ -242,8 +242,16 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		List<ExpenseCategoryItemListEntity> expenseCategoryItemListEntityList = 
 				expenseItemListRepository.findByExpenseInfoEntity(expenseInfoEntity);
 		
-		expenseItemListRepository.deleteAll(expenseCategoryItemListEntityList);
-		expenseInfoRepository.delete(expenseInfoEntity);
+		for(int i=0; i<expenseCategoryItemListEntityList.size(); i++) {
+			
+			expenseCategoryItemListEntityList.get(i).setIsdeleted("Y");
+			expenseItemListRepository.save(expenseCategoryItemListEntityList.get(i));
+		}
+		
+		expenseInfoEntity.setIsdeleted("Y");
+		expenseInfoRepository.save(expenseInfoEntity);
+		//expenseItemListRepository.deleteAll(expenseCategoryItemListEntityList);
+		//expenseInfoRepository.delete(expenseInfoEntity);
 		
 		logger.info("------- Record Deleted Successfully ------");
 		
@@ -266,7 +274,7 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		// TODO Auto-generated method stub
 		logger.info("------- ExpenseInfoController getAllExpenseList ------");
 		
-		List<ExpenseInfoEntity> expenseInfoEntityList = expenseInfoRepository.findAll();
+		List<ExpenseInfoEntity> expenseInfoEntityList = expenseInfoRepository.getAllExpenseListByStatus();
 
 		return ExpenseInfoAndItemListMapper.toExpenseResponseDtosList(expenseInfoEntityList);
 	}

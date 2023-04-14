@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 import com.scube.invoicing.dto.incoming.CreateInvoiceIncomingDto;
 import com.scube.invoicing.entity.CheckCreditNoteMailStatusEntity;
 import com.scube.invoicing.entity.CheckInvoiceMailStatusEntity;
+import com.scube.invoicing.entity.CustomerCreditNoteEntity;
+import com.scube.invoicing.entity.CustomerInvoiceEntity;
 import com.scube.invoicing.repository.CheckCreditNoteMailStatusRepository;
 import com.scube.invoicing.repository.CheckInvoiceMailStatusRepository;
 
@@ -667,8 +669,8 @@ public void sendMailForExcelNotPresent() throws Exception {
 		}
 	}
 
-	public void sendInvoiceMailToCustomer(CreateInvoiceIncomingDto createInvoiceIncomingDto, File attachedFile,
-			List<CheckInvoiceMailStatusEntity> checkMailStatusEntityList) throws Exception {
+	public void sendInvoiceMailToCustomer(CreateInvoiceIncomingDto createInvoiceIncomingDto, File attachedFile, List<CheckInvoiceMailStatusEntity> checkMailStatusEntityList,
+			String invoiceUrl,CustomerInvoiceEntity customerInvoiceEntity) throws Exception {
 	
 		logger.info(" ---- EmailService sendInvoiceMailToCustomer ---- ");
 		
@@ -682,7 +684,23 @@ public void sendMailForExcelNotPresent() throws Exception {
 		properties.put("mail.smtp.ssl.enable", "true");
 		properties.put("mail.smtp.auth", "true");
 		
-		String mailTextContent = createInvoiceIncomingDto.getMailBody();
+		
+		String mailTextContent = createInvoiceIncomingDto.getMailBody()+ " <br> Click on below click to download invoice."+
+				"<br> <a href=http://"	+ invoiceUrl + "/invoicingweb/emailPage?" + customerInvoiceEntity.getId() + " ><strong>Download Link</strong></a>";						
+				//"<a href='http://" + invoiceUrl +"/invoicingweb/emailPage?" + customerInvoiceEntity.getId() +"'><strong>Link to Download invoice</strong></a>";
+		
+		
+		
+		/*
+		 * String mailTextContent = "Dear, " + userName + "\r\r" +
+		 * "We have received your reset password request. Please click link below to reset your password."
+		 * +"<a href='http://" + resetPwdUrl +"/invoicingweb/resetPassword?" +
+		 * encodedUserMobileNo +"'><strong>Reset Link</strong></a>" +
+		 * "<br><br> Thanks, <br> Team SCUBE Technologies";
+		 */
+		
+		
+		
 		String subjectLine = createInvoiceIncomingDto.getSubject();
 		
 		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
@@ -696,7 +714,7 @@ public void sendMailForExcelNotPresent() throws Exception {
 			MimeMessage mimeMessage = new MimeMessage(session);
 			
 			MimeBodyPart textBodyPart = new MimeBodyPart();			
-			textBodyPart.setText(mailTextContent);
+			textBodyPart.setText(mailTextContent ,"UTF-8", "html");
 			
 			MimeMultipart mimeMultipart = new MimeMultipart();			
 			mimeMultipart.addBodyPart(textBodyPart);
@@ -720,9 +738,11 @@ public void sendMailForExcelNotPresent() throws Exception {
 			mimeMessage.addRecipients(Message.RecipientType.BCC, 
 	                InternetAddress.parse(createInvoiceIncomingDto.getBccEmailID()));
 			
-			MimeBodyPart fileMimeBodyPart = new MimeBodyPart();
-			fileMimeBodyPart.attachFile(attachedFile);
-			multipart.addBodyPart(fileMimeBodyPart);
+			/*
+			 * MimeBodyPart fileMimeBodyPart = new MimeBodyPart();
+			 * fileMimeBodyPart.attachFile(attachedFile);
+			 * multipart.addBodyPart(fileMimeBodyPart);
+			 */
 			mimeMessage.setContent(multipart);
 			
 			logger.info("------------" + "Sending" + "---------------");
@@ -794,7 +814,8 @@ public void sendMailForExcelNotPresent() throws Exception {
 	
 	
 	public void sendCreditNoteMail(CreateInvoiceIncomingDto createInvoiceIncomingDto, File attachedFile,
-			List<CheckCreditNoteMailStatusEntity> checkCreditNoteMailStatusEntityList) throws Exception {
+			List<CheckCreditNoteMailStatusEntity> checkCreditNoteMailStatusEntityList, String invoiceUrl, CustomerCreditNoteEntity customerCreditNoteEntity
+			) throws Exception {
 	
 		logger.info(" ---- EmailService sendCreditNoteMail ---- ");
 		
@@ -808,7 +829,10 @@ public void sendMailForExcelNotPresent() throws Exception {
 		properties.put("mail.smtp.ssl.enable", "true");
 		properties.put("mail.smtp.auth", "true");
 		
-		String mailTextContent = createInvoiceIncomingDto.getMailBody();
+		String mailTextContent = createInvoiceIncomingDto.getMailBody()+ " <br> Click on below click to download credit Note."+
+				"<br> <a href=http://"	+ invoiceUrl + "/invoicingweb/emailPageForCreditNote?" + customerCreditNoteEntity.getId() + " ><strong>Download Link</strong></a>";
+		
+		
 		String subjectLine = createInvoiceIncomingDto.getSubject();
 		
 		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
@@ -822,7 +846,7 @@ public void sendMailForExcelNotPresent() throws Exception {
 			MimeMessage mimeMessage = new MimeMessage(session);
 			
 			MimeBodyPart textBodyPart = new MimeBodyPart();			
-			textBodyPart.setText(mailTextContent);
+			textBodyPart.setText(mailTextContent,"UTF-8", "html");
 			
 			MimeMultipart mimeMultipart = new MimeMultipart();			
 			mimeMultipart.addBodyPart(textBodyPart);
@@ -847,9 +871,11 @@ public void sendMailForExcelNotPresent() throws Exception {
 			mimeMessage.addRecipients(Message.RecipientType.BCC, 
 	                InternetAddress.parse(createInvoiceIncomingDto.getBccEmailID()));
 			
-			MimeBodyPart fileMimeBodyPart = new MimeBodyPart();
-			fileMimeBodyPart.attachFile(attachedFile);
-			multipart.addBodyPart(fileMimeBodyPart);
+			/*
+			 * MimeBodyPart fileMimeBodyPart = new MimeBodyPart();
+			 * fileMimeBodyPart.attachFile(attachedFile);
+			 * multipart.addBodyPart(fileMimeBodyPart);
+			 */
 			mimeMessage.setContent(multipart);
 			
 			logger.info("------------" + "Sending" + "---------------");

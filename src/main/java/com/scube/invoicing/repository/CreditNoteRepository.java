@@ -28,5 +28,9 @@ public interface CreditNoteRepository extends JpaRepository<CustomerCreditNoteEn
 			+ "and created_at <= STR_TO_DATE((?2), '%Y-%m-%d');", nativeQuery = true)
 	List<CustomerCreditNoteEntity> getCustomerCreditNoteEntityByDateRange(String startDate, String endDate);
 	
+	//for all credit note list by status N
+	@Query(value = "SELECT * FROM invoicing.customer_credit_note where is_deleted='N';", nativeQuery = true)
+	List<CustomerCreditNoteEntity> getAllCreditNoteListByStatus();
+	
 
 }

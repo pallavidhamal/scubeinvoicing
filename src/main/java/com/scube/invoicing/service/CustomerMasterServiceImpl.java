@@ -51,6 +51,10 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 			throw BRSException.throwException("Error : Last Name cannot be empty");
 		}
 		
+		if(customerMasterIncomingDto.getGstRegistrationNo() == "" || customerMasterIncomingDto.getGstRegistrationNo().trim().isEmpty()) {
+			throw BRSException.throwException("Error : GST Registration no cannot be empty");
+		}
+		
 		CustomerMasterEntity duplicateCompanyNameCheckEntity = customerMasterRepository.findByCompanyName(customerMasterIncomingDto.getCompanyName());
 		
 		if(duplicateCompanyNameCheckEntity != null) {
@@ -58,6 +62,8 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		}
 		
 		CustomerMasterEntity duplicatePanNoCheckEntity = customerMasterRepository.findByPanNo(customerMasterIncomingDto.getPanNo());
+		
+		logger.info("----PAN NO----"+ customerMasterIncomingDto.getPanNo()+"--");
 		
 		if(duplicatePanNoCheckEntity != null) {
 			throw BRSException.throwException(EntityType.PANNO, ALREADY_EXIST, customerMasterIncomingDto.getPanNo());
@@ -100,7 +106,7 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		customerMasterEntity.setGstin(customerMasterIncomingDto.getGstin());
 		customerMasterEntity.setTaxRegistrationNo(customerMasterIncomingDto.getTaxRegistrationNo());
 		customerMasterEntity.setCstRegistrationNo(customerMasterIncomingDto.getCstRegistrationNo());
-		customerMasterEntity.setPanNo(customerMasterIncomingDto.getPanNo());
+		customerMasterEntity.setPanNo(customerMasterIncomingDto.getPanNo() !=null ? customerMasterIncomingDto.getPanNo() : null);
 		
 		customerMasterEntity.setPaymentMethodEntity(paymentMethodEntity);
 		customerMasterEntity.setPrefDelieveryMethod(customerMasterIncomingDto.getPrefDelieveryMethod());
@@ -195,7 +201,9 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 			throw BRSException.throwException("Error : No Customer Records Found ");
 		}
 		
-		customerMasterRepository.delete(customerMasterEntity);
+		customerMasterEntity.setIsdeleted("Y");
+		customerMasterRepository.save(customerMasterEntity);
+		//customerMasterRepository.delete(customerMasterEntity);
 		
 		logger.info("--- Record Deleted Successfully ----");
 		
@@ -225,7 +233,7 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		
 		logger.info("-------- CustomerMasterServiceImpl getAllCustomerInfoDetails ------");
 		
-		List<CustomerMasterEntity> customerMasterEntityList = customerMasterRepository.findAll();
+		List<CustomerMasterEntity> customerMasterEntityList = customerMasterRepository.getAllCustomerListByStatus();
 		
 		if(customerMasterEntityList == null) {
 			throw BRSException.throwException("Error : No Customer Records Found ");

@@ -36,6 +36,7 @@ public class CustomerMasterMapper {
 				.setShippingCountry(customerMasterEntity.getShippingCountry())
 				.setShippingPinCode(customerMasterEntity.getShippingPinCode())
 				
+				
 				.setGstRegistrationNo(customerMasterEntity.getGstRegistrationNo())
 				.setGstin(customerMasterEntity.getGstin())
 				.setTaxRegistrationNo(customerMasterEntity.getTaxRegistrationNo())

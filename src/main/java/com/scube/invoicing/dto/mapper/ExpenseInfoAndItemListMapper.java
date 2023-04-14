@@ -18,7 +18,7 @@ public class ExpenseInfoAndItemListMapper {
 		return new ExpenseResponseDto()
 				.setExpenseID(expenseInfoEntity.getId())
 				.setPaymentAccount(expenseInfoEntity.getPaymentAccount())
-				.setExpenseDate(DateUtils.formatDateToDDMMYYYYFormat(expenseInfoEntity.getPaymentDate()))
+				.setExpenseDate(DateUtils.formattedDate(expenseInfoEntity.getPaymentDate()))
 				.setReferenceNo(expenseInfoEntity.getReferenceNo())
 				.setVendorInfo(VendorMasterMapper.toVendorMasterResponseDto(expenseInfoEntity.getVendorMasterEntity()))
 				.setPaymentMethod(expenseInfoEntity.getPaymentMethodEntity().getMethodName())

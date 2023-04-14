@@ -36,5 +36,6 @@ public class InvoiceCreditNoteResponseDto {
 	private String customerCreditAmount;
 	
 	private String amountPendingFlag;
+	private String currency;
 	
 }

@@ -77,7 +77,10 @@ public class CategoryMasterServiceImpl implements CategoryMasterService {
 		logger.info("----- ExpenseCategoryMasterServiceImpl deleteExpenseCategoryByCategoryID ------");
 		
 		CategoryMasterEntity expenseCategoryMasterEntity = expenseCategoryMasterRepository.findById(categoryID).get();
-		expenseCategoryMasterRepository.delete(expenseCategoryMasterEntity);
+		
+		expenseCategoryMasterEntity.setIsdeleted("Y");
+		expenseCategoryMasterRepository.save(expenseCategoryMasterEntity);
+		//expenseCategoryMasterRepository.delete(expenseCategoryMasterEntity);
 		return true;
 	}
 
@@ -96,7 +99,7 @@ public class CategoryMasterServiceImpl implements CategoryMasterService {
 		// TODO Auto-generated method stub
 		logger.info("----- ExpenseCategoryMasterServiceImpl getAllExpenseCategoryList ------");
 		
-		List<CategoryMasterEntity> expenseCategoryMasterEntitesList = expenseCategoryMasterRepository.findAll();
+		List<CategoryMasterEntity> expenseCategoryMasterEntitesList = expenseCategoryMasterRepository.getAllExpenseCategoryistByStatus();
 		
 		return CategoryMasterResponseMapper.toExpenseCategoryMasterResponseDtosList(expenseCategoryMasterEntitesList);
 	}

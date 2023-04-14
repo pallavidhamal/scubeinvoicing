@@ -35,6 +35,7 @@ public class CustomerInvoiceResponseDto {
 	private String shippingTo;
 	private String shippingVia;
 	private String shippingDate;
+	private String shippingAddress;
 	
 	private String customerCompanyName;
 	

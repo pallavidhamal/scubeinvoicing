@@ -330,8 +330,19 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 			throw BRSException.throwException("Error : No Customer Service details found for " + customerInvoiceEntity.getInvoiceNo());
 		}
 		
-		customerInvoiceServiceRepository.deleteAll(customerInvoiceServiceList);
-		customerInvoiceRepository.delete(customerInvoiceEntity);
+		for(int i=0; i<customerInvoiceServiceList.size(); i++) {
+			
+			customerInvoiceServiceList.get(i).setIsdeleted("Y");
+			customerInvoiceServiceRepository.save(customerInvoiceServiceList.get(i));
+		}
+		
+		customerInvoiceEntity.setIsdeleted("Y");
+		customerInvoiceRepository.save(customerInvoiceEntity);
+		
+		
+		
+		//customerInvoiceServiceRepository.deleteAll(customerInvoiceServiceList);
+		//customerInvoiceRepository.delete(customerInvoiceEntity);
 		
 		return true;
 	}
@@ -358,7 +369,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		// TODO Auto-generated method stub
 		logger.info("----- CustomerInvoiceServiceImpl getAllCustomerInvoiceAndServiceList ----");
 		
-		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = customerInvoiceRepository.findAll();
+		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = customerInvoiceRepository.getAllCustomerInvoiceListByStatus();
 		return CustomerInvoiceMapper.toAllCustomerInvoiceResponseDtosList(customerInvoiceEntitiesList);
 	}
 
@@ -451,6 +462,14 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 						customerServiceIncomingDto.getEndDate());
 		
 		return CustomerInvoiceMapper.toAllCustomerInvoiceResponseDtosList(customerInvoiceEntitiesList);
+	}
+
+	@Override
+	public CustomerInvoiceEntity getCustomerInvoiceEntityByInvoiceID(String invoiceID) {
+		// TODO Auto-generated method stub
+		logger.info("----- CustomerInvoiceServiceImpl getCustomerInvoiceEntityByInvoiceID ----");
+		
+		return customerInvoiceRepository.findById(invoiceID).get();
 	}
 
 }

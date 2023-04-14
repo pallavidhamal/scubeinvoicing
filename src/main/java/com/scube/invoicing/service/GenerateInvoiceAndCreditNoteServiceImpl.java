@@ -1,6 +1,7 @@
 package com.scube.invoicing.service;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import javax.validation.Valid;
 
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import com.scube.invoicing.dto.incoming.CreateInvoiceIncomingDto;
@@ -24,6 +26,7 @@ import com.scube.invoicing.exception.EntityType;
 import com.scube.invoicing.exception.ExceptionType;
 import com.scube.invoicing.repository.CheckCreditNoteMailStatusRepository;
 import com.scube.invoicing.repository.CheckInvoiceMailStatusRepository;
+import com.scube.invoicing.util.FileStorageService;
 import com.scube.invoicing.util.ReceiptPdfExporter;
 
 @Service
@@ -42,6 +45,9 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 	CompanyMasterService companyMasterService;
 	
 	@Autowired
+	FileStorageService fileStorageService;
+	
+	@Autowired
 	CreditNoteService creditNoteService;
 	
 	@Autowired
@@ -55,6 +61,9 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 	
 	@Value("${company.name}")
 	private String companyName;
+	
+	@Value ("${file.reset.password.url}")
+	private String invoiceUrl;
 	
 	private static final Logger logger = LoggerFactory.getLogger(GenerateInvoiceAndCreditNoteServiceImpl.class);
 	
@@ -129,7 +138,7 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 			logger.info("File Path for Invoice :--- " + attachedFile);
 			
 			// Send Mail with Attachment Invoice
-			emailService.sendInvoiceMailToCustomer(createInvoiceIncomingDto, attachedFile, checkMailStatusEntityList);
+			emailService.sendInvoiceMailToCustomer(createInvoiceIncomingDto, attachedFile, checkMailStatusEntityList, invoiceUrl, customerInvoiceEntity);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -206,7 +215,7 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 		try {
 			creditNoteFile = receiptPdfExporter.generateCreditNote(creditNoteDetailsEntities, customerCreditNoteEntity, 
 					companyMasterEntity);
-			emailService.sendCreditNoteMail(createInvoiceIncomingDto, creditNoteFile, checkCreditNoteMailStatusEntityList);
+			emailService.sendCreditNoteMail(createInvoiceIncomingDto, creditNoteFile, checkCreditNoteMailStatusEntityList,invoiceUrl, customerCreditNoteEntity );
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -431,7 +440,70 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 			}
 		}
 		
-		return false;
+		return true;
+	}
+
+	@Override
+	public Resource generateInvoice(String invoiceID) {
+		// TODO Auto-generated method stub
+		logger.info("------ GenerateInvoiceAndCreditNoteServiceImpl generateInvoiceMail -------");
+		
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyName(companyName);
+		
+		if(companyMasterEntity == null) {
+			throw BRSException.throwException("Error : NO Company Details Found");
+		}
+		
+		CustomerInvoiceEntity customerInvoiceEntity = customerInvoiceService.getCustomerInvoiceEntityByInvoiceID(invoiceID);
+		
+		List<CustomerInvoiceServiceEntity> customerInvoiceServiceList = customerInvoiceService.
+				getCustomerServiceInfoByCustomerDetailsAndInvoiceDetails(customerInvoiceEntity.getCustomerMasterEntity(), customerInvoiceEntity);
+		
+		File invoiceFile = null;
+		Path invoiceFilePath = null;
+		Resource fileResource = null;
+		
+		try {
+			invoiceFile = receiptPdfExporter.generateInvoice(customerInvoiceServiceList, companyMasterEntity, customerInvoiceEntity);
+			invoiceFilePath = invoiceFile.toPath();
+			fileResource = fileStorageService.getFileResource(invoiceFilePath);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return fileResource;
+	}
+
+	@Override
+	public Resource generateCreditNote(String creditNoteID) {
+		// TODO Auto-generated method stub
+		logger.info("------ GenerateInvoiceAndCreditNoteServiceImpl generateCreditNoteMail -------");
+		
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyName(companyName);
+		
+		if(companyMasterEntity == null) {
+			throw BRSException.throwException("Error : NO Company Details Found");
+		}
+		
+		CustomerCreditNoteEntity customerCreditNoteEntity = creditNoteService.getCreditNoteEntityByCreditNoteID(creditNoteID);
+		
+		List<CustomerCreditNoteDetailsEntity> creditNoteDetailsEntities = creditNoteService.getCreditNoteDetailsListByCustomerIDAndCreditNoteNo(customerCreditNoteEntity.getCustomerMasterEntity(), 
+						customerCreditNoteEntity);
+		
+		File creditNoteFile = null;
+		Path creditNoteFilePath = null;
+		Resource fileResource = null;
+		
+		try {                      
+			creditNoteFile = receiptPdfExporter.generateCreditNote(creditNoteDetailsEntities, customerCreditNoteEntity, companyMasterEntity);
+			creditNoteFilePath = creditNoteFile.toPath();
+			fileResource = fileStorageService.getFileResource(creditNoteFilePath);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return fileResource;
 	}
 
 }

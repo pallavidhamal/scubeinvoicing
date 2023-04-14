@@ -1,5 +1,7 @@
 package com.scube.invoicing.service;
 
+import static com.scube.invoicing.exception.ExceptionType.ALREADY_EXIST;
+
 import java.util.List;
 
 import javax.validation.Valid;
@@ -12,8 +14,10 @@ import org.springframework.stereotype.Service;
 import com.scube.invoicing.dto.GSTMasterResponseDto;
 import com.scube.invoicing.dto.incoming.GSTMasterIncomingDto;
 import com.scube.invoicing.dto.mapper.GSTMasterMapper;
+import com.scube.invoicing.entity.CustomerMasterEntity;
 import com.scube.invoicing.entity.GSTMasterEntity;
 import com.scube.invoicing.exception.BRSException;
+import com.scube.invoicing.exception.EntityType;
 import com.scube.invoicing.repository.GSTMasterRepository;
 
 @Service
@@ -33,6 +37,16 @@ public class GSTMasterServiceImpl implements GSTMasterService{
 		if(gstMasterIncomingDto.getDescription() == "" || gstMasterIncomingDto.getDescription().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Description cannot be blank");
 		}
+		
+		/*
+		 * GSTMasterEntity duplicateDescriptionCheckEntity =
+		 * gstMasterRepository.findByDescription(gstMasterIncomingDto.getDescription());
+		 * 
+		 * if(duplicateDescriptionCheckEntity != null) {
+		 * 
+		 * throw BRSException.throwException(EntityType.DESCRIPTION, ALREADY_EXIST,
+		 * gstMasterIncomingDto.getDescription()); }
+		 */
 		
 		GSTMasterEntity gstMasterEntity = new GSTMasterEntity();
 		
@@ -82,7 +96,9 @@ public class GSTMasterServiceImpl implements GSTMasterService{
 			throw BRSException.throwException("Error : No GST Records Found ");
 		}
 		
-		gstMasterRepository.delete(gstMasterEntity);
+		gstMasterEntity.setIsdeleted("Y");
+		gstMasterRepository.save(gstMasterEntity);
+		//gstMasterRepository.delete(gstMasterEntity);
 		
 		logger.info("--- Record Deleted Successfully ----");
 		
@@ -110,7 +126,7 @@ public class GSTMasterServiceImpl implements GSTMasterService{
 		
 		logger.info("-------- GSTMasterServiceImpl getAllGstInfoDetails ------");
 		
-		List<GSTMasterEntity> gstMasterEntityList = gstMasterRepository.findAll();
+		List<GSTMasterEntity> gstMasterEntityList = gstMasterRepository.getAllGstListByStatus();
 		
 		if(gstMasterEntityList == null) {
 			throw BRSException.throwException("Error : No GST Records Found ");

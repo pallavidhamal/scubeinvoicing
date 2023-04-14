@@ -311,7 +311,7 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 		// TODO Auto-generated method stub
 		logger.info("------ CreditNoteServiceImpl getAllCreditNoteList -------");
 		
-		List<CustomerCreditNoteEntity> customerCreditNoteEntitiesList = creditNoteRepository.findAll();
+		List<CustomerCreditNoteEntity> customerCreditNoteEntitiesList = creditNoteRepository.getAllCreditNoteListByStatus();
 		
 		return CustomerCreditNoteMapper.toCustomerCreditNoteResponseDtos(customerCreditNoteEntitiesList);
 	}
@@ -337,8 +337,16 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 			throw BRSException.throwException(EntityType.CREDITNOTESERVICE, ExceptionType.ENTITY_NOT_FOUND, customerCreditNoteEntity.getCreditNoteNo());
 		}
 		
-		creditNoteDetailsRepository.deleteAll(customerCreditNoteDetailsEntity);
-		creditNoteRepository.delete(customerCreditNoteEntity);
+		for(int i=0; i<customerCreditNoteDetailsEntity.size(); i++) {
+			
+			customerCreditNoteDetailsEntity.get(i).setIsdeleted("Y");
+			creditNoteDetailsRepository.save(customerCreditNoteDetailsEntity.get(i));
+		}
+		
+		customerCreditNoteEntity.setIsdeleted("Y");
+		creditNoteRepository.save(customerCreditNoteEntity);
+		//creditNoteDetailsRepository.deleteAll(customerCreditNoteDetailsEntity);
+		//creditNoteRepository.delete(customerCreditNoteEntity);
 		
 		return true;
 	}
@@ -353,6 +361,14 @@ public class CreditNoteServiceImpl implements CreditNoteService{
 				findByCustomerCreditNoteEntity(customerCreditNoteEntity);
 		
 		return CustomerCreditNoteMapper.toCreditNoteAndServiceResponseDto(customerCreditNoteEntity, customerCreditNoteDetailsEntityList);
+	}
+
+	@Override
+	public CustomerCreditNoteEntity getCreditNoteEntityByCreditNoteID(String creditNoteID) {
+		// TODO Auto-generated method stub
+		logger.info("------ CreditNoteServiceImpl getCreditNoteEntityByCreditNoteID -------");
+		
+		return creditNoteRepository.findById(creditNoteID).get();
 	}
 
 }

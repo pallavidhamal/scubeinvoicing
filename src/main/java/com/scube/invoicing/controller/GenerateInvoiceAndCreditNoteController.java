@@ -7,7 +7,13 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,15 +32,40 @@ public class GenerateInvoiceAndCreditNoteController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(GenerateInvoiceAndCreditNoteController.class);
 
-	/*
-  	@SuppressWarnings("rawtypes")
-	@PostMapping( value = "/generateInvoiceAndSendMailToCustomer" , consumes = APPLICATION_JSON_VALUE)
-  	public Response generateInvoiceAndSendMailToCustomer(@Valid @RequestBody CreateInvoiceIncomingDto createInvoiceIncomingDto) {
-  		logger.info("------ CreateInvoiceController generateInvoiceAndSendMailToCustomer ------");
-  		return Response.ok().setPayload(generateInvoiceAndCreditNoteService.generateInvoiceAndSendMailToCustomer(createInvoiceIncomingDto));
+	
+	@GetMapping( value = "/generateInvoice/{invoiceID}")
+  	public ResponseEntity<Resource> generateInvoice(@PathVariable String invoiceID) {
+  		logger.info("------ CreateInvoiceController generateInvoice ------");
+  		Resource res = generateInvoiceAndCreditNoteService.generateInvoice(invoiceID);
+  		System.out.println(res);
+  		
+  		MediaType mediaType;
+  		mediaType = MediaType.APPLICATION_PDF;
+		
+//		return ResponseEntity.ok().contentType(mediaType).body(bytes);
+		return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + res.getFilename() + "\"")
+                .body(res);
   	}
 	
-  	
+	@GetMapping( value = "/generateCreditNote/{creditNoteID}")
+  	public ResponseEntity<Resource> generateCreditNote(@PathVariable String creditNoteID) {
+  		logger.info("------ CreateInvoiceController generateCreditNote ------");
+  		Resource res = generateInvoiceAndCreditNoteService.generateCreditNote(creditNoteID);
+  		System.out.println(res);
+  		
+  		MediaType mediaType;
+  		mediaType = MediaType.APPLICATION_PDF;
+		
+//		return ResponseEntity.ok().contentType(mediaType).body(bytes);
+		return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + res.getFilename() + "\"")
+                .body(res);
+  	}
+	
+  	/*
   	@SuppressWarnings("rawtypes")
 	@PostMapping( value = "/generateCreditNoteForCustomer" , consumes = APPLICATION_JSON_VALUE)
   	public Response generateCreditNoteForCustomer(@Valid @RequestBody CreateInvoiceIncomingDto createInvoiceIncomingDto) {

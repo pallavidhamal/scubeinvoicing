@@ -191,7 +191,10 @@ public class VendorMasterServiceImpl implements VendorMasterService {
 		logger.info("----- VendorMasterServiceImpl deleteVendorByVendorID ------");
 		
 		VendorMasterEntity vendorMasterEntity = vendorMasterRepository.findById(vendorID).get();
-		vendorMasterRepository.delete(vendorMasterEntity);
+		
+		vendorMasterEntity.setIsdeleted("Y");
+		vendorMasterRepository.save(vendorMasterEntity);
+		//vendorMasterRepository.delete(vendorMasterEntity);
 		
 		return true;
 	}
@@ -211,7 +214,7 @@ public class VendorMasterServiceImpl implements VendorMasterService {
 		// TODO Auto-generated method stub
 		logger.info("----- VendorMasterServiceImpl getAllVendorList ------");
 		
-		List<VendorMasterEntity> vendorMasterEntitiesList = vendorMasterRepository.findAll();
+		List<VendorMasterEntity> vendorMasterEntitiesList = vendorMasterRepository.getAllVendorListByStatus();
 		
 		return VendorMasterMapper.toVendorMasterResponseDtosList(vendorMasterEntitiesList);
 	}

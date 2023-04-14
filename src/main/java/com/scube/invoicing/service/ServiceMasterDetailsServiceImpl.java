@@ -91,6 +91,7 @@ public class ServiceMasterDetailsServiceImpl implements ServiceMasterDetailsServ
 		}
 		
 		serviceMasterEntity.setStatus("INACTIVE");
+		serviceMasterEntity.setIsdeleted("Y");
 		serviceMasterRepository.save(serviceMasterEntity);
 		
 		return true;
@@ -117,7 +118,7 @@ public class ServiceMasterDetailsServiceImpl implements ServiceMasterDetailsServ
 		
 		logger.info("----- ServiceMasterDetailsServiceImpl getAllServiceInfo ------");
 		
-		List<ServiceMasterEntity> serviceMasterEntity = serviceMasterRepository.findByStatus("ACTIVE");
+		List<ServiceMasterEntity> serviceMasterEntity = serviceMasterRepository.getAllServiceListByStatus();
 		
 		if(serviceMasterEntity.size() == 0) {
 			throw BRSException.throwException("Error : NO Active Service Records present");

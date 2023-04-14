@@ -33,6 +33,8 @@ public interface CustomerInvoiceService {
 	
 	CustomerInvoiceEntity getCustomerInvoiceEntityByCustomerIDAndInvoiceNo(CustomerMasterEntity customerMasterEntity, String invoiceNo);
 	
+	CustomerInvoiceEntity getCustomerInvoiceEntityByInvoiceID(String invoiceID);
+	
 	List<CustomerInvoiceServiceEntity> getCustomerServiceInfoByCustomerDetailsAndInvoiceDetails(
 			CustomerMasterEntity customerMasterEntity, CustomerInvoiceEntity customerInvoiceEntity);
 	
