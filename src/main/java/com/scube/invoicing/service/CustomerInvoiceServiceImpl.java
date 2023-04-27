@@ -369,6 +369,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		// TODO Auto-generated method stub
 		logger.info("----- CustomerInvoiceServiceImpl getAllCustomerInvoiceAndServiceList ----");
 		
+		//List<CustomerInvoiceEntity> customerInvoiceEntitiesList = customerInvoiceRepository.findAll();
 		List<CustomerInvoiceEntity> customerInvoiceEntitiesList = customerInvoiceRepository.getAllCustomerInvoiceListByStatus();
 		return CustomerInvoiceMapper.toAllCustomerInvoiceResponseDtosList(customerInvoiceEntitiesList);
 	}
@@ -470,6 +471,19 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		logger.info("----- CustomerInvoiceServiceImpl getCustomerInvoiceEntityByInvoiceID ----");
 		
 		return customerInvoiceRepository.findById(invoiceID).get();
+	}
+
+	@Override
+	public List<CustomerInvoiceServiceEntity> getCustomerInvoiceServiceEntityByInvoiceID(String invoiceID) {
+		// TODO Auto-generated method stub
+		logger.info("----- CustomerInvoiceServiceImpl getAllCustomerInvoiceListByDateRange ----");
+		
+		CustomerInvoiceEntity customerInvoiceEntity = customerInvoiceRepository.findById(invoiceID).get();
+		
+		List<CustomerInvoiceServiceEntity> customerInvoiceServiceEntityList = customerInvoiceServiceRepository.
+				findByCustomerInvoiceEntity(customerInvoiceEntity);
+		
+		return customerInvoiceServiceEntityList;
 	}
 
 }

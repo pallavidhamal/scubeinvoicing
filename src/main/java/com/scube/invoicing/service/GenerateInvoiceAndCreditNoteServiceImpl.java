@@ -36,6 +36,9 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 	ReceiptPdfExporter receiptPdfExporter;
 	
 	@Autowired
+	LedgerService ledgerService;
+	
+	@Autowired
 	CustomerMasterService customerMasterService;
 	
 	@Autowired
@@ -331,6 +334,8 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 		checkMailStatusEntity.setCustomerInvoiceEntity(customerInvoiceEntity);
 		
 		checkInvoiceMailStatusRepository.save(checkMailStatusEntity);
+		
+		ledgerService.addLedgerEntryForInvoice(checkMailStatusEntity);
 		
 		return true;
 	}

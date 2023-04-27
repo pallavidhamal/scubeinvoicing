@@ -44,6 +44,10 @@ public interface CustomerInvoiceService {
 	// Get All Customer Invoice List By Date Range
 	List<CustomerInvoiceResponseDto> getAllCustomerInvoiceListByDateRange(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
 	
+	// Update Customer Invoice Payment Status
 	boolean updateCustomerInvoicePaymentStatus(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
+	
+	// Get Customer Invoice Service Entity By Customer Invoice ID
+	List<CustomerInvoiceServiceEntity> getCustomerInvoiceServiceEntityByInvoiceID(String invoiceID);
 
 }
