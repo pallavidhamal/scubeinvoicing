@@ -31,6 +31,9 @@ public class VendorMasterServiceImpl implements VendorMasterService {
 	CurrencyMasterService currencyMasterService;
 	
 	@Autowired
+	LedgerMasterService ledgerMasterService;
+	
+	@Autowired
 	VendorMasterRepository vendorMasterRepository;
 	
 	private static final Logger logger = LoggerFactory.getLogger(VendorMasterServiceImpl.class);
@@ -109,6 +112,8 @@ public class VendorMasterServiceImpl implements VendorMasterService {
 		vendorMasterEntity.setCurrencyMasterEntity(currencyMasterEntity);
 
 		vendorMasterRepository.save(vendorMasterEntity);
+		
+		ledgerMasterService.addLedgerMasterEntryForVendor(vendorMasterEntity);
 		
 		return true;
 	}

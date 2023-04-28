@@ -35,6 +35,9 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 	@Autowired
 	PaymentMethodService paymentMethodService;
 	
+	@Autowired
+	LedgerMasterService ledgerMasterService;
+	
 	private static final Logger logger = LoggerFactory.getLogger(CustomerMasterServiceImpl.class);
 
 	@Override
@@ -120,6 +123,8 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		customerMasterEntity.setCurrencyMasterEntity(currencyMasterEntity);
 		
 		customerMasterRepository.save(customerMasterEntity);
+			
+		ledgerMasterService.addLedgerMasterEntryForCustomer(customerMasterEntity);
 		
 		return true;
 	}

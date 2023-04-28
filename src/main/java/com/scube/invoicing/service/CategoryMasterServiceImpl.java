@@ -20,6 +20,9 @@ import com.scube.invoicing.repository.CategoryMasterRepository;
 
 @Service
 public class CategoryMasterServiceImpl implements CategoryMasterService {
+	
+	@Autowired
+	LedgerMasterService ledgerMasterService;
 
 	@Autowired
 	CategoryMasterRepository expenseCategoryMasterRepository;
@@ -48,6 +51,8 @@ public class CategoryMasterServiceImpl implements CategoryMasterService {
 		expenseCategoryMasterEntity.setExpenseCategoryName(expenseCategoryMasterIncomingDto.getCategoryName());
 
 		expenseCategoryMasterRepository.save(expenseCategoryMasterEntity);
+		
+		ledgerMasterService.addLedgerMasterEntryForCategory(expenseCategoryMasterEntity);
 		
 		return true;
 	}

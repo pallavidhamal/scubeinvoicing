@@ -34,4 +34,16 @@ public class LedgerMasterEntity extends BaseEntity {
 	@JoinColumn(name = "fk_tax")
 	private GSTMasterEntity gstMasterEntity;
 
+	@OneToOne
+	@JoinColumn(name = "fk_expense")
+	private ExpenseInfoEntity expenseInfoEntity;
+	
+	@OneToOne
+	@JoinColumn(name = "fk_category")
+	private CategoryMasterEntity categoryMasterEntity;
+	
+	@OneToOne
+	@JoinColumn(name = "fk_vendor")
+	private VendorMasterEntity vendorMasterEntity;
+	
 }

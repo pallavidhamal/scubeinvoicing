@@ -8,4 +8,6 @@ import com.scube.invoicing.entity.LedgerTypeEntity;
 @Repository
 public interface LedgerTypeRepository extends JpaRepository<LedgerTypeEntity, String> {
 
+	LedgerTypeEntity findByLegderType(String legderType);
+	
 }

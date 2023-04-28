@@ -22,6 +22,9 @@ import com.scube.invoicing.repository.ServiceMasterRepository;
 public class ServiceMasterDetailsServiceImpl implements ServiceMasterDetailsService {
 	
 	@Autowired
+	LedgerMasterService ledgerMasterService;
+	
+	@Autowired
 	ServiceMasterRepository serviceMasterRepository;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ServiceMasterDetailsServiceImpl.class);
@@ -49,6 +52,8 @@ public class ServiceMasterDetailsServiceImpl implements ServiceMasterDetailsServ
 		serviceMasterEntity.setStatus("ACTIVE");
 		
 		serviceMasterRepository.save(serviceMasterEntity);
+		
+		ledgerMasterService.addLedgerMasterEntryForService(serviceMasterEntity);
 		
 		return true;
 	}

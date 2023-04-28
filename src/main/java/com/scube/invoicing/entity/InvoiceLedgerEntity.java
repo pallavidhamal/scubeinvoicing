@@ -26,4 +26,7 @@ public class InvoiceLedgerEntity extends BaseEntity {
 	@Column(name = "amount")
 	private String amount;
 	
+	@Column(name = "transaction_type")
+	private String transactionType;
+	
 }

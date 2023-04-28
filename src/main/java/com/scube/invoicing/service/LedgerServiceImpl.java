@@ -12,8 +12,6 @@ import com.scube.invoicing.entity.CustomerInvoiceServiceEntity;
 import com.scube.invoicing.entity.InvoiceLedgerEntity;
 import com.scube.invoicing.entity.LedgerMasterEntity;
 import com.scube.invoicing.repository.InvoiceLedgerRepository;
-import com.scube.invoicing.repository.LedgerMasterRepository;
-import com.scube.invoicing.repository.LedgerTypeRepository;
 
 @Service
 public class LedgerServiceImpl implements LedgerService {
@@ -22,10 +20,7 @@ public class LedgerServiceImpl implements LedgerService {
 	CustomerInvoiceService customerInvoiceService;
 	
 	@Autowired
-	LedgerTypeRepository ledgerTypeRepository;
-	
-	@Autowired
-	LedgerMasterRepository ledgerMasterRepository;
+	LedgerMasterService ledgerMasterService;
 	
 	@Autowired
 	InvoiceLedgerRepository invoiceLedgerRepository;
@@ -38,8 +33,8 @@ public class LedgerServiceImpl implements LedgerService {
 		logger.info("----- LedgerServiceImpl addLedgerEntryForInvoice ------");
 		
 		// For Customer Ledger
-		LedgerMasterEntity customerLedgerMasterEntity = ledgerMasterRepository.
-				findByCustomerMasterEntity(checkInvoiceMailStatusEntity.getCustomerMasterEntity());
+		LedgerMasterEntity customerLedgerMasterEntity = ledgerMasterService.
+				getCustomerLedgerMasterEntityRecord(checkInvoiceMailStatusEntity.getCustomerMasterEntity());
 		
 		InvoiceLedgerEntity customerLedger = new InvoiceLedgerEntity();
 		
@@ -50,23 +45,29 @@ public class LedgerServiceImpl implements LedgerService {
 		invoiceLedgerRepository.save(customerLedger);
 		
 		// For Service Ledger
-		InvoiceLedgerEntity serviceLedger = new InvoiceLedgerEntity();
-		
 		List<CustomerInvoiceServiceEntity> customerInvoiceServiceEntityList = customerInvoiceService.
 				getCustomerInvoiceServiceEntityByInvoiceID(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity().getId());
 		
-		for(int i=0; i<customerInvoiceServiceEntityList.size(); i++) {			
-			LedgerMasterEntity servicLedgerMasterEntity = ledgerMasterRepository.
-					findByServiceMasterEntity(customerInvoiceServiceEntityList.get(i).getServiceMasterEntity());
+		for(int i=0; i<customerInvoiceServiceEntityList.size(); i++) {
 			
-			serviceLedger.setIsdeleted("N");
-			serviceLedger.setAmount(customerInvoiceServiceEntityList.get(i).getAmount());
-			serviceLedger.setCustomerInvoiceEntity(customerInvoiceServiceEntityList.get(i).getCustomerInvoiceEntity());
-			serviceLedger.setLedgerMasterEntity(servicLedgerMasterEntity);
+			List<LedgerMasterEntity> servicLedgerMasterEntityList = ledgerMasterService.
+					getInvoiceServiceListLedgerMasterRecords(customerInvoiceServiceEntityList.get(i).getServiceMasterEntity());
+			
+			for(int j=0; j<servicLedgerMasterEntityList.size(); j++) {
+				
+				InvoiceLedgerEntity serviceLedger = new InvoiceLedgerEntity();
+				
+				serviceLedger.setIsdeleted("N");
+				serviceLedger.setAmount(customerInvoiceServiceEntityList.get(i).getAmount());
+				serviceLedger.setCustomerInvoiceEntity(customerInvoiceServiceEntityList.get(i).getCustomerInvoiceEntity());
+				serviceLedger.setLedgerMasterEntity(servicLedgerMasterEntityList.get(j));
+				
+				invoiceLedgerRepository.save(serviceLedger);
+			}
 			
 		}
-		invoiceLedgerRepository.save(serviceLedger); 
-			
+		
+/*				
 		// For Invoice Ledger
 		InvoiceLedgerEntity invoiceLedgerEntity = new InvoiceLedgerEntity();
 		
@@ -75,17 +76,43 @@ public class LedgerServiceImpl implements LedgerService {
 		invoiceLedgerEntity.setCustomerInvoiceEntity(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity());
 		
 		invoiceLedgerRepository.save(invoiceLedgerEntity);
+*/
 		
-		/*
-		 * // For GST Ledger InvoiceLedgerEntity gstInvoiceLedgerEntity = new
-		 * InvoiceLedgerEntity();
-		 * 
-		 * gstInvoiceLedgerEntity.setIsdeleted("N"); gstInvoiceLedgerEntity.set
-		 */
+		// For GST Ledger 
+		for(int i=0; i<customerInvoiceServiceEntityList.size(); i++) {
+			
+			logger.info("Invoice Services :---- " + customerInvoiceServiceEntityList.size());
+			
+			List<LedgerMasterEntity> gstLedgerMasterEntityList = ledgerMasterService.
+					getServiceGstListLedgerMasterRecords(customerInvoiceServiceEntityList.get(i).getGstMasterEntity()); 
+			
+			for(LedgerMasterEntity ledgerMasterEntity : gstLedgerMasterEntityList) {
+				
+				InvoiceLedgerEntity gstInvoiceLedgerEntity = new InvoiceLedgerEntity();
+			
+				gstInvoiceLedgerEntity.setIsdeleted("N");
+				gstInvoiceLedgerEntity.setAmount(customerInvoiceServiceEntityList.get(i).getGstAmount());
+				gstInvoiceLedgerEntity.setCustomerInvoiceEntity(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity());
+				gstInvoiceLedgerEntity.setLedgerMasterEntity(ledgerMasterEntity);
+				
+				invoiceLedgerRepository.save(gstInvoiceLedgerEntity);
+			}
+			
+		}
+		
+		// For TDS Ledger
+		LedgerMasterEntity tdsLedgerMasterEntity = ledgerMasterService.getTDSLedgerMasterRecords("TDS");
+		
+		InvoiceLedgerEntity tdsLedgerEntity = new InvoiceLedgerEntity();
+		
+		tdsLedgerEntity.setIsdeleted("N");
+		tdsLedgerEntity.setCustomerInvoiceEntity(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity());
+		tdsLedgerEntity.setAmount(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity().getActualTds());
+		tdsLedgerEntity.setLedgerMasterEntity(tdsLedgerMasterEntity);
+		
+		invoiceLedgerRepository.save(tdsLedgerEntity);
 		
 		return true;
 	}
-	
-	
 
 }
