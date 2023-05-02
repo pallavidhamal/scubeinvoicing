@@ -1,7 +1,5 @@
 package com.scube.invoicing.service;
 
-import static com.scube.invoicing.exception.ExceptionType.ALREADY_EXIST;
-
 import java.util.List;
 
 import javax.validation.Valid;
@@ -14,10 +12,8 @@ import org.springframework.stereotype.Service;
 import com.scube.invoicing.dto.GSTMasterResponseDto;
 import com.scube.invoicing.dto.incoming.GSTMasterIncomingDto;
 import com.scube.invoicing.dto.mapper.GSTMasterMapper;
-import com.scube.invoicing.entity.CustomerMasterEntity;
 import com.scube.invoicing.entity.GSTMasterEntity;
 import com.scube.invoicing.exception.BRSException;
-import com.scube.invoicing.exception.EntityType;
 import com.scube.invoicing.repository.GSTMasterRepository;
 
 @Service

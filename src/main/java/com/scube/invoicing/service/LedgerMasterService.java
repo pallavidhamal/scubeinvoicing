@@ -33,6 +33,9 @@ public interface LedgerMasterService {
 	List<LedgerMasterEntity> getServiceGstListLedgerMasterRecords(GSTMasterEntity gstMasterEntity);
 	
 	// Get TDS Records in Ledger Master
-	LedgerMasterEntity getTDSLedgerMasterRecords(String ledgerName);
+	LedgerMasterEntity getLedgerMasterRecords(String ledgerName);
+	
+	// Get Service GST List in Ledger Master
+	List<LedgerMasterEntity> getCategoryLedgerMasterRecords(CategoryMasterEntity categoryMasterEntity);
 
 }

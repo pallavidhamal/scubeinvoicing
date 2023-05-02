@@ -25,6 +25,8 @@ import com.scube.invoicing.entity.GSTMasterEntity;
 import com.scube.invoicing.entity.PaymentMethodEntity;
 import com.scube.invoicing.entity.VendorMasterEntity;
 import com.scube.invoicing.exception.BRSException;
+import com.scube.invoicing.exception.EntityType;
+import com.scube.invoicing.exception.ExceptionType;
 import com.scube.invoicing.repository.ExpenseInfoRepository;
 import com.scube.invoicing.repository.ExpenseItemListRepository;
 import com.scube.invoicing.util.DateUtils;
@@ -52,6 +54,9 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 	ExpenseInfoRepository expenseInfoRepository;
 	
 	@Autowired
+	LedgerService ledgerService;
+	
+	@Autowired
 	ExpenseItemListRepository expenseItemListRepository;
 	
 	Base64.Encoder encoder = Base64.getEncoder();
@@ -62,7 +67,7 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 	@Override
 	public boolean createNewExpense(@Valid ExpenseIncomingDto expenseIncomingDto) {
 		// TODO Auto-generated method stub
-		logger.info("------- ExpenseInfoController createNewExpense ------");
+		logger.info("------- ExpenseInfoServiceImpl createNewExpense ------");
 		
 		if(expenseIncomingDto.getVendorName() == "" || expenseIncomingDto.getVendorName().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Vendor Name cannot be empty or blank");
@@ -142,13 +147,15 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		
 		logger.info("------- Record Created Successfully ------");
 		
+		ledgerService.addLedgerEntryForExpense(expenseInfoEntity);
+		
 		return true;
 	}
 
 	@Override
 	public boolean updateExpense(@Valid ExpenseIncomingDto expenseIncomingDto) {
 		// TODO Auto-generated method stub
-		logger.info("------- ExpenseInfoController updateExpense ------");
+		logger.info("------- ExpenseInfoServiceImpl updateExpense ------");
 		
 		if(expenseIncomingDto.getVendorName() == "" || expenseIncomingDto.getVendorName().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Vendor Name cannot be empty or blank");
@@ -236,7 +243,7 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 	@Override
 	public boolean deleteExpenseByExpenseID(String expenseID) {
 		// TODO Auto-generated method stub
-		logger.info("------- ExpenseInfoController deleteExpenseByExpenseID ------");
+		logger.info("------- ExpenseInfoServiceImpl deleteExpenseByExpenseID ------");
 		
 		ExpenseInfoEntity expenseInfoEntity = expenseInfoRepository.findById(expenseID).get();
 		List<ExpenseCategoryItemListEntity> expenseCategoryItemListEntityList = 
@@ -261,7 +268,7 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 	@Override
 	public ExpenseResponseDto getExpenseInfoByExpenseID(String expenseID) {
 		// TODO Auto-generated method stub
-		logger.info("------- ExpenseInfoController getExpenseInfoByExpenseID ------");
+		logger.info("------- ExpenseInfoServiceImpl getExpenseInfoByExpenseID ------");
 		
 		ExpenseInfoEntity expenseInfoEntity = expenseInfoRepository.findById(expenseID).get();
 		List<ExpenseCategoryItemListEntity> expenseCategoryItemListEntityList = expenseItemListRepository.findByExpenseInfoEntity(expenseInfoEntity);
@@ -272,11 +279,45 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 	@Override
 	public List<ExpenseResponseDto> getAllExpenseList() {
 		// TODO Auto-generated method stub
-		logger.info("------- ExpenseInfoController getAllExpenseList ------");
+		logger.info("------- ExpenseInfoServiceImpl getAllExpenseList ------");
 		
 		List<ExpenseInfoEntity> expenseInfoEntityList = expenseInfoRepository.getAllExpenseListByStatus();
 
 		return ExpenseInfoAndItemListMapper.toExpenseResponseDtosList(expenseInfoEntityList);
+	}
+
+	@Override
+	public ExpenseInfoEntity getExpenseInfoEntityByExpenseID(String expenseID) {
+		// TODO Auto-generated method stub
+		logger.info("------- ExpenseInfoServiceImpl getExpenseInfoEntityByExpenseID ------");
+		
+		ExpenseInfoEntity expenseInfoEntity = expenseInfoRepository.findById(expenseID).get();
+		
+		if(expenseInfoEntity == null) {
+			throw BRSException.throwException("Error : Expense record does not exist");
+		}
+		
+		return expenseInfoEntity;
+	}
+
+	@Override
+	public List<ExpenseCategoryItemListEntity> getExpenseItemsByExpenseID(String expenseID) {
+		// TODO Auto-generated method stub
+		logger.info("------- ExpenseInfoServiceImpl getExpenseItemsByExpenseID ------");
+		
+		ExpenseInfoEntity expenseInfoEntity = expenseInfoRepository.findById(expenseID).get();
+		
+		if(expenseInfoEntity == null) {
+			throw BRSException.throwException("Error : Expense record does not exist");
+		}
+		
+		List<ExpenseCategoryItemListEntity> expenseCategoryItemListEntityList = expenseItemListRepository.findByExpenseInfoEntity(expenseInfoEntity);
+		
+		if(expenseCategoryItemListEntityList == null) {
+			throw BRSException.throwException(EntityType.EXPENSEITEMS, ExceptionType.ENTITY_NOT_FOUND, expenseInfoEntity.getVendorMasterEntity().getCompanyName());
+		}
+		
+		return expenseCategoryItemListEntityList;
 	}
 
 }

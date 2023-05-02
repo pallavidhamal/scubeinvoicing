@@ -6,6 +6,7 @@ import java.util.List;
 import com.scube.invoicing.dto.CustomerMasterResponseDto;
 import com.scube.invoicing.entity.CustomerMasterEntity;
 import com.scube.invoicing.util.DateUtils;
+import com.scube.invoicing.util.StringNullEmpty;
 
 public class CustomerMasterMapper {
 	
@@ -14,46 +15,46 @@ public class CustomerMasterMapper {
 		return new CustomerMasterResponseDto()
 				.setCustomerId(customerMasterEntity.getId())
 				
-				.setTitle(customerMasterEntity.getTitle())
-				.setFirstName(customerMasterEntity.getFirstName())
-				.setLastName(customerMasterEntity.getLastName())
+				.setTitle(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getTitle()))
+				.setFirstName(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getFirstName()))
+				.setLastName(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getLastName()))
 				
-				.setCompanyName(customerMasterEntity.getCompanyName())
-				.setEmailId(customerMasterEntity.getEmailId())
-				.setMobileNumber(customerMasterEntity.getMobileNumber())
-				.setFax(customerMasterEntity.getFax())
-				.setWebsite(customerMasterEntity.getWebsite())
+				.setCompanyName(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getCompanyName()))
+				.setEmailId(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getEmailId()))
+				.setMobileNumber(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getMobileNumber()))
+				.setFax(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getFax()))
+				.setWebsite(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getWebsite()))
 				
-				.setBillingAddress(customerMasterEntity.getBillingAddress())
-				.setBillingCity(customerMasterEntity.getBillingCity())
-				.setBillingState(customerMasterEntity.getBillingState())
-				.setBillingCountry(customerMasterEntity.getBillingCountry())
-				.setBillingPinCode(customerMasterEntity.getBillingPinCode())
+				.setBillingAddress(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getBillingAddress()))
+				.setBillingCity(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getBillingCity()))
+				.setBillingState(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getBillingState()))
+				.setBillingCountry(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getBillingCountry()))
+				.setBillingPinCode(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getBillingPinCode()))
 				
-				.setShippingAddress(customerMasterEntity.getShippingAddress())
-				.setShippingCity(customerMasterEntity.getShippingCity())
-				.setShippingState(customerMasterEntity.getShippingState())
-				.setShippingCountry(customerMasterEntity.getShippingCountry())
-				.setShippingPinCode(customerMasterEntity.getShippingPinCode())
+				.setShippingAddress(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getShippingAddress()))
+				.setShippingCity(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getShippingCity()))
+				.setShippingState(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getShippingState()))
+				.setShippingCountry(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getShippingCountry()))
+				.setShippingPinCode(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getShippingPinCode()))
 				
 				
-				.setGstRegistrationNo(customerMasterEntity.getGstRegistrationNo())
-				.setGstin(customerMasterEntity.getGstin())
-				.setTaxRegistrationNo(customerMasterEntity.getTaxRegistrationNo())
-				.setCstRegistrationNo(customerMasterEntity.getCstRegistrationNo())
-				.setPanNo(customerMasterEntity.getPanNo())
+				.setGstRegistrationNo(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getGstRegistrationNo()))
+				.setGstin(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getGstin()))
+				.setTaxRegistrationNo(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getTaxRegistrationNo()))
+				.setCstRegistrationNo(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getCstRegistrationNo()))
+				.setPanNo(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getPanNo()))
 				
-				.setPaymentMethodID(customerMasterEntity.getPaymentMethodEntity().getId())
-				.setPrefPaymentMethod(customerMasterEntity.getPaymentMethodEntity().getMethodName())
+				.setPaymentMethodID(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getPaymentMethodEntity().getId()))
+				.setPrefPaymentMethod(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getPaymentMethodEntity().getMethodName()))
 				
-				.setPrefDelieveryMethod(customerMasterEntity.getPrefDelieveryMethod())
-				.setPaymentTerms(customerMasterEntity.getPaymentTerms())
+				.setPrefDelieveryMethod(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getPrefDelieveryMethod()))
+				.setPaymentTerms(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getPaymentTerms()))
 				.setOpeningBalance(customerMasterEntity.getOpeningBalance())
 				.setPaymentDate(DateUtils.formattedDate(customerMasterEntity.getPaymentDate()))
-				.setPaysWith(customerMasterEntity.getPaysWith())
+				.setPaysWith(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getPaysWith()))
 				
-				.setCurrencyID(customerMasterEntity.getCurrencyMasterEntity().getId())
-				.setCurrencyName(customerMasterEntity.getCurrencyMasterEntity().getCurrencyName());
+				.setCurrencyID(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getCurrencyMasterEntity().getId()))
+				.setCurrencyName(StringNullEmpty.stringNullAndEmptyToBlank(customerMasterEntity.getCurrencyMasterEntity().getCurrencyName()));
 	}
 	
 	public static List<CustomerMasterResponseDto> toAllCustomerDataList(List<CustomerMasterEntity> customerMasterEntitiesList) {

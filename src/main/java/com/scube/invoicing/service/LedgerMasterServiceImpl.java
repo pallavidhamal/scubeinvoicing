@@ -149,9 +149,9 @@ public class LedgerMasterServiceImpl implements LedgerMasterService {
 	}
 
 	@Override
-	public LedgerMasterEntity getTDSLedgerMasterRecords(String ledgerName) {
+	public LedgerMasterEntity getLedgerMasterRecords(String ledgerName) {
 		// TODO Auto-generated method stub
-		logger.info("---- LedgerMasterServiceImpl getTDSLedgerMasterRecords ----");
+		logger.info("---- LedgerMasterServiceImpl getLedgerMasterRecords ----");
 		
 		LedgerMasterEntity tdsLedgerMasterEntity = ledgerMasterRepository.findByLedgerName(ledgerName);
 		
@@ -160,6 +160,16 @@ public class LedgerMasterServiceImpl implements LedgerMasterService {
 		}
 		
 		return tdsLedgerMasterEntity;
+	}
+
+	@Override
+	public List<LedgerMasterEntity> getCategoryLedgerMasterRecords(CategoryMasterEntity categoryMasterEntity) {
+		// TODO Auto-generated method stub
+		logger.info("---- LedgerMasterServiceImpl getCategoryLedgerMasterRecords ----");
+		
+		List<LedgerMasterEntity> categoryLedgerMasterEntityList = ledgerMasterRepository.findByCategoryMasterEntity(categoryMasterEntity);
+		
+		return categoryLedgerMasterEntityList;
 	}
 
 }
