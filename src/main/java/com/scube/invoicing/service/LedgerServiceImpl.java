@@ -239,6 +239,7 @@ public class LedgerServiceImpl implements LedgerService {
 		expenseLedgerEntity.setAmount(expenseInfoEntity.getTotalAmount());
 		expenseLedgerEntity.setVendorMasterEntity(expenseInfoEntity.getVendorMasterEntity());
 		expenseLedgerEntity.setLedgerMasterEntity(ledgerMasterEntity);
+		expenseLedgerEntity.setTransactionType("Credit");
 		
 		expenseLedgerRepository.save(expenseLedgerEntity);
 		
@@ -260,6 +261,7 @@ public class LedgerServiceImpl implements LedgerService {
 				expenseCategoryLedgerEntity.setAmount(expenseInfoEntity.getTotalAmount());
 				expenseCategoryLedgerEntity.setCategoryMasterEntity(expenseCategoryItemListEntity.getCategoryMasterEntity());
 				expenseCategoryLedgerEntity.setLedgerMasterEntity(categoryLedgerMasterEntityList.get(j));
+				expenseLedgerEntity.setTransactionType("Debit");
 				
 				expenseLedgerRepository.save(expenseCategoryLedgerEntity);
 			}

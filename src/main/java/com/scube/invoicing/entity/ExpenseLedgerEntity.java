@@ -32,5 +32,8 @@ public class ExpenseLedgerEntity extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "fk_ledger_mst")
 	private LedgerMasterEntity ledgerMasterEntity;
+	
+	@Column(name = "transaction_type")
+	private String transactionType;
 
 }
