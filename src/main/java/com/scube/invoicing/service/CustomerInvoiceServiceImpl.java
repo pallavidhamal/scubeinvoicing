@@ -31,7 +31,6 @@ import com.scube.invoicing.exception.ExceptionType;
 import com.scube.invoicing.repository.CustomerInvoiceRepository;
 import com.scube.invoicing.repository.CustomerInvoiceServiceRepository;
 import com.scube.invoicing.util.DateUtils;
-import com.scube.invoicing.util.RandomUtils;
 
 @Service
 public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
@@ -134,7 +133,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		customerInvoiceEntity.setTrackingNo(customerInvoiceIncomingDto.getTrackingNo());
 		
 		// Invoice No and Date
-		customerInvoiceEntity.setInvoiceNo("INVOICE-00"+RandomUtils.generateRandomNumber());
+//		customerInvoiceEntity.setInvoiceNo("INVOICE-00"+RandomUtils.generateRandomNumber());
 		customerInvoiceEntity.setInvoiceDate(DateUtils.stringToDateConvert(customerInvoiceIncomingDto.getInvoiceDate()));
 		
 		// Invoice Payment Status
