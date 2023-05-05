@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.scube.invoicing.entity.CustomerInvoiceEntity;
 import com.scube.invoicing.entity.CustomerMasterEntity;
+import com.scube.invoicing.entity.InvoiceLedgerEntity;
+import com.scube.invoicing.entity.LedgerMasterEntity;
 
 
 @Repository
@@ -51,5 +53,7 @@ public interface CustomerInvoiceRepository extends JpaRepository<CustomerInvoice
 	//for all customer invoices list by status N
 	@Query(value = "SELECT * FROM invoicing.customer_invoice where is_deleted='N';", nativeQuery = true)
 	List<CustomerInvoiceEntity> getAllCustomerInvoiceListByStatus();
+	
+
 
 }

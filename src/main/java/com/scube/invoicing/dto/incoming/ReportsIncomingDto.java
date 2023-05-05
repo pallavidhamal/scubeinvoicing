@@ -14,5 +14,9 @@ public class ReportsIncomingDto {
 	private String endDate;
 	
 	private String amountPendingFlag;
+	
+	private String invoiceID;
+	
+	private String vendorID;
 
 }

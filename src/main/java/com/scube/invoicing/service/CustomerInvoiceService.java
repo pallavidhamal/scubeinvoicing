@@ -35,6 +35,7 @@ public interface CustomerInvoiceService {
 	
 	CustomerInvoiceEntity getCustomerInvoiceEntityByInvoiceID(String invoiceID);
 	
+	
 	List<CustomerInvoiceServiceEntity> getCustomerServiceInfoByCustomerDetailsAndInvoiceDetails(
 			CustomerMasterEntity customerMasterEntity, CustomerInvoiceEntity customerInvoiceEntity);
 	
@@ -49,5 +50,8 @@ public interface CustomerInvoiceService {
 	
 	// Get Customer Invoice Service Entity By Customer Invoice ID
 	List<CustomerInvoiceServiceEntity> getCustomerInvoiceServiceEntityByInvoiceID(String invoiceID);
+	
+	// Get Invoice Entity By Customer ID
+	List<CustomerInvoiceEntity> getCustomerInvoiceEntityByCustomerEntity(CustomerMasterEntity customerMasterEntity);
 
 }

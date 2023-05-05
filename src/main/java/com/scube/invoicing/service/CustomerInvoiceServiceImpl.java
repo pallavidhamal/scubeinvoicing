@@ -49,9 +49,6 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	CompanyMasterService companyMasterService;
 	
 	@Autowired
-	LedgerService ledgerService;
-	
-	@Autowired
 	CustomerInvoiceServiceRepository customerInvoiceServiceRepository;
 	
 	@Autowired
@@ -411,8 +408,6 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		customerInvoiceEntity.setPaymentStatus("Payment Completed");
 		customerInvoiceRepository.save(customerInvoiceEntity);
 		
-		ledgerService.updateLedgerEntryForInvoicePaymentReceived(customerInvoiceEntity);
-		
 		return true;
 	}
 
@@ -490,5 +485,18 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		
 		return customerInvoiceServiceEntityList;
 	}
+	
+	@Override
+	public List<CustomerInvoiceEntity> getCustomerInvoiceEntityByCustomerEntity(
+			CustomerMasterEntity customerMasterEntity) {
+		// TODO Auto-generated method stub
+		if( customerMasterEntity == null) {
+			
+			throw BRSException.throwException("Error : Customer ID cannot be blank or empty.");
+		}
+		
+		return customerInvoiceRepository.findByCustomerMasterEntity(customerMasterEntity);
+	}
+
 
 }

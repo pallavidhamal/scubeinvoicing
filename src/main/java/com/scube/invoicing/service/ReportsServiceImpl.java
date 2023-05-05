@@ -11,17 +11,31 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.scube.invoicing.dto.ExpenseLedgerResponseDto;
+import com.scube.invoicing.dto.ExpenseResponseDto;
 import com.scube.invoicing.dto.GSTReportResponseDto;
 import com.scube.invoicing.dto.InvoiceCreditNoteResponseDto;
+import com.scube.invoicing.dto.LedgerResponseDto;
 import com.scube.invoicing.dto.incoming.ReportsIncomingDto;
+import com.scube.invoicing.dto.mapper.ExpenseInfoAndItemListMapper;
+import com.scube.invoicing.dto.mapper.ExpenseLedgerMapper;
 import com.scube.invoicing.dto.mapper.GSTReportResponseMapper;
 import com.scube.invoicing.dto.mapper.InvoiceCreditNoteResponseMapper;
 import com.scube.invoicing.dto.mapper.TDSReportResponseMapper;
+import com.scube.invoicing.dto.mapper.LedgerMapper;
 import com.scube.invoicing.entity.CustomerCreditNoteEntity;
 import com.scube.invoicing.entity.CustomerInvoiceEntity;
+import com.scube.invoicing.entity.CustomerMasterEntity;
+import com.scube.invoicing.entity.ExpenseInfoEntity;
+import com.scube.invoicing.entity.ExpenseLedgerEntity;
+import com.scube.invoicing.entity.InvoiceLedgerEntity;
+import com.scube.invoicing.entity.VendorMasterEntity;
 import com.scube.invoicing.exception.BRSException;
 import com.scube.invoicing.repository.CreditNoteRepository;
 import com.scube.invoicing.repository.CustomerInvoiceRepository;
+import com.scube.invoicing.repository.ExpenseInfoRepository;
+import com.scube.invoicing.repository.ExpenseLedgerRepository;
+import com.scube.invoicing.repository.InvoiceLedgerRepository;
 import com.scube.invoicing.util.DateUtils;
 
 @Service
@@ -31,9 +45,29 @@ public class ReportsServiceImpl implements ReportsService {
 	CustomerInvoiceRepository customerInvoiceRepository;
 	
 	@Autowired
+	InvoiceLedgerRepository invoiceLedgerRepository;
+	
+	@Autowired
+	ExpenseLedgerRepository expenseLedgerRepository;
+	
+	@Autowired
+	CustomerInvoiceService customerInvoiceService;
+	
+	@Autowired
+	VendorMasterService vendorMasterService;
+	
+	@Autowired
+	ExpenseInfoService expenseInfoService;
+	
+	@Autowired
 	CreditNoteRepository creditNoteRepository;
 	
+	@Autowired
+	CustomerMasterService customerMasterService;
+	
 	Base64.Decoder decoder = Base64.getDecoder();
+
+	private List<InvoiceLedgerEntity> customerLedgerEntitiesList;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ReportsServiceImpl.class);
 	
@@ -389,5 +423,133 @@ public class ReportsServiceImpl implements ReportsService {
 		
 		return TDSReportResponseMapper.toTDSReportForCreditNoteResponseDtosList(customerCreditNoteEntitiesList);
 	}
+
+
+	@Override
+	public List<LedgerResponseDto> getLedgerEntriesByinvoiceId(String invoiceID) {
+		// TODO Auto-generated method stub
+		
+		CustomerInvoiceEntity ledgerMasterEntity = customerInvoiceService.getCustomerInvoiceEntityByInvoiceID(invoiceID);
+		
+		 List<InvoiceLedgerEntity> customerLedgerEntitiesList = invoiceLedgerRepository.findByCustomerInvoiceEntity(ledgerMasterEntity);
+		 
+		 if (customerLedgerEntitiesList.size() == 0) {
+			 
+			 throw BRSException.throwException("Error : Record not found");
+			
+		}
+		 
+		return LedgerMapper.toLedgerResponseDtosList(customerLedgerEntitiesList);
+	}
+
+
+	@Override
+	public List<LedgerResponseDto> generateLedgerReportByCustomerIDAndDateRange(@Valid ReportsIncomingDto reportsIncomingDto) {
+		// TODO Auto-generated method stub
+		logger.info("----- InvoiceAndCreditNoteReportServiceImpl generateLedgerReportByCustomerIDAndDateRange ------");
+		
+		if(reportsIncomingDto.getCustomerID() == "" || reportsIncomingDto.getCustomerID().trim().isEmpty()) {
+			throw BRSException.throwException("Error : Customer ID cannot be blank or empty.");
+		}
+		
+		if(reportsIncomingDto.getStartDate() == "" || reportsIncomingDto.getStartDate().trim().isEmpty()) {
+			throw BRSException.throwException("Error : Start Date cannot be blank or empty.");
+		}
+		
+		if(reportsIncomingDto.getEndDate() == "" || reportsIncomingDto.getEndDate().trim().isEmpty()) {
+			throw BRSException.throwException("Error : End Date cannot be blank or empty.");
+		}
+		
+		logger.info("--- Customer ID :- " + reportsIncomingDto.getCustomerID() 
+		+ "--- Start Date :- " + reportsIncomingDto.getStartDate() + 
+		"--- End Date :- " + reportsIncomingDto.getEndDate() + "--- Converted End Date :- " 
+		+ DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		
+		CustomerMasterEntity customerMasterEntity = customerMasterService.getCustomerDetailsByCustomerId(reportsIncomingDto.getCustomerID());
+		
+		if(customerMasterEntity == null) {
+			
+			throw BRSException.throwException("Error : Customer ID cannot be blank or empty.");
+		}
+		
+		List<CustomerInvoiceEntity> customerInvoiceEntityList = customerInvoiceService.getCustomerInvoiceEntityByCustomerEntity(customerMasterEntity);
+		
+		if(customerInvoiceEntityList == null) {
+			
+			throw BRSException.throwException("Error : invoice cannot be blank or empty.");
+		}
+			
+		List<LedgerResponseDto> ledgerEntries = new ArrayList<LedgerResponseDto>();
+		
+		for(int i=0; i<customerInvoiceEntityList.size(); i++) {
+			
+			logger.info("inside :---- " + customerInvoiceEntityList.get(i).getId());
+			
+			List<InvoiceLedgerEntity> customerLedgerEntityList = invoiceLedgerRepository.getCustomerLedgerListByCustomerIDAndDateRange(customerInvoiceEntityList.get(i).getId(), reportsIncomingDto.getStartDate(),  DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+			
+			logger.info("inside list  :---- " +customerLedgerEntityList);
+			
+	        List<LedgerResponseDto> currentLedgerResponseDtosList = LedgerMapper.toLedgerResponseDtosList(customerLedgerEntityList);
+	        ledgerEntries.addAll(currentLedgerResponseDtosList);
+			
+			//led = LedgerMapper.toLedgerResponseDtosList(customerLedgerEntityList);
+		}
+		
+		//return customerLedgerEntityList;
+		return ledgerEntries;
+		
+		
+		
+	}
+
+
+	@Override
+	public List<ExpenseLedgerResponseDto> generateExpenseReportByVendorIDAndDateRange(
+			@Valid ReportsIncomingDto reportsIncomingDto) {
+		// TODO Auto-generated method stub
+		logger.info("----- InvoiceAndCreditNoteReportServiceImpl generateExpenseReportByVendorIDAndDateRange ------");
+		
+		if(reportsIncomingDto.getVendorID() == "" || reportsIncomingDto.getVendorID().trim().isEmpty()) {
+			throw BRSException.throwException("Error : Customer ID cannot be blank or empty.");
+		}
+		
+		if(reportsIncomingDto.getStartDate() == "" || reportsIncomingDto.getStartDate().trim().isEmpty()) {
+			throw BRSException.throwException("Error : Start Date cannot be blank or empty.");
+		}
+		
+		if(reportsIncomingDto.getEndDate() == "" || reportsIncomingDto.getEndDate().trim().isEmpty()) {
+			throw BRSException.throwException("Error : End Date cannot be blank or empty.");
+		}
+		
+		logger.info("--- Vendor ID :- " + reportsIncomingDto.getVendorID()
+		+ "--- Start Date :- " + reportsIncomingDto.getStartDate() + 
+		"--- End Date :- " + reportsIncomingDto.getEndDate() + "--- Converted End Date :- " 
+		+ DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+		
+		VendorMasterEntity vendorMasterEntity = vendorMasterService.getVendorMasterEntityByVendorID(reportsIncomingDto.getVendorID());
+		
+		if(vendorMasterEntity == null) {
+			
+			throw BRSException.throwException("Error : Vendor ID cannot be blank or empty.");
+		}
+		
+		List<ExpenseInfoEntity> expenseInfoEntityList = expenseInfoService.getExpenseInfoEntityByVendor(vendorMasterEntity);
+		
+		if(expenseInfoEntityList.size() == 0) {
+			
+			throw BRSException.throwException("Error : expense cannot be blank or empty.");
+		}
+					
+			List<ExpenseLedgerEntity> expenseEntityList = 
+					expenseLedgerRepository.getExpenseLedgerListByVendorIDAndDateRange
+					(reportsIncomingDto.getVendorID(), reportsIncomingDto.getStartDate() , DateUtils.add1DayToInputDate(reportsIncomingDto.getEndDate()));
+			
+			logger.info("list  :---- " +expenseEntityList);
+			
+				
+		return ExpenseLedgerMapper.toExpenseLedgerResponseDtosList(expenseEntityList);
+	}
+
+
 
 }

@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,4 +85,26 @@ public class ReportsController {
 		logger.info("----- InvoiceAndCreditNoteReportController generateTDSReportForCreditNoteByDateRange ------");
 		return Response.ok().setPayload(invoiceAndCreditNoteReportService.generateTDSReportForInvoiceByDateRange(reportsIncomingDto));
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@GetMapping(value = "/getLedgerEntriesByinvoiceId/{invoiceID}")
+	public Response getLedgerEntriesByCustomerId(@PathVariable String invoiceID) {
+		logger.info("-------- CustomerMasterController getLedgerEntriesByinvoiceId ------");
+		return Response.ok().setPayload(invoiceAndCreditNoteReportService.getLedgerEntriesByinvoiceId(invoiceID));
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@PostMapping(value = "/generateLedgerReportByCustomerIDAndDateRange", consumes = APPLICATION_JSON_VALUE)
+	public Response generateLedgerReportByCustomerIDAndDateRange(@Valid @RequestBody ReportsIncomingDto reportsIncomingDto) {
+		logger.info("----- InvoiceAndCreditNoteReportController generateLedgerReportByCustomerIDAndDateRange ------");
+		return Response.ok().setPayload(invoiceAndCreditNoteReportService.generateLedgerReportByCustomerIDAndDateRange(reportsIncomingDto));
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@PostMapping(value = "/generateExpenseReportByVendorIDAndDateRange", consumes = APPLICATION_JSON_VALUE)
+	public Response generateExpenseReportByVendorIDAndDateRange(@Valid @RequestBody ReportsIncomingDto reportsIncomingDto) {
+		logger.info("----- InvoiceAndCreditNoteReportController generateExpenseReportByVendorIDAndDateRange ------");
+		return Response.ok().setPayload(invoiceAndCreditNoteReportService.generateExpenseReportByVendorIDAndDateRange(reportsIncomingDto));
+	}
+	
 }

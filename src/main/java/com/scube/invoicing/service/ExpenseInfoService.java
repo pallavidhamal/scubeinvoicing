@@ -8,6 +8,7 @@ import com.scube.invoicing.dto.ExpenseResponseDto;
 import com.scube.invoicing.dto.incoming.ExpenseIncomingDto;
 import com.scube.invoicing.entity.ExpenseCategoryItemListEntity;
 import com.scube.invoicing.entity.ExpenseInfoEntity;
+import com.scube.invoicing.entity.VendorMasterEntity;
 
 public interface ExpenseInfoService {
 	
@@ -22,6 +23,8 @@ public interface ExpenseInfoService {
 	List<ExpenseResponseDto> getAllExpenseList();
 	
 	ExpenseInfoEntity getExpenseInfoEntityByExpenseID(String expenseID);
+	
+	List<ExpenseInfoEntity> getExpenseInfoEntityByVendor(VendorMasterEntity vendorMasterEntity);
 	
 	List<ExpenseCategoryItemListEntity> getExpenseItemsByExpenseID(String expenseID);
 

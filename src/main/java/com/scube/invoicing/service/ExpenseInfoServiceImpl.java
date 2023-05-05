@@ -320,4 +320,16 @@ public class ExpenseInfoServiceImpl implements ExpenseInfoService {
 		return expenseCategoryItemListEntityList;
 	}
 
+	@Override
+	public List<ExpenseInfoEntity> getExpenseInfoEntityByVendor(VendorMasterEntity vendorMasterEntity) {
+		// TODO Auto-generated method stub
+		if( vendorMasterEntity == null) {
+			
+			throw BRSException.throwException("Error : Vendor ID cannot be blank or empty.");
+		}
+		
+		
+		return expenseInfoRepository.findByVendorMasterEntity(vendorMasterEntity);
+	}
+
 }

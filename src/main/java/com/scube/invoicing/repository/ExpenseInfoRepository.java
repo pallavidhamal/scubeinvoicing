@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.scube.invoicing.entity.CustomerMasterEntity;
 import com.scube.invoicing.entity.ExpenseInfoEntity;
+import com.scube.invoicing.entity.VendorMasterEntity;
 
 @Repository
 public interface ExpenseInfoRepository extends JpaRepository<ExpenseInfoEntity, String> {
@@ -15,5 +16,7 @@ public interface ExpenseInfoRepository extends JpaRepository<ExpenseInfoEntity, 
 	//for all customer list by status N
 	@Query(value = "SELECT * FROM invoicing.expense where is_deleted='N';", nativeQuery = true)
 	List<ExpenseInfoEntity> getAllExpenseListByStatus();
+
+	List<ExpenseInfoEntity> findByVendorMasterEntity(VendorMasterEntity vendorMasterEntity);
 
 }
