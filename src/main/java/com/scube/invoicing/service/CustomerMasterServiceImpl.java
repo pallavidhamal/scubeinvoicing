@@ -64,18 +64,23 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 			throw BRSException.throwException(EntityType.COMPANY, ALREADY_EXIST, customerMasterIncomingDto.getCompanyName());
 		}
 		
-		CustomerMasterEntity duplicatePanNoCheckEntity = customerMasterRepository.findByPanNo(customerMasterIncomingDto.getPanNo());
+		if(customerMasterIncomingDto.getPanNo() != null) {
+			logger.info("--- Customer Pan exists " + customerMasterIncomingDto.getPanNo());
+			CustomerMasterEntity duplicatePanNoCheckEntity = customerMasterRepository.findByPanNo(customerMasterIncomingDto.getPanNo());
+			
+			logger.info("----PAN NO----"+ duplicatePanNoCheckEntity +"--");
 		
-		logger.info("----PAN NO----"+ customerMasterIncomingDto.getPanNo()+"--");
-		
-		if(duplicatePanNoCheckEntity != null) {
-			throw BRSException.throwException(EntityType.PANNO, ALREADY_EXIST, customerMasterIncomingDto.getPanNo());
+			if(duplicatePanNoCheckEntity != null) {
+				throw BRSException.throwException(EntityType.PANNO, ALREADY_EXIST, customerMasterIncomingDto.getPanNo());
+			}
 		}
 		
-		CustomerMasterEntity checkDuplicateGstNoEntity = customerMasterRepository.findByGstRegistrationNo(customerMasterIncomingDto.getGstRegistrationNo());
-		
-		if(checkDuplicateGstNoEntity != null) {
-			throw BRSException.throwException(EntityType.GSTNO, ALREADY_EXIST, customerMasterIncomingDto.getGstRegistrationNo());
+		if(customerMasterIncomingDto.getGstin() != null) {
+			CustomerMasterEntity checkDuplicateGstNoEntity = customerMasterRepository.findByGstin(customerMasterIncomingDto.getGstin());
+			
+			if(checkDuplicateGstNoEntity != null) {
+				throw BRSException.throwException(EntityType.GSTNO, ALREADY_EXIST, customerMasterIncomingDto.getGstin());
+			}
 		}
 		
 		CurrencyMasterEntity currencyMasterEntity = currencyMasterService.getCurrencyMasterEntityByCurrencyId(customerMasterIncomingDto.getCurrencyName());
@@ -109,13 +114,16 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		customerMasterEntity.setGstin(customerMasterIncomingDto.getGstin());
 		customerMasterEntity.setTaxRegistrationNo(customerMasterIncomingDto.getTaxRegistrationNo());
 		customerMasterEntity.setCstRegistrationNo(customerMasterIncomingDto.getCstRegistrationNo());
-		customerMasterEntity.setPanNo(customerMasterIncomingDto.getPanNo() !=null ? customerMasterIncomingDto.getPanNo() : null);
+		customerMasterEntity.setPanNo(customerMasterIncomingDto.getPanNo());
 		
 		customerMasterEntity.setPaymentMethodEntity(paymentMethodEntity);
 		customerMasterEntity.setPrefDelieveryMethod(customerMasterIncomingDto.getPrefDelieveryMethod());
 		customerMasterEntity.setPaymentTerms(customerMasterIncomingDto.getPaymentTerms());
 		customerMasterEntity.setOpeningBalance(customerMasterIncomingDto.getOpeningBalance());
-		customerMasterEntity.setPaymentDate(DateUtils.stringToDateConvert(customerMasterIncomingDto.getPaymentDate()));
+		
+		if(customerMasterIncomingDto.getPaymentDate() != null) {
+			customerMasterEntity.setPaymentDate(DateUtils.stringToDateConvert(customerMasterIncomingDto.getPaymentDate()));
+		}
 		customerMasterEntity.setPaysWith(customerMasterIncomingDto.getPaysWith());
 		
 		customerMasterEntity.setIsdeleted("N");
@@ -180,7 +188,10 @@ public class CustomerMasterServiceImpl implements CustomerMasterService {
 		customerMasterEntity.setPrefDelieveryMethod(customerMasterIncomingDto.getPrefDelieveryMethod());
 		customerMasterEntity.setPaymentTerms(customerMasterIncomingDto.getPaymentTerms());
 		customerMasterEntity.setOpeningBalance(customerMasterIncomingDto.getOpeningBalance());
-		customerMasterEntity.setPaymentDate(DateUtils.stringToDateConvert(customerMasterIncomingDto.getPaymentDate()));
+		
+		if(customerMasterIncomingDto.getPaymentDate() != null) {
+			customerMasterEntity.setPaymentDate(DateUtils.stringToDateConvert(customerMasterIncomingDto.getPaymentDate()));
+		}
 		customerMasterEntity.setPaysWith(customerMasterIncomingDto.getPaysWith());
 		
 		customerMasterEntity.setIsdeleted("N");
