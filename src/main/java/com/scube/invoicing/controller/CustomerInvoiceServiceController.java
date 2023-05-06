@@ -92,5 +92,12 @@ public class CustomerInvoiceServiceController {
   		return Response.ok().setPayload(customerInvoiceService.updateCustomerInvoicePaymentStatus(customerServiceIncomingDto));
   	}
 	
+  	
+  	@SuppressWarnings("rawtypes")
+  	@GetMapping( value = "/getInvoiceMailResponseByInvoiceID/{invoiceID}")
+  	public Response getInvoiceMailResponseByInvoiceID(@PathVariable("invoiceID") String invoiceID) {
+  		logger.info("----- CustomerInvoiceServiceController getInvoiceMailResponseByInvoiceID ----");
+  		return Response.ok().setPayload(customerInvoiceService.getInvoiceMailResponseByInvoiceID(invoiceID));
+  	}
 	
 }

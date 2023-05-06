@@ -25,8 +25,6 @@ public class CustomerInvoiceMapper {
 				+ "Please click link below to view or download the invoice."
 				+ companyMasterEntity.getCompanyName();
 		
-//		String subTotal = 
-		
 		return new CustomerInvoiceResponseDto()
 				// Company Info and Mail Info
 				.setCompanyName(companyMasterEntity.getCompanyName())

@@ -63,7 +63,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	
 	// Create New Invoice and Service API
 	@Override
-	public CustomerInvoiceResponseDto addCustomerInvoiceAndServiceInfo(@Valid CustomerInvoiceIncomingDto customerInvoiceIncomingDto) {
+	public String addCustomerInvoiceAndServiceInfo(@Valid CustomerInvoiceIncomingDto customerInvoiceIncomingDto) {
 		// TODO Auto-generated method stub
 		
 		logger.info("----- CustomerInvoiceServiceImpl addCustomerInvoiceAndServiceData ----");
@@ -72,10 +72,9 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 				customerInvoiceIncomingDto.getCustomerID().trim().isEmpty()) {
 			throw BRSException.throwException("Error : Customer ID cannot be blank or null");
 		}
-		
-		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyName(companyName);
+	
 		CustomerMasterEntity customerMasterEntity = customerMasterService.getCustomerDetailsByCustomerId
-				(customerInvoiceIncomingDto.getCustomerID());
+				(customerInvoiceIncomingDto.getCustomerID());			
 		
 		CustomerInvoiceEntity customerInvoiceEntity = new CustomerInvoiceEntity();
 		
@@ -86,7 +85,10 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		
 		customerInvoiceEntity.setCustEmailId(customerInvoiceIncomingDto.getCustEmailId());
 		customerInvoiceEntity.setCustomerBillingAddress(customerInvoiceIncomingDto.getCustomerBillingAddress());
-		customerInvoiceEntity.setShippingDate(DateUtils.stringToDateConvert(customerInvoiceIncomingDto.getShippingDate()));
+		
+		if(customerInvoiceIncomingDto.getShippingDate() != null)
+			customerInvoiceEntity.setShippingDate(DateUtils.stringToDateConvert(customerInvoiceIncomingDto.getShippingDate()));
+		
 		customerInvoiceEntity.setShippingTo(customerInvoiceIncomingDto.getShippingTo());
 		customerInvoiceEntity.setShippingVia(customerInvoiceIncomingDto.getShippingVia());
 		customerInvoiceEntity.setTerms(customerInvoiceIncomingDto.getTerms());
@@ -130,6 +132,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		customerInvoiceEntity.setTrackingNo(customerInvoiceIncomingDto.getTrackingNo());
 		
 		// Invoice No and Date
+		
 //		customerInvoiceEntity.setInvoiceNo("INVOICE-00"+RandomUtils.generateRandomNumber());
 		customerInvoiceEntity.setInvoiceDate(DateUtils.stringToDateConvert(customerInvoiceIncomingDto.getInvoiceDate()));
 		
@@ -178,7 +181,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		}
 		customerInvoiceServiceRepository.saveAll(customerInvoiceServiceEntityList);
 		
-		return CustomerInvoiceMapper.toCustomerServiceAndCompanyResponseMailDto(customerInvoiceEntity, companyMasterEntity);
+		return customerInvoiceEntity.getId();
 	}
 
 	// Update Existing Invoice API
@@ -490,11 +493,28 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 			CustomerMasterEntity customerMasterEntity) {
 		// TODO Auto-generated method stub
 		if( customerMasterEntity == null) {
-			
 			throw BRSException.throwException("Error : Customer ID cannot be blank or empty.");
 		}
 		
 		return customerInvoiceRepository.findByCustomerMasterEntity(customerMasterEntity);
+	}
+
+	@Override
+	public CustomerInvoiceResponseDto getInvoiceMailResponseByInvoiceID(String invoiceID) {
+		// TODO Auto-generated method stub
+		logger.info("----- CustomerInvoiceServiceImpl getInvoiceMailResponseByInvoiceID ----");
+		
+		logger.info("_invoice ID :---" + invoiceID);
+		
+		CustomerInvoiceEntity customerInvoiceEntity = customerInvoiceRepository.findById(invoiceID).get();
+		
+		if(customerInvoiceEntity == null) {
+			throw BRSException.throwException("Error : Customer Invoice Record does not exist.");
+		}
+		
+		CompanyMasterEntity companyMasterEntity = companyMasterService.getCompanyEntityByCompanyName(companyName);
+		
+		return CustomerInvoiceMapper.toCustomerServiceAndCompanyResponseMailDto(customerInvoiceEntity, companyMasterEntity);
 	}
 
 

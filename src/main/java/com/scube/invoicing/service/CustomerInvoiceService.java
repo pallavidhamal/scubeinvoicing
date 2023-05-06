@@ -13,7 +13,7 @@ import com.scube.invoicing.entity.CustomerMasterEntity;
 public interface CustomerInvoiceService {
 	
 	// Create New Invoice and Service Info
-	CustomerInvoiceResponseDto addCustomerInvoiceAndServiceInfo(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
+	String addCustomerInvoiceAndServiceInfo(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
 	
 	// Update Invoice and Service Info
 	CustomerInvoiceResponseDto updateCustomerInvoiceAndServiceInfo(@Valid CustomerInvoiceIncomingDto customerServiceIncomingDto);
@@ -53,5 +53,7 @@ public interface CustomerInvoiceService {
 	
 	// Get Invoice Entity By Customer ID
 	List<CustomerInvoiceEntity> getCustomerInvoiceEntityByCustomerEntity(CustomerMasterEntity customerMasterEntity);
+	
+	CustomerInvoiceResponseDto getInvoiceMailResponseByInvoiceID(String invoiceID);
 
 }
