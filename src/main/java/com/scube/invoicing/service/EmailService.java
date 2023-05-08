@@ -738,11 +738,11 @@ public void sendMailForExcelNotPresent() throws Exception {
 			mimeMessage.addRecipients(Message.RecipientType.BCC, 
 	                InternetAddress.parse(createInvoiceIncomingDto.getBccEmailID()));
 			
-			/*
-			 * MimeBodyPart fileMimeBodyPart = new MimeBodyPart();
-			 * fileMimeBodyPart.attachFile(attachedFile);
-			 * multipart.addBodyPart(fileMimeBodyPart);
-			 */
+			
+			  MimeBodyPart fileMimeBodyPart = new MimeBodyPart();
+			  fileMimeBodyPart.attachFile(attachedFile);
+			 multipart.addBodyPart(fileMimeBodyPart);
+			
 			mimeMessage.setContent(multipart);
 			
 			logger.info("------------" + "Sending" + "---------------");
@@ -871,11 +871,11 @@ public void sendMailForExcelNotPresent() throws Exception {
 			mimeMessage.addRecipients(Message.RecipientType.BCC, 
 	                InternetAddress.parse(createInvoiceIncomingDto.getBccEmailID()));
 			
-			/*
-			 * MimeBodyPart fileMimeBodyPart = new MimeBodyPart();
-			 * fileMimeBodyPart.attachFile(attachedFile);
-			 * multipart.addBodyPart(fileMimeBodyPart);
-			 */
+			
+			  MimeBodyPart fileMimeBodyPart = new MimeBodyPart();
+			  fileMimeBodyPart.attachFile(attachedFile);
+			  multipart.addBodyPart(fileMimeBodyPart);
+			 
 			mimeMessage.setContent(multipart);
 			
 			logger.info("------------" + "Sending" + "---------------");
