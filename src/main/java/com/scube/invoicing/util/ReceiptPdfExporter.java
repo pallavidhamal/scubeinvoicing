@@ -97,11 +97,24 @@ public class ReceiptPdfExporter {
 		companyDetailsCell.add(new Paragraph("CIN :- " + companyMasterEntity.getCompanyCinNo()).setFontSize(8));
 
 		companyDetailsTable.addCell(companyDetailsCell);
+		
 		layoutDocument.add(companyDetailsTable);
 		
 		layoutDocument.add(new Paragraph());
 		layoutDocument.add(new Paragraph());
+		
+		Table invoiceNoFieldTable = new Table(UnitValue.createPercentArray(3)).useAllAvailableWidth();
+		
+		invoiceNoFieldTable.addCell(new Cell(1,3).add(new Paragraph(customerInvoiceEntity.getInvoiceNo()))
+				.setBorder(Border.NO_BORDER)
+				.setBold()
+				.setTextAlignment(TextAlignment.RIGHT)
+				.setFontColor(new DeviceRgb(46, 35, 85))
+				.setFontSize(10)
+		);
 
+		layoutDocument.add(invoiceNoFieldTable);
+		
 		Table addLineTable = new Table(UnitValue.createPercentArray(1)).useAllAvailableWidth();
 
 		addLineTable.addCell(new Cell().add(new Paragraph())
@@ -315,7 +328,7 @@ public class ReceiptPdfExporter {
 				.setHorizontalAlignment(HorizontalAlignment.LEFT)
 				.setFontColor(new DeviceRgb(58,70,109))
 		);
-		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph(new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getSubTotal())))))
+		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph(new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getCgstAmount())))))
 				.setBorder(Border.NO_BORDER)
 				.setFontSize(8)
 				.setTextAlignment(TextAlignment.RIGHT)
@@ -340,7 +353,7 @@ public class ReceiptPdfExporter {
 					.setFontColor(new DeviceRgb(58,70,109))
 			);
 			bankDetailsTable.addCell(new Cell(1,3).add(new Paragraph(customerInvoiceEntity.getSgstAmount() != null ?
-					new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getSubTotal()))) : ""))
+					new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getSgstAmount()))) : ""))
 					.setBorder(Border.NO_BORDER)
 					.setFontSize(8)
 					.setTextAlignment(TextAlignment.RIGHT)
@@ -357,7 +370,7 @@ public class ReceiptPdfExporter {
 					.setFontColor(new DeviceRgb(58,70,109))
 			);
 			bankDetailsTable.addCell(new Cell(1,3).add(new Paragraph(customerInvoiceEntity.getSgstAmount() != null ?
-					new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getSubTotal()))) : ""))
+					new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getSgstAmount()))) : ""))
 					.setBorder(Border.NO_BORDER)
 					.setFontSize(8)
 					.setTextAlignment(TextAlignment.RIGHT)

@@ -86,8 +86,9 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		customerInvoiceEntity.setCustEmailId(customerInvoiceIncomingDto.getCustEmailId());
 		customerInvoiceEntity.setCustomerBillingAddress(customerInvoiceIncomingDto.getCustomerBillingAddress());
 		
-		if(customerInvoiceIncomingDto.getShippingDate() != null)
+		if(customerInvoiceIncomingDto.getShippingDate() != null && customerInvoiceIncomingDto.getShippingDate() != "") {
 			customerInvoiceEntity.setShippingDate(DateUtils.stringToDateConvert(customerInvoiceIncomingDto.getShippingDate()));
+		}
 		
 		customerInvoiceEntity.setShippingTo(customerInvoiceIncomingDto.getShippingTo());
 		customerInvoiceEntity.setShippingVia(customerInvoiceIncomingDto.getShippingVia());
