@@ -78,6 +78,7 @@ public class EmailService {
 		properties.put("mail.smtp.port", "465");
 		properties.put("mail.smtp.ssl.enable", "true");
 		properties.put("mail.smtp.auth", "true");
+		properties.put("mail.smtp.connectiontimeout", 1000);
 		
 		String mailTextContent = "Dear Team, \r\r " +
 							" PFA Rejected Records for " + withoutExtensionFileName + "\r\r " + 
@@ -678,7 +679,6 @@ public void sendMailForExcelNotPresent() throws Exception {
 		String host = fromMailIdHost;
 		
 		Properties properties = System.getProperties();
-		logger.info("Properties are ------" + properties);
 		properties.put("mail.smtp.host", host);
 		properties.put("mail.smtp.port", "465");
 		properties.put("mail.smtp.ssl.enable", "true");
@@ -749,7 +749,7 @@ public void sendMailForExcelNotPresent() throws Exception {
 			Transport.send(mimeMessage);
 			logger.info("Mail Sent Successfully...................");
 			
-			updateInvoiceMailStatusIfSuccess(checkMailStatusEntityList);
+			updateInvoiceMailStatusIfSuccess(checkMailStatusEntityList, attachedFile);
 			
 		} 
 		catch (MessagingException e) {
@@ -798,15 +798,16 @@ public void sendMailForExcelNotPresent() throws Exception {
 	}
 	
 	
-	public boolean updateInvoiceMailStatusIfSuccess(List<CheckInvoiceMailStatusEntity> checkMailStatusEntityList) {
+	public boolean updateInvoiceMailStatusIfSuccess(List<CheckInvoiceMailStatusEntity> checkMailStatusEntityList, File attachedFile) {
 		CheckInvoiceMailStatusEntity checkInvoiceMailStatusEntity = new CheckInvoiceMailStatusEntity();
 		
 		for(int i=0; i<checkMailStatusEntityList.size(); i++) {
 			checkInvoiceMailStatusEntity = checkMailStatusRepository.findById(checkMailStatusEntityList.get(i).getId()).get();
 			checkInvoiceMailStatusEntity.setMailStatus("SENT");
+			checkInvoiceMailStatusEntity.setInvoiceFileName(attachedFile.getName());
+			
+			checkMailStatusRepository.save(checkInvoiceMailStatusEntity);
 		}
-		
-		checkMailStatusRepository.save(checkInvoiceMailStatusEntity);
 		
 		logger.info("--- Mail Sent Status Updated in Invoice ----");
 		return true;

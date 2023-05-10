@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class ReceiptPdfExporter {
 	public File generateInvoice(List<CustomerInvoiceServiceEntity> customerInvoiceServiceList,
 			CompanyMasterEntity companyMasterEntity, CustomerInvoiceEntity customerInvoiceEntity) throws Exception {
 
-		String filename = "INVOICE_" + new Date().getTime() + "".concat(fileExtension);
+		String filename = "INVOICE_" + Calendar.getInstance().get(Calendar.YEAR) +"_" + new Date().getTime() + "".concat(fileExtension);
 		logger.info("Check File Name :--- " + filename);
 
 		String newPath = this.fileBaseLocation + "/" + UploadPathContUtils.FILE_INVOICE_DIR;
@@ -77,7 +78,22 @@ public class ReceiptPdfExporter {
 		Image image = new Image(imageData);
 		image.scaleAbsolute(50f, 40f);
 		image.setTextAlignment(TextAlignment.CENTER);
-
+		
+		Table taxInvoiceTitleTable = new Table(UnitValue.createPercentArray(1)).setAutoLayout();
+		
+		taxInvoiceTitleTable.addCell(new Cell(4,4).add(new Paragraph("TAX INVOICE"))
+				.setBorder(Border.NO_BORDER)
+				.setBold()
+				.setTextAlignment(TextAlignment.LEFT)
+				.setFontColor(new DeviceRgb(46, 35, 85))
+				.setFontSize(10)
+		);
+		
+		layoutDocument.add(taxInvoiceTitleTable);
+		
+		layoutDocument.add(new Paragraph());
+		layoutDocument.add(new Paragraph());
+		
 		Table companyDetailsTable = new Table(UnitValue.createPercentArray(4)).setAutoLayout();
 
 		// companyDataTable cell 1
@@ -105,7 +121,8 @@ public class ReceiptPdfExporter {
 		
 		Table invoiceNoFieldTable = new Table(UnitValue.createPercentArray(3)).useAllAvailableWidth();
 		
-		invoiceNoFieldTable.addCell(new Cell(1,3).add(new Paragraph(customerInvoiceEntity.getInvoiceNo()))
+		invoiceNoFieldTable.addCell(new Cell(1,3).add(new Paragraph(
+				StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getInvoiceNo())))
 				.setBorder(Border.NO_BORDER)
 				.setBold()
 				.setTextAlignment(TextAlignment.RIGHT)
@@ -136,12 +153,16 @@ public class ReceiptPdfExporter {
 		billingDetailsCell.setTextAlignment(TextAlignment.LEFT);
 
 		billingDetailsCell.add(new Paragraph("BILL TO").setBold());
-		billingDetailsCell.add(new Paragraph(customerInvoiceEntity.getCustomerBillingAddress()));
+		billingDetailsCell.add(new Paragraph(
+				StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getTitle()) + " " + 
+				StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getFirstName()) + " " +
+				StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getLastName())));
+		billingDetailsCell.add(new Paragraph(StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerBillingAddress())));
 		billingDetailsCell.add(new Paragraph("State Code : 27"));
-		billingDetailsCell.add(new Paragraph("GSTIN :- " + customerInvoiceEntity.getCustomerMasterEntity().getGstin()));
+		billingDetailsCell.add(new Paragraph("GSTIN :- " + StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getGstin())));
 		billingDetailsCell.add(new Paragraph("PLACE OF SUPPLY").setBold());
 		billingDetailsCell
-				.add(new Paragraph("27 - " + customerInvoiceEntity.getCustomerMasterEntity().getBillingState()));
+				.add(new Paragraph("27 - " + StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getBillingState())));
 
 		billingAndShippingAndPaymentDateTable.addCell(billingDetailsCell);
 
@@ -151,9 +172,10 @@ public class ReceiptPdfExporter {
 		shippingDetailsCell.setTextAlignment(TextAlignment.LEFT);
 
 		shippingDetailsCell.add(new Paragraph("SHIP TO").setBold());
-		shippingDetailsCell.add(new Paragraph(customerInvoiceEntity.getCustomerMasterEntity().getTitle() + " "
-				+ customerInvoiceEntity.getCustomerMasterEntity().getFirstName()));
-		shippingDetailsCell.add(new Paragraph(customerInvoiceEntity.getCustomerBillingAddress()));
+		shippingDetailsCell.add(new Paragraph(StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getTitle()) + " "
+				+ StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getFirstName()) + " "
+				+ StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getLastName())));
+		shippingDetailsCell.add(new Paragraph(StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerBillingAddress())));
 		shippingDetailsCell.add(new Paragraph("State Code : 27"));
 
 		billingAndShippingAndPaymentDateTable.addCell(shippingDetailsCell);
@@ -321,20 +343,41 @@ public class ReceiptPdfExporter {
 				.setTextAlignment(TextAlignment.LEFT)
 				.setHorizontalAlignment(HorizontalAlignment.LEFT)
 			);
-		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph("CGST @ 9% on "))
-				.setBorder(Border.NO_BORDER)
-				.setFontSize(8)
-				.setTextAlignment(TextAlignment.LEFT)
-				.setHorizontalAlignment(HorizontalAlignment.LEFT)
-				.setFontColor(new DeviceRgb(58,70,109))
-		);
-		bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph(new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getCgstAmount())))))
-				.setBorder(Border.NO_BORDER)
-				.setFontSize(8)
-				.setTextAlignment(TextAlignment.RIGHT)
-				.setHorizontalAlignment(HorizontalAlignment.RIGHT)
-				.setFontColor(new DeviceRgb(58,70,109))
-		);
+		
+		if(customerInvoiceEntity.getCgstAmount() != null) {
+			bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph("CGST @ 9% on "))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.LEFT)
+					.setHorizontalAlignment(HorizontalAlignment.LEFT)
+					.setFontColor(new DeviceRgb(58,70,109))
+			);
+			bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph(new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getCgstAmount())))))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+					.setFontColor(new DeviceRgb(58,70,109))
+			);
+		}
+		else {
+			bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph())
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.LEFT)
+					.setHorizontalAlignment(HorizontalAlignment.LEFT)
+					.setFontColor(new DeviceRgb(58,70,109))
+			);
+			bankDetailsTable.addCell(new Cell(1,2).add(new Paragraph(new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getSgstAmount() != null ?
+					new String(baseDecoder.decode(String.valueOf(customerInvoiceEntity.getSgstAmount()))) : "")))))
+					.setBorder(Border.NO_BORDER)
+					.setFontSize(8)
+					.setTextAlignment(TextAlignment.RIGHT)
+					.setHorizontalAlignment(HorizontalAlignment.RIGHT)
+					.setFontColor(new DeviceRgb(58,70,109))
+			);
+		}
+		
 		
 		bankDetailsTable.addCell(new Cell(1,3).add(new Paragraph("Bank : " + companyMasterEntity.getBankName()))
 				.setBorder(Border.NO_BORDER)

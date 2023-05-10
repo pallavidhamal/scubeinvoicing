@@ -53,6 +53,9 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	@Autowired
 	CustomerInvoiceRepository customerInvoiceRepository;
 	
+	@Autowired
+	LedgerService ledgerService;
+	
 	@Value("${company.name}")
 	private String companyName;
 	
@@ -410,6 +413,8 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 		customerInvoiceEntity.setPaymentCompletedDate(DateUtils.today());
 		customerInvoiceEntity.setPaymentStatus("Payment Completed");
 		customerInvoiceRepository.save(customerInvoiceEntity);
+		
+		ledgerService.updateLedgerEntryForInvoicePaymentReceived(customerInvoiceEntity);
 		
 		return true;
 	}

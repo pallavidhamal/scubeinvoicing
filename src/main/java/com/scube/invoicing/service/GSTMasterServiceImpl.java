@@ -22,6 +22,9 @@ public class GSTMasterServiceImpl implements GSTMasterService{
 	@Autowired
 	GSTMasterRepository gstMasterRepository;
 	
+	@Autowired
+	LedgerMasterService ledgerMasterService;
+	
 	private static final Logger logger = LoggerFactory.getLogger(GSTMasterServiceImpl.class);
 
 	@Override
@@ -53,6 +56,8 @@ public class GSTMasterServiceImpl implements GSTMasterService{
 		gstMasterRepository.save(gstMasterEntity);
 		
 		logger.info("--- Record Added Successfully ----");
+		
+		ledgerMasterService.addLedgerMasterEntryForGST(gstMasterEntity);
 		
 		return true;
 	}

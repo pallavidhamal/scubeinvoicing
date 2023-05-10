@@ -138,10 +138,11 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 		File attachedFile = null;
 		try {
 			attachedFile = receiptPdfExporter.generateInvoice(customerInvoiceServiceList, companyMasterEntity, customerInvoiceEntity);
-			logger.info("File Path for Invoice :--- " + attachedFile);
+			logger.info("File Path for Invoice :--- " + attachedFile.getName());
 			
 			// Send Mail with Attachment Invoice
 			emailService.sendInvoiceMailToCustomer(createInvoiceIncomingDto, attachedFile, checkMailStatusEntityList, invoiceUrl, customerInvoiceEntity);
+		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -256,10 +257,13 @@ public class GenerateInvoiceAndCreditNoteServiceImpl implements GenerateInvoiceA
 						checkMailStatusEntityList.get(i).getCustomerInvoiceEntity(), 
 						checkMailStatusEntityList.get(i).getCustomerMasterEntity(),
 						checkMailStatusEntityList);
+				
+				
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 		}
+		
 		
 		return false;
 	}

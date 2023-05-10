@@ -172,4 +172,23 @@ public class LedgerMasterServiceImpl implements LedgerMasterService {
 		return categoryLedgerMasterEntityList;
 	}
 
+	@Override
+	public boolean addLedgerMasterEntryForGST(GSTMasterEntity gstMasterEntity) {
+		// TODO Auto-generated method stub
+		logger.info("---- LedgerMasterServiceImpl getCategoryLedgerMasterRecords ----");
+		
+		LedgerTypeEntity gstLedgerTypeEntity = ledgerTypeService.getLedgerTypeEntityByLedgerName("GST Ledger");
+		
+		LedgerMasterEntity gstLedgerMasterEntity = new LedgerMasterEntity();
+		
+		gstLedgerMasterEntity.setIsdeleted("N");
+		gstLedgerMasterEntity.setLedgerName(gstMasterEntity.getDescription() + String.valueOf(gstMasterEntity.getValue()) + "%");
+		gstLedgerMasterEntity.setGstMasterEntity(gstMasterEntity);
+		gstLedgerMasterEntity.setLedgerTypeEntity(gstLedgerTypeEntity);
+		
+		ledgerMasterRepository.save(gstLedgerMasterEntity);
+		
+		return true;
+	}
+
 }

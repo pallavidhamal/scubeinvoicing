@@ -23,6 +23,9 @@ public interface LedgerMasterService {
 	// Service - Entry in Ledger Master
 	boolean addLedgerMasterEntryForService(ServiceMasterEntity serviceMasterEntity);
 	
+	// GST - Entry in Ledger Master
+	boolean addLedgerMasterEntryForGST(GSTMasterEntity gstMasterEntity);
+	
 	// Get Customer Record in Ledger Master
 	LedgerMasterEntity getCustomerLedgerMasterEntityRecord(CustomerMasterEntity customerMasterEntity);
 	

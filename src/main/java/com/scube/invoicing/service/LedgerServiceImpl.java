@@ -1,5 +1,7 @@
 package com.scube.invoicing.service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -37,6 +39,9 @@ public class LedgerServiceImpl implements LedgerService {
 	@Autowired
 	ExpenseLedgerRepository expenseLedgerRepository;
 	
+	static Base64.Encoder encoder = Base64.getEncoder();
+	static Base64.Decoder decoder = Base64.getDecoder();
+	
 	private static final Logger logger = LoggerFactory.getLogger(LedgerServiceImpl.class);
 
 	@Override
@@ -52,6 +57,7 @@ public class LedgerServiceImpl implements LedgerService {
 		
 		customerLedger.setIsdeleted("N");
 		customerLedger.setTransactionType("Debit");
+		customerLedger.setAmount(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity().getSubTotal());
 		customerLedger.setCustomerInvoiceEntity(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity());
 		customerLedger.setLedgerMasterEntity(customerLedgerMasterEntity);
 		
@@ -123,7 +129,7 @@ public class LedgerServiceImpl implements LedgerService {
 		tdsLedgerEntity.setIsdeleted("N");
 		tdsLedgerEntity.setTransactionType("Debit");
 		tdsLedgerEntity.setCustomerInvoiceEntity(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity());
-		tdsLedgerEntity.setAmount(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity().getActualTds());
+		tdsLedgerEntity.setAmount(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity().getInvoiceTds());
 		tdsLedgerEntity.setLedgerMasterEntity(tdsLedgerMasterEntity);
 		
 		invoiceLedgerRepository.save(tdsLedgerEntity);
@@ -140,10 +146,15 @@ public class LedgerServiceImpl implements LedgerService {
 		LedgerMasterEntity customerLedgerMasterEntity = ledgerMasterService.getCustomerLedgerMasterEntityRecord(customerInvoiceEntity.getCustomerMasterEntity());
 				
 		InvoiceLedgerEntity customerLedger = new InvoiceLedgerEntity();
+		
+		Double subTotal = Double.valueOf(new String(decoder.decode(customerInvoiceEntity.getSubTotal())));
+		Double actualTds = Double.valueOf(new String(decoder.decode(customerInvoiceEntity.getActualTds())));
+		Double amount = subTotal - actualTds;
 				
 		customerLedger.setIsdeleted("N");
 		customerLedger.setTransactionType("Credit");
 		customerLedger.setCustomerInvoiceEntity(customerInvoiceEntity);
+		customerLedger.setAmount(encoder.encodeToString(String.valueOf(amount).getBytes(StandardCharsets.UTF_8)));
 		customerLedger.setLedgerMasterEntity(customerLedgerMasterEntity);
 				
 		invoiceLedgerRepository.save(customerLedger);

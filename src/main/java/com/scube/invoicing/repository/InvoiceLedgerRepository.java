@@ -1,7 +1,5 @@
 package com.scube.invoicing.repository;
 
-import com.scube.invoicing.dto.LedgerResponseDto;
-import com.scube.invoicing.entity.CustomerCreditNoteEntity;
 import com.scube.invoicing.entity.CustomerInvoiceEntity;
 import com.scube.invoicing.entity.InvoiceLedgerEntity;
 

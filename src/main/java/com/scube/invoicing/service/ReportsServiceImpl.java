@@ -12,12 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.scube.invoicing.dto.ExpenseLedgerResponseDto;
-import com.scube.invoicing.dto.ExpenseResponseDto;
 import com.scube.invoicing.dto.GSTReportResponseDto;
 import com.scube.invoicing.dto.InvoiceCreditNoteResponseDto;
 import com.scube.invoicing.dto.LedgerResponseDto;
 import com.scube.invoicing.dto.incoming.ReportsIncomingDto;
-import com.scube.invoicing.dto.mapper.ExpenseInfoAndItemListMapper;
 import com.scube.invoicing.dto.mapper.ExpenseLedgerMapper;
 import com.scube.invoicing.dto.mapper.GSTReportResponseMapper;
 import com.scube.invoicing.dto.mapper.InvoiceCreditNoteResponseMapper;
@@ -33,7 +31,6 @@ import com.scube.invoicing.entity.VendorMasterEntity;
 import com.scube.invoicing.exception.BRSException;
 import com.scube.invoicing.repository.CreditNoteRepository;
 import com.scube.invoicing.repository.CustomerInvoiceRepository;
-import com.scube.invoicing.repository.ExpenseInfoRepository;
 import com.scube.invoicing.repository.ExpenseLedgerRepository;
 import com.scube.invoicing.repository.InvoiceLedgerRepository;
 import com.scube.invoicing.util.DateUtils;
@@ -66,8 +63,6 @@ public class ReportsServiceImpl implements ReportsService {
 	CustomerMasterService customerMasterService;
 	
 	Base64.Decoder decoder = Base64.getDecoder();
-
-	private List<InvoiceLedgerEntity> customerLedgerEntitiesList;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ReportsServiceImpl.class);
 	
@@ -431,12 +426,10 @@ public class ReportsServiceImpl implements ReportsService {
 		
 		CustomerInvoiceEntity ledgerMasterEntity = customerInvoiceService.getCustomerInvoiceEntityByInvoiceID(invoiceID);
 		
-		 List<InvoiceLedgerEntity> customerLedgerEntitiesList = invoiceLedgerRepository.findByCustomerInvoiceEntity(ledgerMasterEntity);
+		List<InvoiceLedgerEntity> customerLedgerEntitiesList = invoiceLedgerRepository.findByCustomerInvoiceEntity(ledgerMasterEntity);
 		 
-		 if (customerLedgerEntitiesList.size() == 0) {
-			 
-			 throw BRSException.throwException("Error : Record not found");
-			
+		if (customerLedgerEntitiesList.size() == 0) {
+			throw BRSException.throwException("Error : Record not found");
 		}
 		 
 		return LedgerMapper.toLedgerResponseDtosList(customerLedgerEntitiesList);

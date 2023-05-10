@@ -43,7 +43,7 @@ public class CheckInvoiceMailStatusEntity extends BaseEntity {
 	@Column(name = "cc")
 	private String cc;
 	
-	
-
+	@Column(name = "invoice_file_name")
+	private String invoiceFileName;
 
 }
