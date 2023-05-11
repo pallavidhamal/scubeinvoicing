@@ -228,6 +228,19 @@ public class LedgerServiceImpl implements LedgerService {
 				
 		invoiceLedgerRepository.save(tdsLedgerEntity);
 		
+		// For Bank Balance Ledger
+		LedgerMasterEntity bankLedgerMasterEntity = ledgerMasterService.getLedgerMasterRecords("Bank");
+						
+		InvoiceLedgerEntity bankInvoiceLedgerEntity = new InvoiceLedgerEntity();
+						
+		bankInvoiceLedgerEntity.setIsdeleted("N");
+		bankInvoiceLedgerEntity.setTransactionType("Credit");
+		bankInvoiceLedgerEntity.setCustomerInvoiceEntity(customerInvoiceEntity);
+		bankInvoiceLedgerEntity.setAmount(customerInvoiceEntity.getTotalAmount());
+		bankInvoiceLedgerEntity.setLedgerMasterEntity(bankLedgerMasterEntity);
+						
+		invoiceLedgerRepository.save(bankInvoiceLedgerEntity);
+		
 		return true;
 	}
 
