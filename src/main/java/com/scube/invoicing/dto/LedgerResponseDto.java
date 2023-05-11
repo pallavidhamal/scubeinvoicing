@@ -27,6 +27,8 @@ public class LedgerResponseDto {
 	private String transactionType;
 	
 	private String invoiceDate;
+	
+	private String invoiceNo;
 		
 
 }
