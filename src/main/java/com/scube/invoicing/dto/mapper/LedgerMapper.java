@@ -23,6 +23,7 @@ public class LedgerMapper {
 				
 				.setLedgerName(invoiceLedgerEntity.getLedgerMasterEntity().getLedgerName())	
 				.setInvoiceDate(formattedDate)
+				.setInvoiceNo(invoiceLedgerEntity.getCustomerInvoiceEntity().getInvoiceNo())
 				//.setInvoiceDate(DateUtils.formatDateToDDMMYYYYFormat(invoiceLedgerEntity.getCustomerInvoiceEntity().getInvoiceDate()))
 				.setTransactionType(invoiceLedgerEntity.getTransactionType());
 				
