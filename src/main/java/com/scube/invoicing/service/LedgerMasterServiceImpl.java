@@ -155,8 +155,10 @@ public class LedgerMasterServiceImpl implements LedgerMasterService {
 		
 		LedgerMasterEntity tdsLedgerMasterEntity = ledgerMasterRepository.findByLedgerName(ledgerName);
 		
+		logger.info("Ledger Name :--- " + ledgerName);
+		
 		if(tdsLedgerMasterEntity == null) {
-			throw BRSException.throwException(EntityType.TDSLEDGER, ExceptionType.ENTITY_NOT_FOUND, ledgerName);
+			throw BRSException.throwException(EntityType.LEDGER, ExceptionType.ENTITY_NOT_FOUND, ledgerName);
 		}
 		
 		return tdsLedgerMasterEntity;

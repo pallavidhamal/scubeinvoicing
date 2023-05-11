@@ -156,7 +156,8 @@ public class ReceiptPdfExporter {
 		billingDetailsCell.add(new Paragraph(
 				StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getTitle()) + " " + 
 				StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getFirstName()) + " " +
-				StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getLastName())));
+				StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getLastName()) + " " +
+				StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getMobileNumber())));
 		billingDetailsCell.add(new Paragraph(StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerBillingAddress())));
 		billingDetailsCell.add(new Paragraph("State Code : 27"));
 		billingDetailsCell.add(new Paragraph("GSTIN :- " + StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getGstin())));
@@ -174,7 +175,8 @@ public class ReceiptPdfExporter {
 		shippingDetailsCell.add(new Paragraph("SHIP TO").setBold());
 		shippingDetailsCell.add(new Paragraph(StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getTitle()) + " "
 				+ StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getFirstName()) + " "
-				+ StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getLastName())));
+				+ StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getLastName()) + " "
+				+ StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getMobileNumber())));
 		shippingDetailsCell.add(new Paragraph(StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerBillingAddress())));
 		shippingDetailsCell.add(new Paragraph("State Code : 27"));
 
