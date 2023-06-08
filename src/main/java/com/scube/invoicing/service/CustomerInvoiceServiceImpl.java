@@ -495,7 +495,7 @@ public class CustomerInvoiceServiceImpl implements CustomerInvoiceService {
 	}
 	
 	@Override
-	public List<CustomerInvoiceEntity> getCustomerInvoiceEntityByCustomerEntity(
+	public List<CustomerInvoiceEntity> getCustomerInvoiceEntityByCustomerEntity (
 			CustomerMasterEntity customerMasterEntity) {
 		// TODO Auto-generated method stub
 		if( customerMasterEntity == null) {

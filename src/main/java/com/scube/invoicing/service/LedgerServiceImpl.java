@@ -57,7 +57,7 @@ public class LedgerServiceImpl implements LedgerService {
 		
 		customerLedger.setIsdeleted("N");
 		customerLedger.setTransactionType("Debit");
-		customerLedger.setAmount(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity().getSubTotal());
+		customerLedger.setAmount(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity().getTotalAmount());
 		customerLedger.setCustomerInvoiceEntity(checkInvoiceMailStatusEntity.getCustomerInvoiceEntity());
 		customerLedger.setLedgerMasterEntity(customerLedgerMasterEntity);
 		
@@ -147,9 +147,9 @@ public class LedgerServiceImpl implements LedgerService {
 				
 		InvoiceLedgerEntity customerLedger = new InvoiceLedgerEntity();
 		
-		Double subTotal = Double.valueOf(new String(decoder.decode(customerInvoiceEntity.getSubTotal())));
+		Double totalAmount = Double.valueOf(new String(decoder.decode(customerInvoiceEntity.getTotalAmount())));
 		Double actualTds = Double.valueOf(new String(decoder.decode(customerInvoiceEntity.getActualTds())));
-		Double amount = subTotal - actualTds;
+		Double amount = totalAmount - actualTds;
 				
 		customerLedger.setIsdeleted("N");
 		customerLedger.setTransactionType("Credit");

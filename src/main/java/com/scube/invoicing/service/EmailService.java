@@ -703,6 +703,9 @@ public void sendMailForExcelNotPresent() throws Exception {
 		
 		String subjectLine = createInvoiceIncomingDto.getSubject();
 		
+		System.out.println("From Mail ID :-- " + createInvoiceIncomingDto.getFromEmailID()
+				+ " Password :--- " + fromMailPwd);
+		
 		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {			
 				return new PasswordAuthentication(createInvoiceIncomingDto.getFromEmailID(), fromMailPwd);
