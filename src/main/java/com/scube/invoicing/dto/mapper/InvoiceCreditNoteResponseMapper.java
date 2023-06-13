@@ -8,6 +8,7 @@ import com.scube.invoicing.dto.InvoiceCreditNoteResponseDto;
 import com.scube.invoicing.entity.CustomerCreditNoteEntity;
 import com.scube.invoicing.entity.CustomerInvoiceEntity;
 import com.scube.invoicing.util.DateUtils;
+import com.scube.invoicing.util.StringNullEmpty;
 
 public class InvoiceCreditNoteResponseMapper {
 	
@@ -25,9 +26,18 @@ public class InvoiceCreditNoteResponseMapper {
 				.setInvoiceDate(DateUtils.formatDateToDDMMYYYYFormat(customerInvoiceEntity.getInvoiceDate()))
 				
 				// Invoice Payment Status and Invoice Amount
-				.setCustomerInvoiceAmount(new String(decoder.decode(customerInvoiceEntity.getTotalAmount())))
+				.setCustomerInvoiceAmount(customerInvoiceEntity.getTotalAmount() != null ? StringNullEmpty.stringNullAndEmptyToBlank(new String(decoder.decode(customerInvoiceEntity.getTotalAmount()))): "")
 				.setCurrency(customerInvoiceEntity.getCustomerMasterEntity().getCurrencyMasterEntity().getCurrencyName())
-				.setAmountPendingFlag(customerInvoiceEntity.getPaymentStatus());
+				.setAmountPendingFlag(customerInvoiceEntity.getPaymentStatus())
+				
+				//Cgst, Sgst, Igst, subtotal, TotalNumber
+				.setCgstamount(customerInvoiceEntity.getCgstAmount() != null ? StringNullEmpty.stringNullAndEmptyToBlank(new String(decoder.decode(customerInvoiceEntity.getCgstAmount()))):"")
+				.setSgstamount(customerInvoiceEntity.getSgstAmount()!= null ? StringNullEmpty.stringNullAndEmptyToBlank(new String(decoder.decode(customerInvoiceEntity.getSgstAmount()))):"")
+				.setIgstamount(customerInvoiceEntity.getIgstAmount() != null ? StringNullEmpty.stringNullAndEmptyToBlank(new String(decoder.decode(customerInvoiceEntity.getIgstAmount()))):"")
+				
+				.setGstnumber(customerInvoiceEntity.getCustomerMasterEntity().getGstin() != null ? StringNullEmpty.stringNullAndEmptyToBlank(customerInvoiceEntity.getCustomerMasterEntity().getGstin()): "")
+				.setSubtotal(customerInvoiceEntity.getSubTotal() !=null ? StringNullEmpty.stringNullAndEmptyToBlank(new String(decoder.decode(customerInvoiceEntity.getSubTotal()))):"");
+			//	.setTotalamount(new String(decoder.decode(customerInvoiceEntity.getTotalAmount())));
 	}
 	
 	public static List<InvoiceCreditNoteResponseDto> toInvoiceResponseDtosList(List<CustomerInvoiceEntity> customerInvoiceEntitiesList) {

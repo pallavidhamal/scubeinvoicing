@@ -38,4 +38,15 @@ public class InvoiceCreditNoteResponseDto {
 	private String amountPendingFlag;
 	private String currency;
 	
+	private String cgstamount;
+	
+	private String sgstamount;
+	
+	private String igstamount;
+	
+	private String gstnumber;
+	
+	private String subtotal;
+	
+	private String totalamount;
 }
